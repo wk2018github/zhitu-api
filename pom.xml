@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>zhitu</groupId>
-    <artifactId>api</artifactId>
+    <artifactId>zhitu-api</artifactId>
     <version>0.1</version>
 
 
