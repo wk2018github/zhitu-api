@@ -12,6 +12,7 @@ public class UserController {
             @RequestParam(value="name") String name,
             @RequestParam(value="age") int age
     ) {
+    	System.out.println("aaa");
         return String.format("name = %s\tage = %d", name, age);
     }
 
