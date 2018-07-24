@@ -1,11 +1,11 @@
-package zhitu.controller;
+package zhitu.sq.dataset.controller;
 
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @CrossOrigin
-public class UserController {
+public class RdbController {
 
     @RequestMapping(value = "/",  method = RequestMethod.GET)
     public String index(
