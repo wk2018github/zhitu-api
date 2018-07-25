@@ -1,143 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="zhitu.sq.dataset.mapper.DataSetMapper">
-	<resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.DataSet">
-		<id column="id" property="id" jdbcType="VARCHAR" />
-		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="describe" property="describe" jdbcType="VARCHAR" />
-		<result column="typeId" property="typeId" jdbcType="VARCHAR" />
-		<result column="userId" property="userId" jdbcType="VARCHAR" />
-		<result column="projectId" property="projectId" jdbcType="VARCHAR" />
-		<result column="dataTable" property="dataTable" jdbcType="VARCHAR" />
-		<result column="rdbId" property="rdbId" jdbcType="VARCHAR" />
-	</resultMap>
-  <sql id="Base_Column_List" >
-    id, createTime, name, describe, typeId, userId, projectId, dataTable, rdbId
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from zt_sys_dataset
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from zt_sys_dataset
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="zhitu.sq.dataset.model.DataSet" >
-    insert into zt_sys_dataset (id, createTime, name, 
-      describe, typeId, userId, 
-      projectId, dataTable, rdbId
-      )
-    values (#{id,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
-      #{describe,jdbcType=VARCHAR}, #{typeid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, 
-      #{projectid,jdbcType=VARCHAR}, #{datatable,jdbcType=VARCHAR}, #{rdbid,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="zhitu.sq.dataset.model.DataSet" >
-    insert into zt_sys_dataset
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="createtime != null" >
-        createTime,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="describe != null" >
-        describe,
-      </if>
-      <if test="typeid != null" >
-        typeId,
-      </if>
-      <if test="userid != null" >
-        userId,
-      </if>
-      <if test="projectid != null" >
-        projectId,
-      </if>
-      <if test="datatable != null" >
-        dataTable,
-      </if>
-      <if test="rdbid != null" >
-        rdbId,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="createtime != null" >
-        #{createtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="describe != null" >
-        #{describe,jdbcType=VARCHAR},
-      </if>
-      <if test="typeid != null" >
-        #{typeid,jdbcType=VARCHAR},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="projectid != null" >
-        #{projectid,jdbcType=VARCHAR},
-      </if>
-      <if test="datatable != null" >
-        #{datatable,jdbcType=VARCHAR},
-      </if>
-      <if test="rdbid != null" >
-        #{rdbid,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="zhitu.sq.dataset.model.DataSet" >
-    update zt_sys_dataset
-    <set >
-      <if test="createtime != null" >
-        createTime = #{createtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="describe != null" >
-        describe = #{describe,jdbcType=VARCHAR},
-      </if>
-      <if test="typeid != null" >
-        typeId = #{typeid,jdbcType=VARCHAR},
-      </if>
-      <if test="userid != null" >
-        userId = #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="projectid != null" >
-        projectId = #{projectid,jdbcType=VARCHAR},
-      </if>
-      <if test="datatable != null" >
-        dataTable = #{datatable,jdbcType=VARCHAR},
-      </if>
-      <if test="rdbid != null" >
-        rdbId = #{rdbid,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.DataSet" >
-    update zt_sys_dataset
-    set createTime = #{createtime,jdbcType=TIMESTAMP},
-      name = #{name,jdbcType=VARCHAR},
-      describe = #{describe,jdbcType=VARCHAR},
-      typeId = #{typeid,jdbcType=VARCHAR},
-      userId = #{userid,jdbcType=VARCHAR},
-      projectId = #{projectid,jdbcType=VARCHAR},
-      dataTable = #{datatable,jdbcType=VARCHAR},
-      rdbId = #{rdbid,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
+<mapper namespace="zhitu.sq.dataset.mapper.DataSetMapper" >
+ <resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.DataSet" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="typeId" property="typeId" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="VARCHAR" />
+    <result column="projectId" property="projectId" jdbcType="VARCHAR" />
+    <result column="dataTable" property="dataTable" jdbcType="VARCHAR" />
+    <result column="rdbId" property="rdbId" jdbcType="VARCHAR" />
+  </resultMap>
+  
   <select id="findByName" resultType="java.util.Map">
    SELECT d.id, d.`name`, d.`describe` AS dateDesc, d.typeId, f.`describe` AS typeDesc, d.createTime
 	FROM zt_sys_dataset d

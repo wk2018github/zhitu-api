@@ -1,6 +1,5 @@
 package zhitu.cfg;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+
 
 
 /**
@@ -28,12 +28,12 @@ public abstract class BaseController {
 	protected static final String RETURNMESSAGE = "返回结果 -- code:000000(成功),code:100000(失败)";
     
 	
-	/**
+/*	*//**
 	 * 获取登陆用户信息
 	 * @param request
 	 * @return
-	 */
-	/*public User getLoginUser(HttpServletRequest request){
+	 *//*
+	public User getLoginUser(HttpServletRequest request){
 	   User loginUser =  (User)request.getSession().getAttribute(SysEnums.SYS_USER.getKey());
 	   if(loginUser == null){
 	      //mock登陆用户信息

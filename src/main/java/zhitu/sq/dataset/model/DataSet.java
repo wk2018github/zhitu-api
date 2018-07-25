@@ -1,14 +1,8 @@
 package zhitu.sq.dataset.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class DataSet implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class DataSet{
 
 	/**
 	 * 唯一ID，必须以`DATASET_毫秒时间戳`为格式
@@ -55,24 +49,6 @@ public class DataSet implements Serializable{
      */
     private String rdbId;
 
-	public DataSet() {
-		super();
-	}
-
-	public DataSet(String id, Date createTime, String name, String typeId, String userId, String projectId,
-			String dataTable, String rdbId,String describe) {
-		super();
-		this.id = id;
-		this.createTime = createTime;
-		this.name = name;
-		this.describe = describe;
-		this.typeId = typeId;
-		this.userId = userId;
-		this.projectId = projectId;
-		this.dataTable = dataTable;
-		this.rdbId = rdbId;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -95,6 +71,14 @@ public class DataSet implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescribe() {
+		return describe;
+	}
+
+	public void setDescribe(String describe) {
+		this.describe = describe;
 	}
 
 	public String getTypeId() {
@@ -137,13 +121,6 @@ public class DataSet implements Serializable{
 		this.rdbId = rdbId;
 	}
 
-	public String getDescribe() {
-		return describe;
-	}
-
-	public void setDescribe(String describe) {
-		this.describe = describe;
-	}
-
+	
 
 }
