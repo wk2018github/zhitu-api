@@ -10,11 +10,6 @@ public class DataSetVo {
     private String id;
     
     /**
-     * 创建时间(修改时间)
-     */
-    private Date createTime;
-
-    /**
      * 数据集名称
      */
     private String name;
@@ -22,7 +17,7 @@ public class DataSetVo {
     /**
      * 数据集描述
      */
-    private String describe;
+    private String description;
 
 	public String getId() {
 		return id;
@@ -30,14 +25,6 @@ public class DataSetVo {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	public String getName() {
@@ -48,12 +35,12 @@ public class DataSetVo {
 		this.name = name;
 	}
 
-	public String getDescribe() {
-		return describe;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 
