@@ -22,4 +22,6 @@ public interface DataSetMapper {
 	int updateDataSet(DataSet dSet);
 
 	int deleteByPrimaryKey(String id);
+
+	Map<String, Object> chartsByName(@Param("name")String name,@Param("userId")String userId);
 }

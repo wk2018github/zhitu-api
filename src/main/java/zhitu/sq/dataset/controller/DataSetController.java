@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
+import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
 import zhitu.sq.dataset.controller.vo.DataSetVo;
 import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.service.DataSetService;
@@ -77,7 +78,9 @@ public class DataSetController extends BaseController{
     		
     		String id = StringHandler.objectToString(map.get("id"));
     		String typeId = StringHandler.objectToString(map.get("typeId"));
-        	int i = dataSetService.deleteById(id,typeId);
+    		String dataTable = StringHandler.objectToString(map.get("dataTable"));
+    		String rdbId = StringHandler.objectToString(map.get("rdbId"));
+        	int i = dataSetService.deleteById(id,typeId,dataTable,rdbId);
         	if(i>0){
         		return success();
         	}
@@ -110,7 +113,6 @@ public class DataSetController extends BaseController{
 		}
     }
 	
-	
 	/**
 	 * 
 	 * 暂时未完成
@@ -135,4 +137,74 @@ public class DataSetController extends BaseController{
 		}
     }
 	
+	@ApiOperation(value = "保存数据集信息-远程数据库sql", notes = "保存数据集信息-远程数据库sql")
+    @RequestMapping(value = "/saveSqlDb",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> saveSqlDb(HttpServletRequest request,
+    		@RequestBody DataSetRdbVo dRdbVo) {
+    	try {
+        	//获取登录用户Id
+    		String userId = "USER_1293910401";
+    		int i = dataSetService.saveSqlDataSet(dRdbVo,userId);
+    		if(i>0){
+    			return success();
+    		}
+    		return error("上传失败");
+		} catch (Exception e) {
+			LOG.error("上传失败:" + e.getMessage(),e);
+			return error("上传失败");
+		}
+    }
+	
+	@ApiOperation(value = "本地数据库local_rdb修改", notes = "本地数据库local_rdb修改")
+    @RequestMapping(value = "/updateSqlDb",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> updateSqlDb(HttpServletRequest request,
+    		@RequestBody Map<String, Object> map) {
+    	try {
+//        	//获取登录用户Id
+//    		String userId = "USER_1293910401";
+//    		int i = dataSetService.updateSqlDb(map);
+//    		if(i>0){
+//    			return success();
+//    		}
+    		return error("更新失败");
+		} catch (Exception e) {
+			LOG.error("更新失败:" + e.getMessage(),e);
+			return error("更新失败");
+		}
+    }
+	
+	@ApiOperation(value = "本地数据库local_rdb查询表数据", notes = "本地数据库local_rdb查询表数据")
+    @RequestMapping(value = "/findByTableAndId",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> findByTableAndId(HttpServletRequest request,
+    		@RequestBody Map<String, Object> map) {
+    	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		result = dataSetService.findByTableAndId(map);
+    		return success(result);
+		} catch (Exception e) {
+			LOG.error("上传失败:" + e.getMessage(),e);
+			return error("上传失败");
+		}
+    }
+	
+	@ApiOperation(value = "数据集饼状图", notes = "数据集饼状图")
+    @RequestMapping(value = "/findByTableAndId",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> chartsByName(HttpServletRequest request,
+    		@RequestBody Map<String, Object> map) {
+    	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		//获取登录用户Id
+    		String userId = "USER_1293910401";
+    		String name = StringHandler.objectToString(map.get("name"));
+    		result = dataSetService.chartsByName(name,userId);
+    		return success(result);
+		} catch (Exception e) {
+			LOG.error("上传失败:" + e.getMessage(),e);
+			return error("上传失败");
+		}
+    }
 }

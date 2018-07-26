@@ -1,26 +1,8 @@
-package zhitu.sq.dataset.model;
+package zhitu.sq.dataset.controller.vo;
 
-import java.io.Serializable;
-import java.util.Date;
-
-public class Rdb implements Serializable{
-
+public class DataSetRdbVo {
+	
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 唯一ID，必须以`RDB_毫秒时间戳`为格式
-	 */
-    private String id;
-    
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
      * 数据库host
      */
     private String host;
@@ -29,11 +11,6 @@ public class Rdb implements Serializable{
      * 数据库port
      */
     private Integer port;
-    
-    /**
-     * 数据库类型
-     */
-    private String databasetype;
     
     /**
      * 数据字符集
@@ -64,22 +41,26 @@ public class Rdb implements Serializable{
      * 选取的列，多列用英文逗号分隔
      */
     private String columnNames;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    
+    /**
+     * 类型（本地数据库，远程数据库）
+     */
+    private String typeId;
+    
+    /**
+     * 项目ID
+     */
+    private String projectId;
+    
+    /**
+     * 数据集名称
+     */
+    private String name;
+    
+    /**
+     * 数据集描述
+     */
+    private String description;
 
 	public String getHost() {
 		return host;
@@ -95,15 +76,6 @@ public class Rdb implements Serializable{
 
 	public void setPort(Integer port) {
 		this.port = port;
-	}
-
-	
-	public String getDatabasetype() {
-		return databasetype;
-	}
-
-	public void setDatabasetype(String databasetype) {
-		this.databasetype = databasetype;
 	}
 
 	public String getCharset() {
@@ -154,8 +126,38 @@ public class Rdb implements Serializable{
 		this.columnNames = columnNames;
 	}
 
-	
-    
+	public String getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
     
 
 }

@@ -6,6 +6,7 @@
 		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="host" property="host" jdbcType="VARCHAR" />
 		<result column="port" property="port" jdbcType="INTEGER" />
+		<result column="databaseType" property="databaseType" jdbcType="VARCHAR" />
 		<result column="charset" property="charset" jdbcType="VARCHAR" />
 		<result column="user" property="user" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
@@ -13,7 +14,28 @@
 		<result column="tableName" property="tableName" jdbcType="VARCHAR" />
 		<result column="columnNames" property="columnNames" jdbcType="VARCHAR" />
 	</resultMap>
-
-	
-	
+  <sql id="Base_Column_List" >
+    id, createTime, host, port, databaseType, charset, user, password, dbName, tableName, 
+    columnNames
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from zt_sys_dataset_rdb
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from zt_sys_dataset_rdb
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>	
+ <insert id="insert" parameterType="zhitu.sq.dataset.model.Rdb" >
+    insert into zt_sys_dataset_rdb (id, createTime, host, 
+      port, databaseType, charset, 
+      user, password, dbName, 
+      tableName, columnNames)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{host,jdbcType=VARCHAR}, 
+      #{port,jdbcType=INTEGER}, #{databasetype,jdbcType=VARCHAR}, #{charset,jdbcType=VARCHAR}, 
+      #{user,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{dbName,jdbcType=VARCHAR}, 
+      #{tableName,jdbcType=VARCHAR}, #{columnNames,jdbcType=VARCHAR})
+  </insert>
 </mapper>
