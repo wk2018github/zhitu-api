@@ -1,5 +1,6 @@
 package zhitu.sq.dataset.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -30,17 +31,26 @@ public interface DataSetService {
 	int saveLocalDataSet(String userId,String name, String describe, String projectId, MultipartFile[] files);
 
 	/**
-	 * 根据id查询数据集详细信息
-	 * @param id
-	 * @return
-	 */
-	DataSet findById(String id);
-
-	/**
 	 * 更新数据集信息
 	 * @param dSet
 	 * @return
 	 */
 	int updateDataSet(DataSet dSet);
+	
+	/**
+	 * 查询数据集详细信息
+	 * @param id
+	 * @param typeId 
+	 * @return
+	 */
+	PageInfo<Map<String, Object>> findById(Map<String, Object> map);
+
+	/**
+	 * 删除数据集
+	 * @param id
+	 * @param typeId 
+	 * @return
+	 */
+	int deleteById(String id, String typeId);
 
 }

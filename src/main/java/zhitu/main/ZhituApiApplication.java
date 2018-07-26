@@ -1,5 +1,6 @@
 package zhitu.main;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +17,7 @@ import zhitu.filter.LoginFilter;
 /*@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,
         MongoAutoConfiguration.class,
         MongoDataAutoConfiguration.class})*/
-
+@MapperScan("zhitu.sq.dataset.mapper")
 public class ZhituApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZhituApiApplication.class, args);

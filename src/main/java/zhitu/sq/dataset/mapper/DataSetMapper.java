@@ -20,4 +20,6 @@ public interface DataSetMapper {
 	DataSet findById(String id);
 
 	int updateDataSet(DataSet dSet);
+
+	int deleteByPrimaryKey(String id);
 }

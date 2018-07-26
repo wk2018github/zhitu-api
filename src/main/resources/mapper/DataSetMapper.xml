@@ -31,6 +31,10 @@
       #{projectId,jdbcType=VARCHAR}, #{dataTable,jdbcType=VARCHAR}, #{rdbId,jdbcType=VARCHAR}
       )
   </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from zt_sys_dataset
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
    <update id="updateDataSet" parameterType="zhitu.sq.dataset.model.DataSet" >
     update zt_sys_dataset
     <set >

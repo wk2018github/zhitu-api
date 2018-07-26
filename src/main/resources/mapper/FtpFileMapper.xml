@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zhitu.sq.dataset.mapper.FtpFileMapper" >
+  <resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.FtpFile" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="fileName" property="fileName" jdbcType="VARCHAR" />
+    <result column="ftpurl" property="ftpurl" jdbcType="VARCHAR" />
+    <result column="datasetId" property="datasetId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="zhitu.sq.dataset.model.FtpFile" extends="BaseResultMap" >
+    <result column="fileAbstract" property="fileabstract" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createTime, fileName, ftpurl, datasetId
+  </sql>
+  <sql id="Blob_Column_List" >
+    fileAbstract
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zt_data_ftp_file
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from zt_data_ftp_file
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="zhitu.sq.dataset.model.FtpFile" >
+    insert into zt_data_ftp_file (id, createTime, fileName, 
+      ftpurl, datasetId, fileAbstract
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fileName,jdbcType=VARCHAR}, 
+      #{ftpurl,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR}, #{fileabstract,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="zhitu.sq.dataset.model.FtpFile" >
+    insert into zt_data_ftp_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="fileName != null" >
+        fileName,
+      </if>
+      <if test="ftpurl != null" >
+        ftpurl,
+      </if>
+      <if test="datasetId != null" >
+        datasetId,
+      </if>
+      <if test="fileabstract != null" >
+        fileAbstract,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpurl != null" >
+        #{ftpurl,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetId != null" >
+        #{datasetId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileabstract != null" >
+        #{fileabstract,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="zhitu.sq.dataset.model.FtpFile" >
+    update zt_data_ftp_file
+    <set >
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fileName != null" >
+        fileName = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpurl != null" >
+        ftpurl = #{ftpurl,jdbcType=VARCHAR},
+      </if>
+      <if test="datasetId != null" >
+        datasetId = #{datasetId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileabstract != null" >
+        fileAbstract = #{fileabstract,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="zhitu.sq.dataset.model.FtpFile" >
+    update zt_data_ftp_file
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      fileName = #{fileName,jdbcType=VARCHAR},
+      ftpurl = #{ftpurl,jdbcType=VARCHAR},
+      datasetId = #{datasetId,jdbcType=VARCHAR},
+      fileAbstract = #{fileabstract,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.FtpFile" >
+    update zt_data_ftp_file
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      fileName = #{fileName,jdbcType=VARCHAR},
+      ftpurl = #{ftpurl,jdbcType=VARCHAR},
+      datasetId = #{datasetId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="findByDataSetId" resultType="java.util.Map">
+    select * from zt_data_ftp_file
+    where datasetId = #{datasetId}
+  </select>
+  <delete id="deleteByDataSetId" parameterType="java.lang.String" >
+    delete from zt_data_ftp_file
+    where datasetId = #{datasetId,jdbcType=VARCHAR}
+  </delete>
+</mapper>
