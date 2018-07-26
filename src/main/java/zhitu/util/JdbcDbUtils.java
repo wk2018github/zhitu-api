@@ -1,4 +1,4 @@
-package zhitu.utils;
+package zhitu.util;
 
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import zhitu.sq.dataset.model.Rdb;
 
-public class JdbcDbUtil {
+public class JdbcDbUtils {
 
 	/**
 	 * 远程连接数据库mysql查询表显示需要字段

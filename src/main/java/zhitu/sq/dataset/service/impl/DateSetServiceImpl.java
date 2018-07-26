@@ -22,9 +22,9 @@ import zhitu.sq.dataset.mapper.RdbMapper;
 import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.model.Rdb;
 import zhitu.sq.dataset.service.DataSetService;
-import zhitu.utils.JdbcDbUtil;
-import zhitu.utils.NumberDealHandler;
-import zhitu.utils.StringHandler;
+import zhitu.util.NumberDealHandler;
+import zhitu.util.StringHandler;
+import zhitu.util.JdbcDbUtils;
 
 @Service
 @Transactional
@@ -111,7 +111,7 @@ public class DateSetServiceImpl implements DataSetService{
 		}else{
 			//先查询远程连接信息及表名
 			Rdb rdb = rdbMapper.selectByPrimaryKey(rdbId);
-			list = JdbcDbUtil.jdbcTable(rdb,page,rows);
+			list = JdbcDbUtils.jdbcTable(rdb,page,rows);
 		}
 		return new PageInfo<>(list);
 	}
