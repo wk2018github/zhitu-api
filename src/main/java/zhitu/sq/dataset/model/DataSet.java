@@ -22,7 +22,7 @@ public class DataSet{
     /**
      * 数据集描述
      */
-    private String describe;
+    private String description;
 
     /**
      * 类型ID，外键:引用zt_sys_dataset_local_file.id
@@ -73,12 +73,12 @@ public class DataSet{
 		this.name = name;
 	}
 
-	public String getDescribe() {
-		return describe;
+	public String getDescriptione() {
+		return description;
 	}
 
-	public void setDescribe(String describe) {
-		this.describe = describe;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getTypeId() {

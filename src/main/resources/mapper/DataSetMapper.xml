@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="typeId" property="typeId" jdbcType="VARCHAR" />
     <result column="userId" property="userId" jdbcType="VARCHAR" />
     <result column="projectId" property="projectId" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
     <result column="rdbId" property="rdbId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, createTime, name, describe, typeId, userId, projectId, dataTable, rdbId
+    id, createTime, name, description, typeId, userId, projectId, dataTable, rdbId
   </sql>
    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -23,11 +23,11 @@
   </select>
   <insert id="insert" parameterType="zhitu.sq.dataset.model.DataSet" >
     insert into zt_sys_dataset (id, createTime, name, 
-      describe, typeId, userId, 
+      description, typeId, userId, 
       projectId, dataTable, rdbId
       )
     values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
-      #{describe,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
       #{projectId,jdbcType=VARCHAR}, #{dataTable,jdbcType=VARCHAR}, #{rdbId,jdbcType=VARCHAR}
       )
   </insert>
@@ -44,8 +44,8 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="describe != null" >
-        describe = #{describe,jdbcType=VARCHAR},
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="typeId != null" >
         typeId = #{typeId,jdbcType=VARCHAR},
@@ -67,13 +67,23 @@
   </update>
   
   <select id="findByName" resultType="java.util.Map">
-   	SELECT d.id, d.`name`, d.`describe` AS dateDesc, d.typeId, f.`describe` AS typeDesc, d.createTime
+   	SELECT d.id, d.`name`, d.description AS dateDesc, d.typeId, f.description AS typeDesc, d.createTime
 	FROM zt_sys_dataset d
-	LEFT JOIN zt_sys_dataset_local_file f ON f.typeId = d.typeId
+	LEFT JOIN zt_sys_dataset_type f ON f.typeId = d.typeId
 	where d.userId = #{userId}
 	<if test="name!=null and name!=''">
 		and d.`name` like concat(concat('%',#{name}),'%')
 	</if>
 	ORDER BY d.createTime DESC
+  </select>
+  
+  <select id="chartsByName" resultType="java.util.Map">
+   SELECT typeId,COUNT(*) as cout 
+   FROM  zt_sys_dataset 
+   where userId =#{userId}
+	<if test="name!=null and name!=''">
+		and `name` like concat(concat('%',#{name}),'%')
+	</if>
+	 GROUP BY typeId
   </select>
 </mapper>

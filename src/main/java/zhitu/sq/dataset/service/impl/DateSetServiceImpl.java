@@ -8,25 +8,36 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
 import zhitu.sq.dataset.mapper.DataSetMapper;
+import zhitu.sq.dataset.mapper.DataTableMapper;
 import zhitu.sq.dataset.mapper.FtpFileMapper;
+import zhitu.sq.dataset.mapper.RdbMapper;
 import zhitu.sq.dataset.model.DataSet;
+import zhitu.sq.dataset.model.Rdb;
 import zhitu.sq.dataset.service.DataSetService;
-import zhitu.util.NumberDealHandler;
-import zhitu.util.StringHandler;
+import zhitu.utils.JdbcDbUtil;
+import zhitu.utils.NumberDealHandler;
+import zhitu.utils.StringHandler;
 
 @Service
+@Transactional
 public class DateSetServiceImpl implements DataSetService{
 
 	@Autowired
 	private DataSetMapper dataSetMapper;
 	@Autowired
 	private FtpFileMapper ftpFileMapper;
+	@Autowired
+	private DataTableMapper dataTableMapper;
+	@Autowired
+	private RdbMapper rdbMapper;
 	
 	@Override
 	public PageInfo<Map<String, Object>> queryDateSet(Map<String, Object> map,String userId) {
@@ -82,32 +93,101 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public PageInfo<Map<String, Object>> findById(Map<String, Object> map) {
+	public PageInfo<Map<String, Object>> findById(Map<String, Object> map) throws Exception{
 		
 		String id = StringHandler.objectToString(map.get("id"));
     	String typeId = StringHandler.objectToString(map.get("typeId"));
-    	PageHelper.startPage(NumberDealHandler.objectToInt(map.get("page")),
-				NumberDealHandler.objectToInt(map.get("rows")));
+    	String dataTable = StringHandler.objectToString(map.get("dataTable"));
+    	String rdbId = StringHandler.objectToString(map.get("rdbId"));
+    	int page = NumberDealHandler.objectToInt(map.get("page"));
+    	int rows = NumberDealHandler.objectToInt(map.get("rows"));
+    	PageHelper.startPage(page,rows);
     	List<Map<String, Object>> list = new ArrayList<>();
 		if(typeId.equals("local_file_pdf")){
 			list = ftpFileMapper.findByDataSetId(id);
-		}else {
-			//根据id及数据库表查询改表下所有数据
+		}else if(typeId.equals("local_rdb")){
+			//根据dataTable及数据库表查询改表下所有数据
+			list = dataTableMapper.findByDataSetId(dataTable);
+		}else{
+			//先查询远程连接信息及表名
+			Rdb rdb = rdbMapper.selectByPrimaryKey(rdbId);
+			list = JdbcDbUtil.jdbcTable(rdb,page,rows);
 		}
 		return new PageInfo<>(list);
 	}
 
 	@Override
-	public int deleteById(String id, String typeId) {
+	public int deleteById(String id, String typeId,String dataTable,String rdbId) {
 		
 		if(typeId.equals("local_file_pdf")){
 			ftpFileMapper.deleteByDataSetId(id);
+		}else if(typeId.equals("local_rdb")){
+			//根据dataTable及数据库表删除改表
+			dataTableMapper.deleteByDataSetId(dataTable);
+			//根据rdbId删除信息
+			rdbMapper.deleteByPrimaryKey(rdbId);
 		}else{
-			//根据id及数据库表删除改表
+			//根据rdbId删除信息
+			rdbMapper.deleteByPrimaryKey(rdbId);
 		}
 		int i = dataSetMapper.deleteByPrimaryKey(id);
 		
 		return i;
+	}
+
+	@Override
+	public int saveSqlDataSet(DataSetRdbVo dRdbVo, String userId) {
+//		String typeId = StringHandler.objectToString(dRdbVo.getTypeId());
+		
+		DataSet dataSet = new DataSet();
+		
+//		if(typeId.equals("remote_rdb")){
+			
+			/**
+			 * 首先保存数据库连接rdb数据，在保存dataset信息
+			 */
+			Rdb rdb = new Rdb();
+			String rdbId = "RDB_"+new Date().getTime();
+			rdb.setId(rdbId);
+			rdb.setCharset(dRdbVo.getCharset());
+			rdb.setColumnNames(dRdbVo.getColumnNames());
+			rdb.setCreateTime(new Date());
+			rdb.setDbName(dRdbVo.getDbName());
+			rdb.setHost(dRdbVo.getHost());
+			rdb.setPassword(dRdbVo.getPassword());
+			rdb.setPort(dRdbVo.getPort());
+			rdb.setDatabasetype("mysql");
+			rdb.setTableName(dRdbVo.getTableName());
+			rdb.setUser(dRdbVo.getUser());
+			rdbMapper.insert(rdb);
+			
+			dataSet.setTypeId("remote_rdb");	
+			dataSet.setRdbId(rdbId);
+			
+		/*}else if (typeId.equals("local_rdb")) {
+			
+			
+		}*/
+		String id = "DATASET_"+new Date().getTime();
+		dataSet.setId(id);
+		dataSet.setCreateTime(new Date());
+		dataSet.setName(dRdbVo.getName());
+		dataSet.setUserId(userId);
+		dataSet.setProjectId(dRdbVo.getProjectId());
+		int i = dataSetMapper.insert(dataSet);
+		return i;
+	}
+
+	@Override
+	public Map<String, Object> findByTableAndId(Map<String, Object> map) {
+		String tableName = StringHandler.objectToString(map.get("tableName"));
+		String id = StringHandler.objectToString(map.get("id"));
+		return dataTableMapper.findByTableAndId(tableName,id);
+	}
+
+	@Override
+	public Map<String, Object> chartsByName(String name, String userId) {
+		return dataSetMapper.chartsByName(name,userId);
 	}
 
 }
