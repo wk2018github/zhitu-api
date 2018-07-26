@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -175,7 +176,7 @@ public class DataSetController extends BaseController{
 		}
     }
 	
-	@ApiOperation(value = "本地数据库local_rdb查询表数据", notes = "本地数据库local_rdb查询表数据")
+	@ApiOperation(value = "本地数据库local_rdb根据表id查询数据", notes = "本地数据库local_rdb根据表id查询数据")
     @RequestMapping(value = "/findByTableAndId",method = RequestMethod.POST)
     @ResponseBody
     public SQApiResponse<Map<String, Object>> findByTableAndId(HttpServletRequest request,
@@ -191,7 +192,7 @@ public class DataSetController extends BaseController{
     }
 	
 	@ApiOperation(value = "数据集饼状图", notes = "数据集饼状图")
-    @RequestMapping(value = "/findByTableAndId",method = RequestMethod.POST)
+    @RequestMapping(value = "/chartsByName",method = RequestMethod.POST)
     @ResponseBody
     public SQApiResponse<Map<String, Object>> chartsByName(HttpServletRequest request,
     		@RequestBody Map<String, Object> map) {
