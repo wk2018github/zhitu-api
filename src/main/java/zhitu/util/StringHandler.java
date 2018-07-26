@@ -1,4 +1,4 @@
-package zhitu.utils;
+package zhitu.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
