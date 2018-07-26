@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +26,6 @@ import zhitu.utils.StringHandler;
 
 @RestController
 @CrossOrigin
-@MapperScan("zhitu.sq.dataset.mapper")
 public class DataSetController extends BaseController{
 	
 	private static final Logger LOG = Logger.getLogger(DataSetController.class);
@@ -54,20 +52,39 @@ public class DataSetController extends BaseController{
 		}
     }
 	
-	@ApiOperation(value = "根据id查询数据集详细", notes = "根据id查询数据集详细")
+	@ApiOperation(value = "根据数据集id和typeId(类型)查询数据集详细", notes = "根据数据集id和typeId(类型)查询数据集详细")
     @RequestMapping(value = "/findById",method = RequestMethod.POST)
     @ResponseBody
     public SQApiResponse<Map<String, Object>> findById(HttpServletRequest request,
     		@ApiParam(value = "id")@RequestBody Map<String, Object> map) {
     	try {
         	Map<String, Object> result = new HashMap<String, Object>();
-        	String id = StringHandler.objectToString(map.get("id"));
-        	DataSet dateSet = dataSetService.findById(id);
-        	result.put("date", dateSet);
+        	PageInfo<Map<String, Object>> data = dataSetService.findById(map);
+        	result.put("date", data);
     		return success(result);
 		} catch (Exception e) {
 			LOG.error("查询失败:" + e.getMessage(),e);
 			return error("查询失败");
+		}
+    }
+	
+	@ApiOperation(value = "根据id和typeId(类型)删除数据集", notes = "根据id和typeId(类型)删除数据集")
+    @RequestMapping(value = "/deleteById",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> deleteById(HttpServletRequest request,
+    		@ApiParam(value = "id")@RequestBody Map<String, Object> map) {
+    	try {
+    		
+    		String id = StringHandler.objectToString(map.get("id"));
+    		String typeId = StringHandler.objectToString(map.get("typeId"));
+        	int i = dataSetService.deleteById(id,typeId);
+        	if(i>0){
+        		return success();
+        	}
+    		return error("删除失败");
+		} catch (Exception e) {
+			LOG.error("删除失败:" + e.getMessage(),e);
+			return error("删除失败");
 		}
     }
 	
@@ -117,5 +134,5 @@ public class DataSetController extends BaseController{
 			return error("上传失败");
 		}
     }
-
+	
 }
