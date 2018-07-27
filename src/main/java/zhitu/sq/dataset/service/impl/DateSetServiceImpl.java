@@ -27,7 +27,6 @@ import zhitu.util.StringHandler;
 import zhitu.util.JdbcDbUtils;
 
 @Service
-@Transactional
 public class DateSetServiceImpl implements DataSetService{
 
 	@Autowired
@@ -44,7 +43,8 @@ public class DateSetServiceImpl implements DataSetService{
 		PageHelper.startPage(NumberDealHandler.objectToInt(map.get("page")),
 				NumberDealHandler.objectToInt(map.get("rows")));
 		String name = StringHandler.objectToString(map.get("name"));
-		List<Map<String, Object>> list = dataSetMapper.findByName(name,userId);
+		String projectId = StringHandler.objectToString(map.get("projectId"));
+		List<Map<String, Object>> list = dataSetMapper.findByName(name,userId,projectId);
 		return new PageInfo<>(list);
 	}
 
@@ -156,7 +156,7 @@ public class DateSetServiceImpl implements DataSetService{
 			rdb.setHost(dRdbVo.getHost());
 			rdb.setPassword(dRdbVo.getPassword());
 			rdb.setPort(dRdbVo.getPort());
-			rdb.setDatabasetype("mysql");
+			rdb.setDatabaseType(dRdbVo.getDatabaseType());
 			rdb.setTableName(dRdbVo.getTableName());
 			rdb.setUser(dRdbVo.getUser());
 			rdbMapper.insert(rdb);
@@ -186,8 +186,8 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public Map<String, Object> chartsByName(String name, String userId) {
-		return dataSetMapper.chartsByName(name,userId);
+	public List<Map<String, Object>> chartsByName(String name,String projectId, String userId) {
+		return dataSetMapper.chartsByName(name,projectId,userId);
 	}
 
 }

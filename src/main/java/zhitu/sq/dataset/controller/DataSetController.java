@@ -1,13 +1,13 @@
 package zhitu.sq.dataset.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,16 +53,19 @@ public class DataSetController extends BaseController{
 			return error("查询失败");
 		}
     }
+	private static final String param = "{\"page\":1,\"rows\":10,\n" 
+			+ "\"id\":\"DATASET_1532596254452\",\"typeId\":\"local_rdb\",\n" 
+			+ "\"rdbId\":\"RDB_1532596254450\",\"dataTable\":\"zt_data_dataset_1531139698243\"}";
 	
 	@ApiOperation(value = "根据数据集id和typeId(类型)查询数据集详细", notes = "根据数据集id和typeId(类型)查询数据集详细")
     @RequestMapping(value = "/findById",method = RequestMethod.POST)
     @ResponseBody
     public SQApiResponse<Map<String, Object>> findById(HttpServletRequest request,
-    		@ApiParam(value = "id")@RequestBody Map<String, Object> map) {
+    		@ApiParam(value = param)@RequestBody Map<String, Object> map) {
     	try {
         	Map<String, Object> result = new HashMap<String, Object>();
         	PageInfo<Map<String, Object>> data = dataSetService.findById(map);
-        	result.put("date", data);
+        	result = mergeJqGridData(data);
     		return success(result);
 		} catch (Exception e) {
 			LOG.error("查询失败:" + e.getMessage(),e);
@@ -186,8 +189,8 @@ public class DataSetController extends BaseController{
     		result = dataSetService.findByTableAndId(map);
     		return success(result);
 		} catch (Exception e) {
-			LOG.error("上传失败:" + e.getMessage(),e);
-			return error("上传失败");
+			LOG.error("查询失败:" + e.getMessage(),e);
+			return error("查询失败");
 		}
     }
 	
@@ -201,11 +204,16 @@ public class DataSetController extends BaseController{
     		//获取登录用户Id
     		String userId = "USER_1293910401";
     		String name = StringHandler.objectToString(map.get("name"));
-    		result = dataSetService.chartsByName(name,userId);
+    		String projectId = StringHandler.objectToString(map.get("projectId"));
+//    		if(projectId.isEmpty()){
+//    			return error("项目Id不能为空!");
+//    		}
+    		List<Map<String, Object>> list = dataSetService.chartsByName(name,projectId,userId);
+    		result.put("data", list);
     		return success(result);
 		} catch (Exception e) {
-			LOG.error("上传失败:" + e.getMessage(),e);
-			return error("上传失败");
+			LOG.error("查询失败:" + e.getMessage(),e);
+			return error("查询失败");
 		}
     }
 }

@@ -1,5 +1,6 @@
 package zhitu.sq.dataset.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -69,14 +70,15 @@ public interface DataSetService {
 	 * @param map
 	 * @return
 	 */
-	Map<String, Object> findByTableAndId(Map<String, Object> map);
+	Map<String, Object> findByTableAndId(Map<String, Object> map)throws Exception;
 
 	/**
-	 * 根据name 和登录人员id 统计类型个数
+	 * 根据name 和登录人员id 统计项目下数据集类型
 	 * @param name
 	 * @param userId
+	 * @param projectId 
 	 * @return
 	 */
-	Map<String, Object> chartsByName(String name, String userId);
+	List<Map<String, Object>> chartsByName(String name,String projectId, String userId)throws Exception;
 
 }
