@@ -61,7 +61,13 @@ public class DataSetRdbVo {
      * 数据集描述
      */
     private String description;
-
+    
+    /**
+     * 数据库类型
+     * @return
+     */
+    private String databaseType;
+    
 	public String getHost() {
 		return host;
 	}
@@ -158,6 +164,13 @@ public class DataSetRdbVo {
 		this.description = description;
 	}
 
+	public String getDatabaseType() {
+		return databaseType;
+	}
+
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
+	}
     
 
 }

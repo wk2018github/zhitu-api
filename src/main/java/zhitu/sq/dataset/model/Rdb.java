@@ -33,7 +33,7 @@ public class Rdb implements Serializable{
     /**
      * 数据库类型
      */
-    private String databasetype;
+    private String databaseType;
     
     /**
      * 数据字符集
@@ -97,13 +97,12 @@ public class Rdb implements Serializable{
 		this.port = port;
 	}
 
-	
-	public String getDatabasetype() {
-		return databasetype;
+	public String getDatabaseType() {
+		return databaseType;
 	}
 
-	public void setDatabasetype(String databasetype) {
-		this.databasetype = databasetype;
+	public void setDatabaseType(String databaseType) {
+		this.databaseType = databaseType;
 	}
 
 	public String getCharset() {

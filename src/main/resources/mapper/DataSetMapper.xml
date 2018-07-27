@@ -67,23 +67,30 @@
   </update>
   
   <select id="findByName" resultType="java.util.Map">
-   	SELECT d.id, d.`name`, d.description AS dateDesc, d.typeId, f.description AS typeDesc, d.createTime
+   	SELECT d.*, f.description AS typeDesc
 	FROM zt_sys_dataset d
 	LEFT JOIN zt_sys_dataset_type f ON f.typeId = d.typeId
 	where d.userId = #{userId}
 	<if test="name!=null and name!=''">
 		and d.`name` like concat(concat('%',#{name}),'%')
 	</if>
+	<if test="projectId!=null and projectId!=''">
+		and d.projectId =#{projectId}
+	</if>
 	ORDER BY d.createTime DESC
   </select>
   
   <select id="chartsByName" resultType="java.util.Map">
-   SELECT typeId,COUNT(*) as cout 
-   FROM  zt_sys_dataset 
+    SELECT d.typeId,t.description,COUNT(*) as cout 
+   	FROM  zt_sys_dataset d
+	LEFT JOIN zt_sys_dataset_type t on t.typeId =d.typeId
    where userId =#{userId}
+  	 <if test="projectId !=null and projectId !=''">
+		and projectId =#{projectId}
+	</if>
 	<if test="name!=null and name!=''">
 		and `name` like concat(concat('%',#{name}),'%')
 	</if>
-	 GROUP BY typeId
+    GROUP BY d.typeId
   </select>
 </mapper>

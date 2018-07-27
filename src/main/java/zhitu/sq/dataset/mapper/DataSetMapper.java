@@ -13,7 +13,7 @@ import zhitu.sq.dataset.model.DataSet;
 @Mapper
 public interface DataSetMapper {
 	
-    List<Map<String, Object>> findByName(@Param("name")String name,@Param("userId")String userId);
+    List<Map<String, Object>> findByName(@Param("name")String name,@Param("userId")String userId,@Param("projectId")String projectId);
 
 	int insert(DataSet dataSet);
 
@@ -23,5 +23,5 @@ public interface DataSetMapper {
 
 	int deleteByPrimaryKey(String id);
 
-	Map<String, Object> chartsByName(@Param("name")String name,@Param("userId")String userId);
+	List<Map<String, Object>> chartsByName(@Param("name")String name,@Param("projectId")String projectId,@Param("userId")String userId);
 }

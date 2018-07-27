@@ -3,17 +3,18 @@ package zhitu.sq.dataset.model;
 import java.util.Date;
 
 public class FtpFile {
-    private String id;
+	
+    private String id; //唯一ID，必须以`PDF_毫秒时间戳`为格式
 
-    private Date createTime;
+    private Date createTime;//创建时间
 
-    private String fileName;
+    private String fileName;//文件名
 
-    private String ftpurl;
+    private String ftpurl;//文件路径
 
-    private String datasetId;
+    private String datasetId;//zt_sys_dataset表中新增一条记录的id
 
-    private String fileAbstract;
+    private String fileAbstract;//内容摘要
 
 	public String getId() {
 		return id;

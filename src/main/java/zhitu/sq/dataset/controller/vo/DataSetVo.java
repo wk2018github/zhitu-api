@@ -1,7 +1,5 @@
 package zhitu.sq.dataset.controller.vo;
 
-import java.util.Date;
-
 public class DataSetVo {
 
 	/**
@@ -42,6 +40,5 @@ public class DataSetVo {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 
 }
