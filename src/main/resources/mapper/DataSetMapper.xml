@@ -93,4 +93,20 @@
 	</if>
     GROUP BY d.typeId
   </select>
+  
+  <select id="queryDBType" resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT
+		id,`key` AS `code`,`value` AS `name`
+		FROM `zt_sys_dict` d
+		WHERE d.`code` = 'databaseType' AND d.`parentValue` = 0
+	</select>
+	<!-- 插入ftp file -->
+	<insert id="insertFtpFile" parameterType="java.util.List" >
+		insert into zt_data_ftp_file (id, createTime, fileName, fileAbstract, ftpurl, datasetId)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR}, now(),#{item.fileName,jdbcType=VARCHAR},
+            #{item.fileAbstract,jdbcType=LONGVARCHAR}, #{item.ftpurl,jdbcType=VARCHAR},#{item.datasetId,jdbcType=VARCHAR})
+        </foreach>
+	</insert>
 </mapper>

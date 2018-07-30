@@ -1,5 +1,6 @@
 package zhitu.sq.dataset.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.github.pagehelper.PageInfo;
 
@@ -20,12 +22,15 @@ import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
 import zhitu.sq.dataset.controller.vo.DataSetVo;
+import zhitu.sq.dataset.controller.vo.RdbVo;
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.DataSet;
+import zhitu.sq.dataset.model.Rdb;
 import zhitu.sq.dataset.service.DataSetService;
 import zhitu.util.StringHandler;
 
 
-
+@RequestMapping("dataSet")
 @RestController
 @CrossOrigin
 public class DataSetController extends BaseController{
@@ -73,22 +78,15 @@ public class DataSetController extends BaseController{
 		}
     }
 	
-	@ApiOperation(value = "根据id和typeId(类型)删除数据集", notes = "根据id和typeId(类型)删除数据集")
+	@ApiOperation(value = "根据id删除数据集", notes = "根据id删除数据集")
     @RequestMapping(value = "/deleteById",method = RequestMethod.POST)
     @ResponseBody
     public SQApiResponse<Map<String, Object>> deleteById(HttpServletRequest request,
     		@ApiParam(value = "id")@RequestBody Map<String, Object> map) {
     	try {
-    		
-    		String id = StringHandler.objectToString(map.get("id"));
-    		String typeId = StringHandler.objectToString(map.get("typeId"));
-    		String dataTable = StringHandler.objectToString(map.get("dataTable"));
-    		String rdbId = StringHandler.objectToString(map.get("rdbId"));
-        	int i = dataSetService.deleteById(id,typeId,dataTable,rdbId);
-        	if(i>0){
-        		return success();
-        	}
-    		return error("删除失败");
+    		List<String> ids = (List<String>) map.get("ids");
+        	dataSetService.deleteById(ids);
+        	return success();
 		} catch (Exception e) {
 			LOG.error("删除失败:" + e.getMessage(),e);
 			return error("删除失败");
@@ -118,28 +116,37 @@ public class DataSetController extends BaseController{
     }
 	
 	/**
-	 * 
-	 * 暂时未完成
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
 	 */
 	@ApiOperation(value = "保存数据集信息-多文件上传保存", notes = "保存数据集信息-文件上传保存")
-    @RequestMapping(value = "/handleFileUpload",method = RequestMethod.POST)
-    @ResponseBody
-    public SQApiResponse<Map<String, Object>> handleFileUpload(/*HttpServletRequest request,*/
-    		@RequestParam("name") String name, @RequestParam("describe") String describe,
-    		@RequestParam("projectId") String projectId,@RequestParam("files") MultipartFile[] files) {
-    	try {
-        	//获取登录用户Id
-    		String userId = "USER_1293910401";
-    		int i = dataSetService.saveLocalDataSet(userId,name,describe,projectId,files);
-    		if(i>0){
-    			return success();
-    		}
-    		return error("上传失败");
+	@RequestMapping(value = "/handleFileUpload", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<Map<String, Object>> handleFileUpload(HttpServletRequest request,
+			@RequestParam("name") String name, @RequestParam("describe") String describe,
+			@RequestParam("projectId") String projectId/*
+														 * ,@RequestParam(
+														 * "files")
+														 * MultipartFile[] files
+														 */) {
+		try {
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+			List<MultipartFile> files = multipartRequest.getFiles("files");
+			// 获取登录用户Id
+			String userId = "USER_1293910401";
+
+			int i = dataSetService.saveLocalDataSet(userId, name, describe, projectId, files);
+			if (i > 0) {
+				return success();
+			}
+			return error("上传失败");
 		} catch (Exception e) {
-			LOG.error("上传失败:" + e.getMessage(),e);
+			LOG.error("handleFileUpload", e);
 			return error("上传失败");
 		}
-    }
+	}
 	
 	@ApiOperation(value = "保存数据集信息-远程数据库sql", notes = "保存数据集信息-远程数据库sql")
     @RequestMapping(value = "/saveSqlDb",method = RequestMethod.POST)
@@ -194,6 +201,38 @@ public class DataSetController extends BaseController{
 		}
     }
 	
+	@ApiOperation(value = "数据库根据表查询数据分页", notes = "数据库根据表查询数据分页")
+    @RequestMapping(value = "/findByTable",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> findByTable(HttpServletRequest request,
+    		@RequestBody RdbVo rdbVo) {
+    	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		PageInfo<Map<String, Object>> list = dataSetService.findByTable(rdbVo);
+    		result = mergeJqGridData(list);
+    		return success(result);
+		} catch (Exception e) {
+			LOG.error("查询失败:" + e.getMessage(),e);
+			return error("查询失败");
+		}
+    }
+	
+	@ApiOperation(value = "数据库根据表查询表字段", notes = "数据库根据表查询表字段")
+    @RequestMapping(value = "/findByTableFiled",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> findByTableFiled(HttpServletRequest request,
+    		@RequestBody RdbVo rdbVo) {
+    	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		List<String> list = dataSetService.findByTableFiled(rdbVo);
+    		result.put("date", list);
+    		return success(result);
+		} catch (Exception e) {
+			LOG.error("查询失败:" + e.getMessage(),e);
+			return error("查询失败");
+		}
+    }
+	
 	@ApiOperation(value = "数据集饼状图", notes = "数据集饼状图")
     @RequestMapping(value = "/chartsByName",method = RequestMethod.POST)
     @ResponseBody
@@ -216,4 +255,149 @@ public class DataSetController extends BaseController{
 			return error("查询失败");
 		}
     }
+	
+	
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "连接数据库页面查询数据库类型", notes = "连接数据库页面查询数据库类型")
+	@RequestMapping(value = "/queryDBType", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<Select>> queryDBType(HttpServletRequest request) {
+		try {
+			List<Select> res = new ArrayList<Select>();
+
+			res = dataSetService.queryDBType();
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("查询失败", e);
+			return error("查询失败");
+		}
+	}
+
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "远程连接数据库查询数据库表所有表", notes = "远程连接数据库查询数据库表所有表")
+	@RequestMapping(value = "/queryDBTables", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<String>> queryDBTables(HttpServletRequest request, @RequestBody Rdb rdb) {
+		try {
+			List<String> res = new ArrayList<String>();
+
+			res = dataSetService.queryDBTables(rdb);
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("查询失败", e);
+			return error("查询失败");
+		}
+	}
+
+	private static final String queryRdbData = "{\"page\":1,\"rows\":10,\"host\":\"localhost\",\"port\":\"3306\","
+			+ "\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"db_kg\",\"tableName\":\"zt_sys_dict\"}";
+
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "远程连接数据库查询数据库指定表中的数据", notes = "远程连接数据库查询数据库指定表中的数据")
+	@RequestMapping(value = "/queryTableData", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<String>> queryTableData(HttpServletRequest request,
+			@ApiParam(value = queryRdbData) @RequestBody Map<String, Object> map) {
+		try {
+			List<String> res = new ArrayList<String>();
+
+			res = dataSetService.queryTableData(map);
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("queryDBTables", e);
+			return error("查询失败");
+		}
+	}
+
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "远程连接数据库查询数据库指定表中的列", notes = "远程连接数据库查询数据库指定表中的列")
+	@RequestMapping(value = "/queryTableColumn", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<String>> queryTableColumn(HttpServletRequest request,
+			@ApiParam(value = queryRdbData) @RequestBody Map<String, Object> map) {
+		try {
+			List<String> res = new ArrayList<String>();
+
+			res = dataSetService.queryTableColumn(map);
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("queryDBTables", e);
+			return error("查询失败");
+		}
+	}
+	
+	private static final String rdbColumnData = "{\"page\":1,\"rows\":10,\"host\":\"192.168.100.111\",\"port\":\"30620\",\"databaseType\":\"01\","
+			+ "\"charset\":\"utf-8\",\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"ldp_test\","
+			+ "\"tableName\":\"ldp_asset_object\",\"columnNames\":\"id,code,name\"}";
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "远程连接数据库查询表中指定的字段的表数据", notes = "远程连接数据库查询表中指定的字段的表数据")
+	@RequestMapping(value = "/queryTableColumnData", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<String>> queryTableColumnData(HttpServletRequest request,
+			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
+		try {
+			List<String> res = new ArrayList<String>();
+
+			res = dataSetService.queryTableColumnData(map);
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("queryDBTables", e);
+			return error("查询失败");
+		}
+	}
+	
+	/**
+	 * @author qwm
+	 * @param request
+	 * @param rdb
+	 * @return
+	 */
+	@ApiOperation(value = "远程连接数据库数据导入本地数据库并且查询表中指定的字段的表数据", notes = "远程连接数据库数据导入本地数据库并且查询表中指定的字段的表数据")
+	@RequestMapping(value = "/queryLocalTableColumnData", method = RequestMethod.POST)
+	@ResponseBody
+	public SQApiResponse<List<String>> queryLocalTableColumnData(HttpServletRequest request,
+			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
+		try {
+			List<String> res = new ArrayList<String>();
+			String userId = "USER_1293910401";
+			res = dataSetService.queryLocalTableColumnData(map,userId);
+
+			return success(res);
+		} catch (Exception e) {
+			LOG.error("queryDBTables", e);
+			return error("查询失败");
+		}
+	}
+	
+	
 }

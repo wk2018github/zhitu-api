@@ -1,29 +1,43 @@
 package zhitu.sq.dataset.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
+import zhitu.sq.dataset.controller.vo.RdbVo;
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.mapper.DataSetMapper;
 import zhitu.sq.dataset.mapper.DataTableMapper;
 import zhitu.sq.dataset.mapper.FtpFileMapper;
 import zhitu.sq.dataset.mapper.RdbMapper;
+import zhitu.sq.dataset.mapper.TaskInfoMapper;
 import zhitu.sq.dataset.model.DataSet;
+import zhitu.sq.dataset.model.FtpFile;
 import zhitu.sq.dataset.model.Rdb;
+import zhitu.sq.dataset.model.TaskInfo;
 import zhitu.sq.dataset.service.DataSetService;
 import zhitu.util.NumberDealHandler;
+import zhitu.util.SparkSql;
 import zhitu.util.StringHandler;
+import zhitu.util.TikaUtils;
+import zhitu.util.DataSourceUtil;
 import zhitu.util.JdbcDbUtils;
 
 @Service
@@ -37,6 +51,10 @@ public class DateSetServiceImpl implements DataSetService{
 	private DataTableMapper dataTableMapper;
 	@Autowired
 	private RdbMapper rdbMapper;
+	@Autowired
+	private DataSourceUtil dataSourceUtil;
+	@Autowired
+	private TaskInfoMapper taskInfoMapper;
 	
 	@Override
 	public PageInfo<Map<String, Object>> queryDateSet(Map<String, Object> map,String userId) {
@@ -49,42 +67,63 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public int saveLocalDataSet(String userId,String name, String describe, String projectId, MultipartFile[] files) {
+	public int saveLocalDataSet(String userId, String name, String describe, String projectId,
+			List<MultipartFile> files) throws Exception {
 		
+		List<FtpFile> ftpFiles = new ArrayList<FtpFile>();
+		String id = "DATASET_" + new Date().getTime();
 		
-		//假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
+		FTPClient ftp = dataSourceUtil.getFTPClient();
+		if (null == ftp) {
+			throw new Exception("获取FTP失败");
+		}
+		
+		for (MultipartFile file : files) {
+			FtpFile f = new FtpFile();
+			f.setId("PDF_"+System.currentTimeMillis());
+//			// 文件后缀名(文件类型)
+//			String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+			// 文件名称带扩展名
+			String fileName = file.getOriginalFilename();
+			f.setFileName(fileName);
+			//调用中科院的接口获取 文件摘要内容一般取前5000字
+			String fileAbstract = TikaUtils.parseFile((File)file);
+			f.setFileAbstract(fileAbstract);
+//			// 文件名不带扩展名
+//			String fileName = fileName2.substring(0, fileName2.lastIndexOf("."));
+			// 文件上传到ftp
+			String directory = "zhituFile";
+			String ftpName = String.valueOf(System.currentTimeMillis());
+			boolean flag = upload(ftp, file, directory, ftpName);
+			if (!flag) {
+				throw new Exception(fileName + "上传失败");
+			}
+			
+			Configuration config = new PropertiesConfiguration("file.properties");
+			String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
+			f.setFtpurl(ftpurl);
+			f.setDatasetId(id);
+			ftpFiles.add(f);
+		}
+		ftp.disconnect();
+		
+		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
 		DataSet dataSet = new DataSet();
-		String id = "DATASET_"+new Date().getTime();
 		dataSet.setId(id);
 		dataSet.setCreateTime(new Date());
 		dataSet.setName(name);
 		dataSet.setUserId(userId);
 		dataSet.setProjectId(projectId);
-		dataSet.setTypeId("local_file");	
-		dataSet.setDataTable("zt_data_"+id);
-		//文件上传成功后保存数据集
-		dataSetMapper.insert(dataSet);
-		//文件保存数据
-		for (MultipartFile file : Arrays.asList(files)) {
-			//文件后缀名(文件类型)
-			String suffix = file.getOriginalFilename()
-					.substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-			//文件名称带扩展名
-			String fileName2 = file.getOriginalFilename();
-			//文件名不带扩展名
-			String fileName = fileName2.substring(0, fileName2.lastIndexOf("."));
-			//文件上传到ftp
-			//................
-			//假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
-			
-		}
-		
-		//创建zt_data_DATASET_1428399384表
-		
-		//字段 id（唯一ID，必须以PDF_毫秒时间戳为格式） createTime创建时间
-		//fileName（pdf文件名带后缀） abstract （pdf内容摘要） 
-		//ftpurl (pdf文件路径)
-		return 0;
+		dataSet.setTypeId("local_file");
+		dataSet.setDataTable("zt_data_" + id);
+		// 文件上传成功后保存数据集
+		int i = dataSetMapper.insert(dataSet);
+		int j = dataSetMapper.insertFtpFile(ftpFiles);
+		// 创建zt_data_DATASET_1428399384表
+		// 字段 id（唯一ID，必须以PDF_毫秒时间戳为格式） createTime创建时间
+		// fileName（pdf文件名带后缀） abstract （pdf内容摘要）
+		// ftpurl (pdf文件路径)
+		return i>0&&j>0?1:0;
 	}
 
 	@Override
@@ -117,22 +156,25 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public int deleteById(String id, String typeId,String dataTable,String rdbId) {
-		
-		if(typeId.equals("local_file_pdf")){
-			ftpFileMapper.deleteByDataSetId(id);
-		}else if(typeId.equals("local_rdb")){
-			//根据dataTable及数据库表删除改表
-			dataTableMapper.deleteByDataSetId(dataTable);
-			//根据rdbId删除信息
-			rdbMapper.deleteByPrimaryKey(rdbId);
-		}else{
-			//根据rdbId删除信息
-			rdbMapper.deleteByPrimaryKey(rdbId);
+	public void deleteById(List<String> ids) {
+		for(int i=0;i<ids.size();i++){
+			String id = ids.get(i);
+			DataSet dataset = dataSetMapper.selectByPrimaryKey(id);
+			
+			if(dataset.getTypeId().equals("local_file_pdf")){
+				ftpFileMapper.deleteByDataSetId(id);
+			}else if(dataset.getTypeId().equals("local_rdb")){
+				//根据dataTable及数据库表删除改表
+				dataTableMapper.deleteByDataSetId(dataset.getDataTable());
+				//根据rdbId删除信息
+				rdbMapper.deleteByPrimaryKey(dataset.getRdbId());
+			}else{
+				//根据rdbId删除信息
+				rdbMapper.deleteByPrimaryKey(dataset.getRdbId());
+			}
+			dataSetMapper.deleteByPrimaryKey(id);
 		}
-		int i = dataSetMapper.deleteByPrimaryKey(id);
 		
-		return i;
 	}
 
 	@Override
@@ -190,4 +232,183 @@ public class DateSetServiceImpl implements DataSetService{
 		return dataSetMapper.chartsByName(name,projectId,userId);
 	}
 
+	@Override
+	public PageInfo<Map<String, Object>> findByTable(RdbVo rdbVo) throws Exception{
+		int page = rdbVo.getPage();
+		int rows = rdbVo.getRows();
+		Rdb rdb = new Rdb();
+		BeanUtils.copyProperties(rdb, rdbVo);
+		List<Map<String, Object>> list = JdbcDbUtils.jdbcTable(rdb,page,rows);
+		return new PageInfo<>(list);
+	}
+
+	@Override
+	public List<String> findByTableFiled(RdbVo rdbVo) throws Exception {
+		Rdb rdb = new Rdb();
+		BeanUtils.copyProperties(rdb, rdbVo);
+		List<String> list = JdbcDbUtils.jdbcTable(rdb);
+		return list;
+	}
+	
+	@Override
+	public List<Select> queryDBType() throws Exception {
+		return dataSetMapper.queryDBType();
+	}
+
+	@Override
+	public List<String> queryDBTables(Rdb rdb) throws Exception {
+		String ip = rdb.getHost();
+		Integer port = rdb.getPort();
+		String userName = rdb.getUser();
+		String password = rdb.getPassword();
+		String databaseName = rdb.getDbName();
+		
+		List<String> list = dataSourceUtil.queryDataBaseTableInMysql(ip, port, userName, password, databaseName);
+		
+		return list;
+	}
+
+	@Override
+	public List<String> queryTableData(Map<String, Object> map) throws Exception {
+		List<String> list = new ArrayList<String>();
+		String ip = String.valueOf(map.get("host"));
+		Integer port = Integer.parseInt(String.valueOf(map.get("port")));
+		String userName = String.valueOf(map.get("user"));
+		String password = String.valueOf(map.get("password"));
+		String databaseName = String.valueOf(map.get("dbName"));
+		String tableName = String.valueOf(map.get("tableName"));
+		
+		//分页参数
+		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
+		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+		Integer start = getIntStart(page,rows);
+		Integer end = getIntEnd(page,rows);
+		//查找数据库
+		list = dataSourceUtil.queryTableData(ip, port, userName, password, databaseName, tableName, start, end);
+		
+		if(null == list){
+			throw new Exception("查询表中的数据时出现异常");
+		}
+		return list.subList(page, rows);
+	}
+
+	@Override
+	public List<String> queryTableColumn(Map<String, Object> map) throws Exception {
+		List<String> list = new ArrayList<String>();
+		String ip = String.valueOf(map.get("host"));
+		Integer port = Integer.parseInt(String.valueOf(map.get("port")));
+		String userName = String.valueOf(map.get("user"));
+		String password = String.valueOf(map.get("password"));
+		String databaseName = String.valueOf(map.get("dbName"));
+		String tableName = String.valueOf(map.get("tableName"));
+		
+		//先去查找redis中是否有数据,没有数据则查找数据库
+		list = dataSourceUtil.queryTableColumn(ip, port, userName, password, databaseName, tableName);
+		
+		if(null == list){
+			throw new Exception("查询表中的列名称出现异常");
+		}
+		return list;
+	}
+
+	@Override
+	public List<String> queryTableColumnData(Map<String, Object> map) throws Exception {
+		List<String> list = new ArrayList<String>();
+		String ip = String.valueOf(map.get("host"));
+		Integer port = Integer.parseInt(String.valueOf(map.get("port")));
+		String userName = String.valueOf(map.get("user"));
+		String password = String.valueOf(map.get("password"));
+		String databaseName = String.valueOf(map.get("dbName"));
+		String tableName = String.valueOf(map.get("tableName"));
+		String columnNames = String.valueOf(map.get("columnNames"));
+		
+		//分页参数
+		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
+		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+		//直接查询,不查redis
+		list = dataSourceUtil.queryTableColumnData(ip, port, userName, password, databaseName, tableName, columnNames);
+		
+		if(null == list){
+			throw new Exception("查询表中指定列数据出现异常");
+		}
+		return list.subList(page, rows);
+	}
+
+	@Override
+	public List<String> queryLocalTableColumnData(Map<String, Object> map,String userId) throws Exception {
+		Configuration config = new PropertiesConfiguration("application.properties");
+		String url = config.getString("spring.datasource.url");
+		String userName = config.getString("spring.datasource.username");
+		String password = config.getString("spring.datasource.password");
+		String columnNames = String.valueOf(map.get("columnNames"));
+		
+		Rdb rdb = getRdb(map);
+		List<String> list = new ArrayList<String>();
+		
+		String targetTable = String.valueOf(System.currentTimeMillis());
+		SparkSql.migration(rdb, targetTable);
+		TaskInfo taskInfo = new TaskInfo();
+		Date date = new Date();
+		taskInfo.setId("TASK_"+date.getTime());
+		taskInfo.setStatus("do");
+		taskInfo.setCreateTime(date);
+		taskInfo.setUserId(userId);
+		taskInfoMapper.insert(taskInfo);
+		//分页参数
+		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
+		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+		
+		list = dataSourceUtil.queryLocalTableColumnData(url, userName, password, targetTable, columnNames);
+		
+		return list.subList(page, rows);
+	}
+	
+	public Rdb getRdb(Map<String, Object> map){
+		Rdb rdb = new Rdb();
+		rdb.setCharset(String.valueOf(map.get("charset")));
+		rdb.setColumnNames(String.valueOf(map.get("columnNames")));
+		rdb.setDatabaseType(String.valueOf(map.get("databaseType")));
+		rdb.setDbName(String.valueOf(map.get("dbName")));
+		rdb.setHost(String.valueOf(map.get("host")));
+		rdb.setPassword(String.valueOf(map.get("password")));
+		rdb.setPort(Integer.parseInt(String.valueOf(map.get("port"))));
+		rdb.setTableName(String.valueOf(map.get("tableName")));
+		rdb.setUser(String.valueOf(map.get("user")));
+		return rdb;
+	}
+	public Integer getIntStart(int page,int rows){
+		return (page - 1)*rows;
+	}
+	public Integer getIntEnd(int page,int rows){
+		return page*rows;
+	}
+	@SuppressWarnings("resource")
+	public boolean upload(FTPClient ftp, MultipartFile file, String directory, String fileName) throws Exception {
+		boolean flag = false;
+		boolean m = ftp.makeDirectory(directory);// 创建文件夹
+		if (!m) {
+			throw new Exception("文件夹创建失败");
+		}
+		m = ftp.changeWorkingDirectory(directory);
+		if (!m) {
+			throw new Exception("进入文件夹失败");
+		}
+		ftp.enterLocalActiveMode();
+		ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+		// 上传文件
+		// FTP协议规定文件编码格式为ISO-8859-1
+		fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
+		InputStream in = new FileInputStream((File) file);
+		OutputStream out = ftp.storeFileStream(fileName);
+
+		byte[] byteArray = new byte[30720];
+		int read = 0;
+		while ((read = in.read(byteArray)) != -1) {
+			out.write(byteArray, 0, read);
+		}
+		out.close();
+
+		return flag;
+
+	}
 }
