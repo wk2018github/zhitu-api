@@ -34,13 +34,30 @@ public class SparkSql {
      * @param  targetTable
      */
     public static void migration(Rdb rdb,String targetTable){
+
+        String host = rdb.getHost();//远程数据库主机IP
+        Integer port = rdb.getPort();//远程数据库端口号
+        String dbName = rdb.getDbName();//远程数据库库名
+        String encoding = rdb.getCharset();//远程数据库编码方式
+        String user = rdb.getUser();//数据库用户名
+        String password = rdb.getPassword();//数据库密码
+        String fromTable = rdb.getTableName();//远程数据库表名
+        String field = rdb.getColumnNames();//导入的字段
+        if(StringHandler.isEmptyOrNull(host)||StringHandler.isEmptyOrNull(port)||StringHandler.isEmptyOrNull(dbName)||
+                StringHandler.isEmptyOrNull(encoding)||StringHandler.isEmptyOrNull(user)||StringHandler.isEmptyOrNull(password)||
+                StringHandler.isEmptyOrNull(fromTable)||StringHandler.isEmptyOrNull(field)){
+            System.out.println("远程数据库必填信息项有为空的项！！");
+            return;
+        }
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useUnicode=true";
+
         try {
-            String url = "jdbc:mysql://" + rdb.getHost() + ":" + rdb.getPort() + "/" + rdb.getDbName() + "?useUnicode=true";
+            /*String url = "jdbc:mysql://" + rdb.getHost() + ":" + rdb.getPort() + "/" + rdb.getDbName() + "?useUnicode=true";
             String encoding = rdb.getCharset();
             String user = rdb.getUser();//数据库用户名
             String password = rdb.getPassword();//数据库密码
             String fromTable = rdb.getTableName();//远程数据库表名
-            String field = rdb.getColumnNames();//导入的字段
+            String field = rdb.getColumnNames();//导入的字段*/
 
             String pythonExePath = "E:\\spark-2.2.0-bin-hadoop2.7\\bin\\spark-submit.cmd";
             CommandLine cmdLine = CommandLine.parse(pythonExePath);
