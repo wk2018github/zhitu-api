@@ -127,8 +127,7 @@
     delete from zt_data_ftp_file
     where datasetId = #{datasetId,jdbcType=VARCHAR}
   </delete>
-  
-   <select id="fingFields" resultType="java.lang.String">
-	select COLUMN_NAME from information_schema.COLUMNS where table_name = 'zt_data_ftp_file';
+   <select id="findFields" resultType="java.lang.String">
+	select DISTINCT COLUMN_NAME from information_schema.COLUMNS where table_name = 'zt_data_ftp_file';
   </select>
 </mapper>

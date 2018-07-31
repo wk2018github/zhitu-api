@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,7 @@ import zhitu.sq.dataset.controller.vo.RdbVo;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.model.Rdb;
+import zhitu.sq.dataset.model.User;
 import zhitu.sq.dataset.service.DataSetService;
 import zhitu.util.StringHandler;
 
@@ -69,8 +71,18 @@ public class DataSetController extends BaseController{
     		@ApiParam(value = param)@RequestBody Map<String, Object> map) {
     	try {
         	Map<String, Object> result = new HashMap<String, Object>();
-        	PageInfo<Map<String, Object>> data = dataSetService.findById(map);
-        	result = mergeJqGridData(data);
+        	String typeId = StringHandler.objectToString(map.get("typeId"));
+        	
+        	if(typeId.equals("ftp_file")){
+        		PageInfo<Map<String, Object>> data = dataSetService.findByIdFtpFile(map);
+            	result = mergeJqGridData(data);
+    		}else if(typeId.equals("local_rdb")){
+    			PageInfo<Map<String, Object>> data = dataSetService.findByIdLcoal(map);
+            	result = mergeJqGridData(data);
+    		}else{
+    			Map<String, Object> data = dataSetService.findById(map);
+            	result.put("data", data);
+    		}
     		return success(result);
 		} catch (Exception e) {
 			LOG.error("查询失败:" + e.getMessage(),e);
@@ -122,22 +134,18 @@ public class DataSetController extends BaseController{
 	 * @return
 	 */
 	@ApiOperation(value = "保存数据集信息-多文件上传保存", notes = "保存数据集信息-文件上传保存")
-	@RequestMapping(value = "/handleFileUpload", method = RequestMethod.POST)
+//	@RequestMapping(value = "/handleFileUpload", method = RequestMethod.POST)
+	@RequestMapping(value = "/handleFileUpload", consumes = " multipart/*", headers = "content-type=multipart/form-data",method = RequestMethod.POST)
 	@ResponseBody
 	public SQApiResponse<Map<String, Object>> handleFileUpload(HttpServletRequest request,
 			@RequestParam("name") String name, @RequestParam("describe") String describe,
-			@RequestParam("projectId") String projectId/*
-														 * ,@RequestParam(
-														 * "files")
-														 * MultipartFile[] files
-														 */) {
+			@RequestParam("projectId") String projectId ,@ApiParam(value = "上传文件", required = true)MultipartFile file ) {
 		try {
-			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-			List<MultipartFile> files = multipartRequest.getFiles("files");
+			
 			// 获取登录用户Id
-			String userId = "USER_1293910401";
-
-			int i = dataSetService.saveLocalDataSet(userId, name, describe, projectId, files);
+			User user = (User)request.getSession().getAttribute("user");
+			
+			int i = dataSetService.saveLocalDataSet("USER_12314123", name, describe, projectId, file);
 			if (i > 0) {
 				return success();
 			}
@@ -160,10 +168,10 @@ public class DataSetController extends BaseController{
     		if(i>0){
     			return success();
     		}
-    		return error("上传失败");
+    		return error("保存失败");
 		} catch (Exception e) {
-			LOG.error("上传失败:" + e.getMessage(),e);
-			return error("上传失败");
+			LOG.error("保存失败:" + e.getMessage(),e);
+			return error("保存失败");
 		}
     }
 	
@@ -225,7 +233,7 @@ public class DataSetController extends BaseController{
     	try {
     		Map<String, Object> result = new HashMap<String, Object>();
     		List<String> list = dataSetService.findByTableFiled(rdbVo);
-    		result.put("date", list);
+    		result.put("data", list);
     		return success(result);
 		} catch (Exception e) {
 			LOG.error("查询失败:" + e.getMessage(),e);
@@ -243,7 +251,7 @@ public class DataSetController extends BaseController{
     		String id = StringHandler.objectToString(map.get("id"));
     		DataSet dataSet = dataSetService.selectByPrimaryKey(id);
     		Map<String, Object> data = dataSetService.findByTableValue(dataSet);
-    		result.put("date", data);
+    		result.put("data", data);
     		return success(result);
 		} catch (Exception e) {
 			LOG.error("查询失败:" + e.getMessage(),e);

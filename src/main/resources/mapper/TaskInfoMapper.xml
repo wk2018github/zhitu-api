@@ -67,4 +67,7 @@
       </if>
     </trim>
   </insert>
+  <select id="selectAllTask" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from zt_sys_task_info
+  </select>
 </mapper>

@@ -75,9 +75,9 @@ public class DateSetServiceImpl implements DataSetService{
 
 	@Override
 	public int saveLocalDataSet(String userId, String name, String describe, String projectId,
-			List<MultipartFile> files) throws Exception {
+			MultipartFile file) throws Exception {
 		
-		List<FtpFile> ftpFiles = new ArrayList<FtpFile>();
+		FtpFile ftpFile = new FtpFile();
 		String id = "DATASET_" + new Date().getTime();
 		
 		FTPClient ftp = dataSourceUtil.getFTPClient();
@@ -85,34 +85,28 @@ public class DateSetServiceImpl implements DataSetService{
 			throw new Exception("获取FTP失败");
 		}
 		
-		for (MultipartFile file : files) {
-			FtpFile f = new FtpFile();
-			f.setId("PDF_"+System.currentTimeMillis());
-//			// 文件后缀名(文件类型)
-//			String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-			// 文件名称带扩展名
-			String fileName = file.getOriginalFilename();
-			f.setFileName(fileName);
-			//调用中科院的接口获取 文件摘要内容一般取前5000字
-			String fileAbstract = TikaUtils.parseFile((File)file);
-			f.setFileAbstract(fileAbstract);
-//			// 文件名不带扩展名
-//			String fileName = fileName2.substring(0, fileName2.lastIndexOf("."));
-			// 文件上传到ftp
-			String directory = "zhituFile";
-			String ftpName = String.valueOf(System.currentTimeMillis());
-			boolean flag = upload(ftp, file, directory, ftpName);
-			if (!flag) {
-				throw new Exception(fileName + "上传失败");
-			}
-			
-			Configuration config = new PropertiesConfiguration("file.properties");
-			String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
-			f.setFtpurl(ftpurl);
-			f.setDatasetId(id);
-			ftpFiles.add(f);
+		FtpFile f = new FtpFile();
+		f.setId("PDF_"+System.currentTimeMillis());
+		// 文件名称带扩展名
+		String fileName = file.getOriginalFilename();
+		f.setFileName(fileName);
+		//调用中科院的接口获取 文件摘要内容一般取前5000字
+		
+		String fileAbstract = TikaUtils.parseFile(file);
+		f.setFileAbstract(fileAbstract);
+		// 文件上传到ftp
+		String directory = "zhituFile"+System.currentTimeMillis();
+		String ftpName = String.valueOf(System.currentTimeMillis());
+		boolean flag = upload(ftp, file, directory, ftpName);
+		if (!flag) {
+			throw new Exception(fileName + "上传失败");
 		}
 		ftp.disconnect();
+		
+		Configuration config = new PropertiesConfiguration("file.properties");
+		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
+		f.setFtpurl(ftpurl);
+		f.setDatasetId(id);
 		
 		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
 		DataSet dataSet = new DataSet();
@@ -125,7 +119,7 @@ public class DateSetServiceImpl implements DataSetService{
 		dataSet.setDataTable("zt_data_" + id);
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
-		int j = dataSetMapper.insertFtpFile(ftpFiles);
+		int j = dataSetMapper.insertFtpFile(ftpFile);
 		// 创建zt_data_DATASET_1428399384表
 		// 字段 id（唯一ID，必须以PDF_毫秒时间戳为格式） createTime创建时间
 		// fileName（pdf文件名带后缀） abstract （pdf内容摘要）
@@ -138,28 +132,51 @@ public class DateSetServiceImpl implements DataSetService{
 		return dataSetMapper.updateDataSet(dSet);
 	}
 
+	
 	@Override
-	public PageInfo<Map<String, Object>> findById(Map<String, Object> map) throws Exception{
+	public PageInfo<Map<String, Object>> findByIdFtpFile(Map<String, Object> map) throws Exception {
 		
-		String id = StringHandler.objectToString(map.get("id"));
-    	String typeId = StringHandler.objectToString(map.get("typeId"));
-    	String dataTable = StringHandler.objectToString(map.get("dataTable"));
-    	String rdbId = StringHandler.objectToString(map.get("rdbId"));
     	int page = NumberDealHandler.objectToInt(map.get("page"));
     	int rows = NumberDealHandler.objectToInt(map.get("rows"));
+    	String id = StringHandler.objectToString(map.get("id"));
     	PageHelper.startPage(page,rows);
-    	List<Map<String, Object>> list = new ArrayList<>();
-		if(typeId.equals("ftp_file")){
-			list = ftpFileMapper.findByDataSetId(id);
-		}else if(typeId.equals("local_rdb")){
-			//根据dataTable及数据库表查询改表下所有数据
-			list = dataTableMapper.findByDataSetId(dataTable);
-		}else{
-			//先查询远程连接信息及表名
-			Rdb rdb = rdbMapper.selectByPrimaryKey(rdbId);
-			list = JdbcDbUtils.jdbcTable(rdb,page,rows);
-		}
+    	List<Map<String, Object>> list = ftpFileMapper.findByDataSetId(id);
 		return new PageInfo<>(list);
+	}
+
+	@Override
+	public PageInfo<Map<String, Object>> findByIdLcoal(Map<String, Object> map) throws Exception {
+		String dataTable = StringHandler.objectToString(map.get("dataTable"));
+		PageHelper.startPage(NumberDealHandler.objectToInt(map.get("page")),
+				NumberDealHandler.objectToInt(map.get("rows")));
+    	
+    	List<Map<String, Object>> list = dataTableMapper.findByDataSetId(dataTable);
+		return new PageInfo<>(list);
+	}
+	
+	@Override
+	public Map<String, Object> findById(Map<String, Object> map) throws Exception{
+		
+    	int page = NumberDealHandler.objectToInt(map.get("page"));
+    	int rows = NumberDealHandler.objectToInt(map.get("rows"));
+    	String rdbId = StringHandler.objectToString(map.get("rdbId"));
+    	PageHelper.startPage(page,rows);
+		//先查询远程连接信息及表名
+		Rdb rdb = rdbMapper.selectByPrimaryKey(rdbId);
+		List<Map<String, Object>> list  = JdbcDbUtils.jdbcTable(rdb,page,rows);
+		Integer records = JdbcDbUtils.jdbcTableCount(rdb);
+		Integer total = 0;
+		if(records>0){
+			float d = (float)records/rows;
+			total = (int)Math.ceil(d);
+		}
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("total", total);
+		map2.put("records", records);
+		map2.put("page", page);
+		map2.put("rows", list);
+		map2.put("userdata", "");
+		return map2;
 	}
 
 	@Override
@@ -171,13 +188,13 @@ public class DateSetServiceImpl implements DataSetService{
 		if (typeId.equals("ftp_file")) {
 			List<Map<String, Object>> list =ftpFileMapper.findByDataSetId(dataSet.getId());
 			count = list.size();
-			fileds = ftpFileMapper.fingFields();
+			fileds = ftpFileMapper.findFields();
 		}else if (typeId.equals("local_rdb")) {
 			//根据dataTable及数据库表查询改表下所有数据
 			List<Map<String, Object>> list = dataTableMapper.findByDataSetId(dataSet.getDataTable());
 			count = list.size();
-			Rdb rdb = rdbMapper.selectByPrimaryKey(dataSet.getRdbId());
-			fileds = JdbcDbUtils.jdbcTable(rdb);
+//			Rdb rdb = rdbMapper.selectByPrimaryKey(dataSet.getRdbId());
+			fileds = dataTableMapper.findFields(dataSet.getDataTable());
 		}else{
 			//先查询远程连接信息及表名
 			Rdb rdb = rdbMapper.selectByPrimaryKey(dataSet.getRdbId());
@@ -249,6 +266,7 @@ public class DateSetServiceImpl implements DataSetService{
 		dataSet.setCreateTime(new Date());
 		dataSet.setName(dRdbVo.getName());
 		dataSet.setUserId(userId);
+		dataSet.setDescription(dRdbVo.getDescription());
 		dataSet.setProjectId(dRdbVo.getProjectId());
 		int i = dataSetMapper.insert(dataSet);
 		return i;
@@ -430,7 +448,8 @@ public class DateSetServiceImpl implements DataSetService{
 	@SuppressWarnings("resource")
 	public boolean upload(FTPClient ftp, MultipartFile file, String directory, String fileName) throws Exception {
 		boolean flag = false;
-		boolean m = ftp.makeDirectory(directory);// 创建文件夹
+		String ftpPath = new String(directory.getBytes("GBK"),"iso-8859-1");
+		boolean m = ftp.makeDirectory(ftpPath);// 创建文件夹
 		if (!m) {
 			throw new Exception("文件夹创建失败");
 		}
@@ -443,15 +462,10 @@ public class DateSetServiceImpl implements DataSetService{
 		// 上传文件
 		// FTP协议规定文件编码格式为ISO-8859-1
 		fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
-		InputStream in = new FileInputStream((File) file);
-		OutputStream out = ftp.storeFileStream(fileName);
-
-		byte[] byteArray = new byte[30720];
-		int read = 0;
-		while ((read = in.read(byteArray)) != -1) {
-			out.write(byteArray, 0, read);
-		}
-		out.close();
+		InputStream in = file.getInputStream();
+		
+		ftp.setBufferSize(1024*1024*50);
+		flag = ftp.storeFile(fileName, in);//
 
 		return flag;
 

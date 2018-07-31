@@ -33,7 +33,7 @@ public interface DataSetService {
 	 * @return
 	 */
 	int saveLocalDataSet(String userId, String name, String describe, String projectId,
-			List<MultipartFile> files)throws Exception;
+			MultipartFile file)throws Exception;
 
 	/**
 	 * 更新数据集信息
@@ -48,7 +48,7 @@ public interface DataSetService {
 	 * @param typeId 
 	 * @return
 	 */
-	PageInfo<Map<String, Object>> findById(Map<String, Object> map)throws Exception;
+	Map<String, Object> findById(Map<String, Object> map)throws Exception;
 
 	/**
 	 * 删除数据集
@@ -151,6 +151,10 @@ public interface DataSetService {
 	 * @return
 	 */
 	Map<String, Object> findByTableValue(DataSet dataSet)throws Exception;
+
+	PageInfo<Map<String, Object>> findByIdFtpFile(Map<String, Object> map)throws Exception;
+
+	PageInfo<Map<String, Object>> findByIdLcoal(Map<String, Object> map)throws Exception;
 
 
 }

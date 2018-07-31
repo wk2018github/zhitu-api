@@ -27,7 +27,7 @@ public interface DataSetMapper {
 
 	List<Select> queryDBType();
 	
-	int insertFtpFile(List<FtpFile> ftpFiles);
+	int insertFtpFile(FtpFile ftpFile);
 
 	DataSet selectByPrimaryKey(String id);
 
