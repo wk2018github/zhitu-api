@@ -233,6 +233,24 @@ public class DataSetController extends BaseController{
 		}
     }
 	
+	@ApiOperation(value = "根据数据集id查询字段以及样本个数", notes = "根据数据集id查询表字段以及样本个数")
+    @RequestMapping(value = "/findByTableValue",method = RequestMethod.POST)
+    @ResponseBody
+    public SQApiResponse<Map<String, Object>> findByTableValue(HttpServletRequest request,
+    		@RequestBody Map<String, Object> map) {
+    	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
+    		String id = StringHandler.objectToString(map.get("id"));
+    		DataSet dataSet = dataSetService.selectByPrimaryKey(id);
+    		Map<String, Object> data = dataSetService.findByTableValue(dataSet);
+    		result.put("date", data);
+    		return success(result);
+		} catch (Exception e) {
+			LOG.error("查询失败:" + e.getMessage(),e);
+			return error("查询失败");
+		}
+    }
+	
 	@ApiOperation(value = "数据集饼状图", notes = "数据集饼状图")
     @RequestMapping(value = "/chartsByName",method = RequestMethod.POST)
     @ResponseBody

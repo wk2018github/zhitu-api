@@ -128,7 +128,7 @@ public class JdbcDbUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static int jdbcTableCount(Rdb rdb) throws Exception{
+	public static Integer jdbcTableCount(Rdb rdb) throws Exception{
 		String sql = "select count(*) from "+rdb.getTableName();	//定义查询的SQL语句	
 		int rowCount = 0;
 		Connection conn = null;

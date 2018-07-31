@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,12 @@ public class DateSetServiceImpl implements DataSetService{
 	private DataSourceUtil dataSourceUtil;
 	@Autowired
 	private TaskInfoMapper taskInfoMapper;
+	
+	
+	@Override
+	public DataSet selectByPrimaryKey(String id) {
+		return dataSetMapper.selectByPrimaryKey(id);
+	}
 	
 	@Override
 	public PageInfo<Map<String, Object>> queryDateSet(Map<String, Object> map,String userId) {
@@ -114,7 +121,7 @@ public class DateSetServiceImpl implements DataSetService{
 		dataSet.setName(name);
 		dataSet.setUserId(userId);
 		dataSet.setProjectId(projectId);
-		dataSet.setTypeId("local_file");
+		dataSet.setTypeId("ftp_file");
 		dataSet.setDataTable("zt_data_" + id);
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
@@ -142,7 +149,7 @@ public class DateSetServiceImpl implements DataSetService{
     	int rows = NumberDealHandler.objectToInt(map.get("rows"));
     	PageHelper.startPage(page,rows);
     	List<Map<String, Object>> list = new ArrayList<>();
-		if(typeId.equals("local_file_pdf")){
+		if(typeId.equals("ftp_file")){
 			list = ftpFileMapper.findByDataSetId(id);
 		}else if(typeId.equals("local_rdb")){
 			//根据dataTable及数据库表查询改表下所有数据
@@ -156,12 +163,39 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
+	public Map<String, Object> findByTableValue(DataSet dataSet) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		String typeId = dataSet.getTypeId();
+		Integer count = null;
+		List<String> fileds = null;
+		if (typeId.equals("ftp_file")) {
+			List<Map<String, Object>> list =ftpFileMapper.findByDataSetId(dataSet.getId());
+			count = list.size();
+			fileds = ftpFileMapper.fingFields();
+		}else if (typeId.equals("local_rdb")) {
+			//根据dataTable及数据库表查询改表下所有数据
+			List<Map<String, Object>> list = dataTableMapper.findByDataSetId(dataSet.getDataTable());
+			count = list.size();
+			Rdb rdb = rdbMapper.selectByPrimaryKey(dataSet.getRdbId());
+			fileds = JdbcDbUtils.jdbcTable(rdb);
+		}else{
+			//先查询远程连接信息及表名
+			Rdb rdb = rdbMapper.selectByPrimaryKey(dataSet.getRdbId());
+			count = JdbcDbUtils.jdbcTableCount(rdb);
+			fileds = JdbcDbUtils.jdbcTable(rdb);
+		}
+		map.put("count", count);
+		map.put("fileds", fileds);
+		return map;
+	}
+	
+	@Override
 	public void deleteById(List<String> ids) {
 		for(int i=0;i<ids.size();i++){
 			String id = ids.get(i);
 			DataSet dataset = dataSetMapper.selectByPrimaryKey(id);
 			
-			if(dataset.getTypeId().equals("local_file_pdf")){
+			if(dataset.getTypeId().equals("ftp_file")){
 				ftpFileMapper.deleteByDataSetId(id);
 			}else if(dataset.getTypeId().equals("local_rdb")){
 				//根据dataTable及数据库表删除改表
@@ -414,4 +448,5 @@ public class DateSetServiceImpl implements DataSetService{
 		return flag;
 
 	}
+
 }

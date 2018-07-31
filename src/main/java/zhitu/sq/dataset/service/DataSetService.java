@@ -138,5 +138,19 @@ public interface DataSetService {
 	 */
 	List<String> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
 
+	/**
+	 * 根据id 查询数据集
+	 * @param id
+	 * @return
+	 */
+	DataSet selectByPrimaryKey(String id)throws Exception;
+
+	/**
+	 * 根据数据集查询对应表字段及数据个数
+	 * @param dataSet
+	 * @return
+	 */
+	Map<String, Object> findByTableValue(DataSet dataSet)throws Exception;
+
 
 }
