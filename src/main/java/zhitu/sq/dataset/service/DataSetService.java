@@ -33,7 +33,7 @@ public interface DataSetService {
 	 * @return
 	 */
 	int saveLocalDataSet(String userId, String name, String describe, String projectId,
-			List<MultipartFile> files)throws Exception;
+			MultipartFile file)throws Exception;
 
 	/**
 	 * 更新数据集信息
@@ -48,7 +48,7 @@ public interface DataSetService {
 	 * @param typeId 
 	 * @return
 	 */
-	PageInfo<Map<String, Object>> findById(Map<String, Object> map)throws Exception;
+	Map<String, Object> findById(Map<String, Object> map)throws Exception;
 
 	/**
 	 * 删除数据集
@@ -117,7 +117,7 @@ public interface DataSetService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryTableData(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryTableData(Map<String, Object> map) throws Exception;
 	/**
 	 * @author qwm
 	 * @return
@@ -129,14 +129,32 @@ public interface DataSetService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryTableColumnData(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryTableColumnData(Map<String, Object> map) throws Exception;
 	/**
 	 * @author qwm
 	 * @param userId 
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
+	Map<String, Object> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
+
+	/**
+	 * 根据id 查询数据集
+	 * @param id
+	 * @return
+	 */
+	DataSet selectByPrimaryKey(String id)throws Exception;
+
+	/**
+	 * 根据数据集查询对应表字段及数据个数
+	 * @param dataSet
+	 * @return
+	 */
+	Map<String, Object> findByTableValue(DataSet dataSet)throws Exception;
+
+	PageInfo<Map<String, Object>> findByIdFtpFile(Map<String, Object> map)throws Exception;
+
+	PageInfo<Map<String, Object>> findByIdLcoal(Map<String, Object> map)throws Exception;
 
 
 }

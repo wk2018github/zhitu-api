@@ -6,6 +6,7 @@ import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.ContentHandler;
 import java.io.*;
 import java.nio.file.Files;
@@ -19,7 +20,7 @@ public class TikaUtils {
      * @param file aaaa
      * @return dfwdf
      */
-    public static String parseFile(File file){
+    public static String parseFile(MultipartFile file){
         String content = "";
         Parser parser = new AutoDetectParser();
         InputStream input = null;
@@ -27,7 +28,7 @@ public class TikaUtils {
             Metadata metadata = new Metadata();
             metadata.set(Metadata.CONTENT_ENCODING, "utf-8");
             metadata.set(Metadata.RESOURCE_NAME_KEY, file.getName());
-            input = new FileInputStream(file);
+            input = file.getInputStream();
             ContentHandler handler = new BodyContentHandler();//当文件大于100000时，new BodyContentHandler(1024*1024*10);
             ParseContext context = new ParseContext();
             context.set(Parser.class,parser);

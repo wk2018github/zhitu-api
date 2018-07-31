@@ -20,7 +20,7 @@
 
 	<select id="selectUserByLoginName" parameterType="String"
 		resultType="zhitu.sq.dataset.model.User">
-		SELECT id, account, password
+		SELECT *
 		FROM zt_sys_user
 		WHERE email = #{email}
 	</select>

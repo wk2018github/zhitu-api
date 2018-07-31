@@ -1,5 +1,7 @@
 package zhitu.util;
 
+import java.util.Date;
+
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
@@ -17,14 +19,14 @@ public class SparkSql {
         String field = "id,createTime,email";//导入的字段*/
         String targetTable = "result";//导入到本地之后的数据库表名
         Rdb rdb = new Rdb();
-        rdb.setHost("172.18.32.91");
-        rdb.setPort(3306);
-        rdb.setDbName("db_kg");
+        rdb.setHost("192.168.100.111");
+        rdb.setPort(30620);
+        rdb.setDbName("ldp_test");
         rdb.setCharset("UTF-8");
         rdb.setUser("root");
-        rdb.setPassword("142536");
-        rdb.setTableName("zt_sys_user");
-        rdb.setColumnNames("id,createTime,email");
+        rdb.setPassword("123456");
+        rdb.setTableName("ldp_asset_object");
+        rdb.setColumnNames("id,code,name");
         migration(rdb,targetTable);
     }
 

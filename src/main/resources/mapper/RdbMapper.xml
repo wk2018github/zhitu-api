@@ -34,7 +34,7 @@
       user, password, dbName, 
       tableName, columnNames)
     values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{host,jdbcType=VARCHAR}, 
-      #{port,jdbcType=INTEGER}, #{databasetype,jdbcType=VARCHAR}, #{charset,jdbcType=VARCHAR}, 
+      #{port,jdbcType=INTEGER}, #{databaseType,jdbcType=VARCHAR}, #{charset,jdbcType=VARCHAR}, 
       #{user,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{dbName,jdbcType=VARCHAR}, 
       #{tableName,jdbcType=VARCHAR}, #{columnNames,jdbcType=VARCHAR})
   </insert>

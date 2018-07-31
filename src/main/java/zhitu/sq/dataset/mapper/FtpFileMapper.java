@@ -25,4 +25,6 @@ public interface FtpFileMapper {
 	List<Map<String, Object>> findByDataSetId(@Param("datasetId")String datasetId);
 
 	int deleteByDataSetId(@Param("datasetId")String datasetId);
+
+	List<String> findFields();
 }

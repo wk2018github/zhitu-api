@@ -370,18 +370,23 @@ public class DataSourceUtil {
 	 * @param tableName
 	 * @return
 	 */
-	public List<String> queryTableData(String ip, int port, String userName, String password, String databaseName,
+	public Map<String, Object> queryTableData(String ip, int port, String userName, String password, String databaseName,
 			String tableName, Integer start, Integer end) {
+		Map<String, Object> result = new HashMap<String,Object>();
+		
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
+		Statement stmtCount = null;
+		
 		String sql = "select * from "+tableName + " LIMIT "+start+","+end;
-
+		String sqlCount = "select count(*) from "+tableName;
+		
 		ResultSet res = null;
+		ResultSet count = null;
 		JSONArray array = null;
 
 		try {
-			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("ip", ip);
 			map.put("port", port);
@@ -389,17 +394,30 @@ public class DataSourceUtil {
 			map.put("username", userName);
 			map.put("password", password);
 			conn = getMySqlConn(map);
-			
 			stmt = conn.createStatement();
+			stmtCount = conn.createStatement();
+			
+			count = stmtCount.executeQuery(sqlCount);
+			// 获取列数
+			ResultSetMetaData metaDataCount = count.getMetaData();
+			// 遍历ResultSet中的每条数据
+			while (count.next()) {
+				// 遍历列
+				String columnName = metaDataCount.getColumnLabel(1);
+				Integer value = count.getInt(columnName);
+				logger.info(tableName+"中数据总条数:"+value);
+				if(value<1){
+					return null;
+				}
+				result.put("total", value);
+			}
+			
 			res = stmt.executeQuery(sql);
-
 			// json数组
 			array = new JSONArray();
-
 			// 获取列数
 			ResultSetMetaData metaData = res.getMetaData();
 			int columnCount = metaData.getColumnCount();
-
 			// 遍历ResultSet中的每条数据
 			while (res.next()) {
 				JSONObject jsonObj = new JSONObject();
@@ -411,31 +429,24 @@ public class DataSourceUtil {
 				}
 				array.put(jsonObj);
 			}
-//			// 通过key获取每个对应value
-//			for (int j = 0; j < array.length(); j++) {
-//				for (int i = 1; i < columnCount; i++) {
-//					String columnName = metaData.getColumnLabel(i);
-//					JSONObject resultObj = array.optJSONObject(j);
-//					// 获取数据项
-//					String value = resultObj.getString(columnName);
-//					logger.info(value);
-//				}
-//			}
-			logger.info(tableName+"中数据总条数:"+array.length());
-			if(array.length()<1){
-				return null;
-			}
 			list = new ArrayList<String>();
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject obj = array.getJSONObject(i);
 				list.add(obj.toString());
 			}
-			return list;
+			
+			result.put("list", list);
+			
+			conn.close();
+			stmt.close();
+			stmtCount.close();
+			res.close();
+			count.close();
+			
+			return result;
 		} catch (Exception e) {
 			logger.error("dataSourceUtil/queryTableData",e);
 			return null;
-		} finally {
-			closeConnect(conn, stmt, res);
 		}
 	}
 	/**
@@ -498,14 +509,18 @@ public class DataSourceUtil {
 	 * @param columnNames
 	 * @return
 	 */
-	public List<String> queryTableColumnData(String ip, int port, String userName, String password, String databaseName,
-			String tableName, String columnNames) {
+	public Map<String,Object> queryTableColumnData(String ip, int port, String userName, String password, String databaseName,
+			String tableName, String columnNames,Integer start, Integer end) {
+		Map<String,Object> result = new HashMap<String,Object>();
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
-		String sql = "select "+columnNames+" from "+tableName;
-
+		Statement stmtCount = null;
+		String sql = "select "+columnNames+" from "+tableName + " LIMIT "+start+","+end;
+		String sqlCount = "select count(*) from "+tableName;
+		
 		ResultSet res = null;
+		ResultSet count = null;
 		JSONArray array = null;
 
 		try {
@@ -517,6 +532,21 @@ public class DataSourceUtil {
 			map.put("username", userName);
 			map.put("password", password);
 			conn = getMySqlConn(map);
+			
+			stmtCount = conn.createStatement();
+			count = stmtCount.executeQuery(sqlCount);
+			ResultSetMetaData metaDataCount = count.getMetaData();
+			// 遍历ResultSet中的每条数据
+			while (count.next()) {
+				// 遍历列
+				String columnName = metaDataCount.getColumnLabel(1);
+				Integer value = count.getInt(columnName);
+				logger.info(tableName+"中数据总条数:"+value);
+				if(value<1){
+					return null;
+				}
+				result.put("total", value);
+			}
 			
 			stmt = conn.createStatement();
 			res = stmt.executeQuery(sql);
@@ -539,31 +569,21 @@ public class DataSourceUtil {
 				}
 				array.put(jsonObj);
 			}
-//			// 通过key获取每个对应value
-//			for (int j = 0; j < array.length(); j++) {
-//				for (int i = 1; i < columnCount; i++) {
-//					String columnName = metaData.getColumnLabel(i);
-//					JSONObject resultObj = array.optJSONObject(j);
-//					// 获取数据项
-//					String value = resultObj.getString(columnName);
-//					logger.info(value);
-//				}
-//			}
-			logger.info(tableName+"中数据总条数:"+array.length());
-			if(array.length()<1){
-				return null;
-			}
+			
 			list = new ArrayList<String>();
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject obj = array.getJSONObject(i);
 				list.add(obj.toString());
 			}
-			return list;
+			
+			result.put("list", list);
+			return result;
 		} catch (Exception e) {
 			logger.error("dataSourceUtil/queryTableData",e);
 			return null;
 		} finally {
 			closeConnect(conn, stmt, res);
+			closeConnect(null, stmtCount, count);
 		}
 	}
 	/**
@@ -577,13 +597,16 @@ public class DataSourceUtil {
 	 * @param columnNames
 	 * @return
 	 */
-	public List<String> queryLocalTableColumnData(String url, String userName, String password, String tableName, String columnNames) {
+	public Map<String,Object> queryLocalTableColumnData(String url, String userName, String password, String tableName, String columnNames, Integer start, Integer end) {
+		Map<String,Object> result = new HashMap<String,Object>();
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
-		String sql = "select "+columnNames+" from "+tableName;
-
+		Statement stmtCount = null;
+		String sql = "select "+columnNames+" from "+tableName + " LIMIT "+start+","+end;
+		String sqlCount = "select count(*) from "+tableName;
 		ResultSet res = null;
+		ResultSet count = null;
 		JSONArray array = null;
 
 		try {
@@ -595,6 +618,20 @@ public class DataSourceUtil {
 			conn = DriverManager.getConnection(url, userName, password);
 			if (null == conn) {
 				return null;
+			}
+			stmtCount = conn.createStatement();
+			count = stmtCount.executeQuery(sqlCount);
+			ResultSetMetaData metaDataCount = count.getMetaData();
+			// 遍历ResultSet中的每条数据
+			while (count.next()) {
+				// 遍历列
+				String columnName = metaDataCount.getColumnLabel(1);
+				Integer value = count.getInt(columnName);
+				logger.info(tableName+"中数据总条数:"+value);
+				if(value<1){
+					return null;
+				}
+				result.put("total", value);
 			}
 			
 			stmt = conn.createStatement();
@@ -618,31 +655,20 @@ public class DataSourceUtil {
 				}
 				array.put(jsonObj);
 			}
-//			// 通过key获取每个对应value
-//			for (int j = 0; j < array.length(); j++) {
-//				for (int i = 1; i < columnCount; i++) {
-//					String columnName = metaData.getColumnLabel(i);
-//					JSONObject resultObj = array.optJSONObject(j);
-//					// 获取数据项
-//					String value = resultObj.getString(columnName);
-//					logger.info(value);
-//				}
-//			}
-			logger.info(tableName+"中数据总条数:"+array.length());
-			if(array.length()<1){
-				return null;
-			}
 			list = new ArrayList<String>();
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject obj = array.getJSONObject(i);
 				list.add(obj.toString());
 			}
-			return list;
+			result.put("list", list);
+			
+			return result;
 		} catch (Exception e) {
-			logger.error("dataSourceUtil/queryTableData",e);
+			logger.error("dataSourceUtil/queryLocalTableColumnData",e);
 			return null;
 		} finally {
 			closeConnect(conn, stmt, res);
+			closeConnect(null, stmtCount, count);
 		}
 	}
 

@@ -22,5 +22,7 @@ public interface DataTableMapper {
 	int deleteByDataSetId(@Param("tableName")String tableName);
 
 	Map<String, Object> findByTableAndId(@Param("tableName")String tableName,@Param("id")String id);
+
+	List<String> findFields(String dataTable);
 	
 }
