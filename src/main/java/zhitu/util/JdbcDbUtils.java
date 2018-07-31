@@ -28,7 +28,12 @@ public class JdbcDbUtils {
 	public static List<Map<String, Object>> jdbcTable(Rdb rdb,int pageIndex,int pageSize) throws Exception{
 		
 		List<Map<String, Object>> list = new ArrayList<>();
-		String sql = "select "+rdb.getColumnNames()+" from "+rdb.getTableName();	//定义查询的SQL语句	
+		String sql = null;
+		if(rdb.getColumnNames()==null){
+			sql= "select * from "+rdb.getTableName();	//定义查询的SQL语句	
+		}else{
+			sql= "select "+rdb.getColumnNames()+" from "+rdb.getTableName();	//定义查询的SQL语句	
+		}
 		Connection conn = null;	//定义数据库的连接conn	
 		PreparedStatement pStmt = null;	//定义盛装SQL语句的载体stmt	
 		ResultSet rs = null;	//定义查询结果集rs
@@ -80,7 +85,12 @@ public class JdbcDbUtils {
 	 * @throws Exception
 	 */
 	public static List<String> jdbcTable(Rdb rdb) throws Exception{
-		String sql = "select "+rdb.getColumnNames()+" from "+rdb.getTableName();	//定义查询的SQL语句	
+		String sql =null;
+		if(rdb.getColumnNames()==null){
+			 sql = "select * from "+rdb.getTableName()+" limit 1";	//定义查询的SQL语句	
+		}else {
+			 sql = "select "+rdb.getColumnNames()+" from "+rdb.getTableName()+" limit 1";	//定义查询的SQL语句	
+		}
 		PreparedStatement pStmt = null;	//定义盛装SQL语句的载体pStmt	
 		ResultSet rs = null;	//定义查询结果集rs
 		Connection conn = null;
@@ -96,7 +106,7 @@ public class JdbcDbUtils {
 	    	        //遍历结果   getColumnCount 获取表列个数
 	    	        while (rs.next()) {
 	    	        	for(int i=1;i<=data.getColumnCount();i++){
-	    	        		list.add(data.getColumnTypeName(i));
+	    	        		list.add(data.getColumnName(i));
 	    				}
 	    	        }
 	        	}catch (Exception e) {	
@@ -142,6 +152,47 @@ public class JdbcDbUtils {
 		return rowCount;
 	}
 	
+	/**
+	 * 根据表名查询字段及字段类型
+	 * @param rdb
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<Map<String, Object>> jdbcTableValue(Rdb rdb) throws Exception{
+		String sql = "select * from "+rdb.getTableName()+" limit 1";	//定义查询的SQL语句	
+		PreparedStatement pStmt = null;	//定义盛装SQL语句的载体pStmt	
+		ResultSet rs = null;	//定义查询结果集rs
+		Connection conn = null;
+		List<Map<String, Object>> list = new ArrayList<>();
+		try{
+			conn = JdbcDbUtils.jdbcConnect(rdb);
+			pStmt = conn.prepareStatement(sql);	//<第4步>获取盛装SQL语句的载体pStmt	
+			rs = pStmt.executeQuery();	//<第5步>获取查询结果集rs	 
+	        if(rs != null){
+	        	try {
+	        		//数据库列名
+	    	        ResultSetMetaData data= rs.getMetaData();
+	    	        //遍历结果   getColumnCount 获取表列个数
+	    	        while (rs.next()) {
+	    	        	Map<String, Object> map = new HashMap<>();
+	    	        	for(int i=1;i<=data.getColumnCount();i++){
+	    	        		// typeName 字段名 type 字段类型
+	    	        		map.put(data.getColumnTypeName(i), data.getColumnType(i));
+	    	        		list.add(map);
+	    				}
+	    	        }
+	        	}catch (Exception e) {	
+	    			e.printStackTrace();
+	    		}finally {
+	    			rs.close();	//<第6步>关闭结果集	
+				}
+	        }
+		}finally{
+			pStmt.close();	//<第7步>关闭盛装SQL语句的载体	
+			conn.close();	//<第8步>关闭数据库连接
+		}
+		return list;
+	}
 	
 	/**
 	 * JDBC连接

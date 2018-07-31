@@ -42,11 +42,11 @@ public class SparkSql {
             String fromTable = rdb.getTableName();//远程数据库表名
             String field = rdb.getColumnNames();//导入的字段
 
-            String pythonExePath = "C:\\\\Spark\\bin\\spark-submit.cmd";
+            String pythonExePath = "E:\\spark-2.2.0-bin-hadoop2.7\\bin\\spark-submit.cmd";
             CommandLine cmdLine = CommandLine.parse(pythonExePath);
             cmdLine.addArgument("--packages");
             cmdLine.addArgument("mysql:mysql-connector-java:5.1.46");
-            cmdLine.addArgument("G:\\\\testpy\\etl.py");
+            cmdLine.addArgument("E:\\zhitu-etl\\etl.py");
             cmdLine.addArgument("--url").addArgument(url);
             cmdLine.addArgument("--encoding").addArgument(encoding);
             cmdLine.addArgument("--user").addArgument(user);
@@ -62,6 +62,7 @@ public class SparkSql {
                 public void onProcessComplete(int exitValue) {
                     super.onProcessComplete(exitValue);
                     System.out.println("my success");
+//                    return "success";
                 }
 
                 @Override

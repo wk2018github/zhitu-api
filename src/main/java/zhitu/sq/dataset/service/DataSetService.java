@@ -8,7 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
+import zhitu.sq.dataset.controller.vo.RdbVo;
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.DataSet;
+import zhitu.sq.dataset.model.Rdb;
 
 public interface DataSetService {
 
@@ -29,7 +32,8 @@ public interface DataSetService {
 	 * @param files
 	 * @return
 	 */
-	int saveLocalDataSet(String userId,String name, String describe, String projectId, MultipartFile[] files)throws Exception;
+	int saveLocalDataSet(String userId, String name, String describe, String projectId,
+			List<MultipartFile> files)throws Exception;
 
 	/**
 	 * 更新数据集信息
@@ -48,13 +52,13 @@ public interface DataSetService {
 
 	/**
 	 * 删除数据集
-	 * @param id
+	 * @param ids
 	 * @param typeId 
 	 * @param dataTable 
 	 * @param rdbId 
 	 * @return
 	 */
-	int deleteById(String id, String typeId, String dataTable, String rdbId)throws Exception;
+	void deleteById(List<String> ids)throws Exception;
 
 	/**
 	 * 保存数据库
@@ -80,5 +84,59 @@ public interface DataSetService {
 	 * @return
 	 */
 	List<Map<String, Object>> chartsByName(String name,String projectId, String userId)throws Exception;
+
+	/**
+	 * 根据表查询数据
+	 * @param rdbVo
+	 * @return
+	 */
+	PageInfo<Map<String, Object>> findByTable(RdbVo rdbVo) throws Exception;
+	
+	/**
+	 * 根据表查询表字段
+	 * @param rdbVo
+	 * @return
+	 */
+	List<String> findByTableFiled(RdbVo rdbVo)throws Exception;
+	
+	
+	/**
+	 * @author qwm
+	 * @return
+	 * @throws Exception
+	 */
+	List<Select> queryDBType() throws Exception;
+	/**
+	 * @author qwm
+	 * @return
+	 * @throws Exception
+	 */
+	List<String> queryDBTables(Rdb rdb) throws Exception;
+	/**
+	 * @author qwm
+	 * @return
+	 * @throws Exception
+	 */
+	List<String> queryTableData(Map<String, Object> map) throws Exception;
+	/**
+	 * @author qwm
+	 * @return
+	 * @throws Exception
+	 */
+	List<String> queryTableColumn(Map<String, Object> map) throws Exception;
+	/**
+	 * @author qwm
+	 * @return
+	 * @throws Exception
+	 */
+	List<String> queryTableColumnData(Map<String, Object> map) throws Exception;
+	/**
+	 * @author qwm
+	 * @param userId 
+	 * @return
+	 * @throws Exception
+	 */
+	List<String> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
+
 
 }
