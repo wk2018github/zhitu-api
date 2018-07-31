@@ -346,7 +346,7 @@ public class DateSetServiceImpl implements DataSetService{
 		List<String> list = new ArrayList<String>();
 		
 		String targetTable = String.valueOf(System.currentTimeMillis());
-		SparkSql.migration(rdb, targetTable);
+		//创建任务
 		TaskInfo taskInfo = new TaskInfo();
 		Date date = new Date();
 		taskInfo.setId("TASK_"+date.getTime());
@@ -354,6 +354,9 @@ public class DateSetServiceImpl implements DataSetService{
 		taskInfo.setCreateTime(date);
 		taskInfo.setUserId(userId);
 		taskInfoMapper.insert(taskInfo);
+		//数据迁移
+		SparkSql.migration(rdb, targetTable);
+		
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));

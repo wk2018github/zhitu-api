@@ -10,6 +10,19 @@
 		<result column="avatarUrl" property="avatarUrl" jdbcType="VARCHAR" />
 	</resultMap>
 
-	
+
+
+	<select id="selectLoginName" parameterType="String" resultType="Integer">
+		SELECT count(*)
+		FROM zt_sys_user
+		WHERE email = #{email}
+	</select>
+
+	<select id="selectUserByLoginName" parameterType="String"
+		resultType="zhitu.sq.dataset.model.User">
+		SELECT id, account, password
+		FROM zt_sys_user
+		WHERE email = #{email}
+	</select>
 	
 </mapper>
