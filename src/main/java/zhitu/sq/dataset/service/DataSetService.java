@@ -117,7 +117,7 @@ public interface DataSetService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryTableData(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryTableData(Map<String, Object> map) throws Exception;
 	/**
 	 * @author qwm
 	 * @return
@@ -129,14 +129,14 @@ public interface DataSetService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryTableColumnData(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryTableColumnData(Map<String, Object> map) throws Exception;
 	/**
 	 * @author qwm
 	 * @param userId 
 	 * @return
 	 * @throws Exception
 	 */
-	List<String> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
+	Map<String, Object> queryLocalTableColumnData(Map<String, Object> map, String userId) throws Exception;
 
 	/**
 	 * 根据id 查询数据集

@@ -331,14 +331,14 @@ public class DataSetController extends BaseController{
 	@ApiOperation(value = "远程连接数据库查询数据库指定表中的数据", notes = "远程连接数据库查询数据库指定表中的数据")
 	@RequestMapping(value = "/queryTableData", method = RequestMethod.POST)
 	@ResponseBody
-	public SQApiResponse<List<String>> queryTableData(HttpServletRequest request,
+	public SQApiResponse<Map<String, Object>> queryTableData(HttpServletRequest request,
 			@ApiParam(value = queryRdbData) @RequestBody Map<String, Object> map) {
 		try {
-			List<String> res = new ArrayList<String>();
+			Map<String, Object> result = new HashMap<String,Object>();
 
-			res = dataSetService.queryTableData(map);
+			result = dataSetService.queryTableData(map);
 
-			return success(res);
+			return success(result);
 		} catch (Exception e) {
 			LOG.error("queryDBTables", e);
 			return error("查询失败");
@@ -380,14 +380,14 @@ public class DataSetController extends BaseController{
 	@ApiOperation(value = "远程连接数据库查询表中指定的字段的表数据", notes = "远程连接数据库查询表中指定的字段的表数据")
 	@RequestMapping(value = "/queryTableColumnData", method = RequestMethod.POST)
 	@ResponseBody
-	public SQApiResponse<List<String>> queryTableColumnData(HttpServletRequest request,
+	public SQApiResponse<Map<String, Object>> queryTableColumnData(HttpServletRequest request,
 			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
 		try {
-			List<String> res = new ArrayList<String>();
+			Map<String, Object> result = new HashMap<String,Object>();
 
-			res = dataSetService.queryTableColumnData(map);
+			result = dataSetService.queryTableColumnData(map);
 
-			return success(res);
+			return success(result);
 		} catch (Exception e) {
 			LOG.error("queryDBTables", e);
 			return error("查询失败");
@@ -403,14 +403,14 @@ public class DataSetController extends BaseController{
 	@ApiOperation(value = "远程连接数据库数据导入本地数据库并且查询表中指定的字段的表数据", notes = "远程连接数据库数据导入本地数据库并且查询表中指定的字段的表数据")
 	@RequestMapping(value = "/queryLocalTableColumnData", method = RequestMethod.POST)
 	@ResponseBody
-	public SQApiResponse<List<String>> queryLocalTableColumnData(HttpServletRequest request,
+	public SQApiResponse<Map<String, Object>> queryLocalTableColumnData(HttpServletRequest request,
 			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
 		try {
-			List<String> res = new ArrayList<String>();
+			Map<String, Object> result = new HashMap<String,Object>();
 			String userId = "USER_1293910401";
-			res = dataSetService.queryLocalTableColumnData(map,userId);
+			result = dataSetService.queryLocalTableColumnData(map,userId);
 
-			return success(res);
+			return success(result);
 		} catch (Exception e) {
 			LOG.error("queryDBTables", e);
 			return error("查询失败");

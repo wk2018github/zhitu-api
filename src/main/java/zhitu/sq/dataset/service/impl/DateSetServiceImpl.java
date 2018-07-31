@@ -303,8 +303,8 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public List<String> queryTableData(Map<String, Object> map) throws Exception {
-		List<String> list = new ArrayList<String>();
+	public Map<String, Object> queryTableData(Map<String, Object> map) throws Exception {
+		Map<String, Object> res = new HashMap<String,Object>();
 		String ip = String.valueOf(map.get("host"));
 		Integer port = Integer.parseInt(String.valueOf(map.get("port")));
 		String userName = String.valueOf(map.get("user"));
@@ -318,12 +318,12 @@ public class DateSetServiceImpl implements DataSetService{
 		Integer start = getIntStart(page,rows);
 		Integer end = getIntEnd(page,rows);
 		//查找数据库
-		list = dataSourceUtil.queryTableData(ip, port, userName, password, databaseName, tableName, start, end);
+		res = dataSourceUtil.queryTableData(ip, port, userName, password, databaseName, tableName, start, end);
 		
-		if(null == list){
+		if(null == res){
 			throw new Exception("查询表中的数据时出现异常");
 		}
-		return list.subList(page, rows);
+		return res;
 	}
 
 	@Override
@@ -336,7 +336,7 @@ public class DateSetServiceImpl implements DataSetService{
 		String databaseName = String.valueOf(map.get("dbName"));
 		String tableName = String.valueOf(map.get("tableName"));
 		
-		//先去查找redis中是否有数据,没有数据则查找数据库
+		//查找数据库
 		list = dataSourceUtil.queryTableColumn(ip, port, userName, password, databaseName, tableName);
 		
 		if(null == list){
@@ -346,8 +346,9 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public List<String> queryTableColumnData(Map<String, Object> map) throws Exception {
-		List<String> list = new ArrayList<String>();
+	public Map<String, Object> queryTableColumnData(Map<String, Object> map) throws Exception {
+		Map<String, Object> res = new HashMap<String,Object>();
+		
 		String ip = String.valueOf(map.get("host"));
 		Integer port = Integer.parseInt(String.valueOf(map.get("port")));
 		String userName = String.valueOf(map.get("user"));
@@ -359,17 +360,19 @@ public class DateSetServiceImpl implements DataSetService{
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+		Integer start = getIntStart(page,rows);
+		Integer end = getIntEnd(page,rows);
 		//直接查询,不查redis
-		list = dataSourceUtil.queryTableColumnData(ip, port, userName, password, databaseName, tableName, columnNames);
+		res = dataSourceUtil.queryTableColumnData(ip, port, userName, password, databaseName, tableName, columnNames, start, end);
 		
-		if(null == list){
+		if(null == res){
 			throw new Exception("查询表中指定列数据出现异常");
 		}
-		return list.subList(page, rows);
+		return res;
 	}
 
 	@Override
-	public List<String> queryLocalTableColumnData(Map<String, Object> map,String userId) throws Exception {
+	public Map<String, Object> queryLocalTableColumnData(Map<String, Object> map,String userId) throws Exception {
 		Configuration config = new PropertiesConfiguration("application.properties");
 		String url = config.getString("spring.datasource.url");
 		String userName = config.getString("spring.datasource.username");
@@ -377,16 +380,19 @@ public class DateSetServiceImpl implements DataSetService{
 		String columnNames = String.valueOf(map.get("columnNames"));
 		
 		Rdb rdb = getRdb(map);
-		List<String> list = new ArrayList<String>();
+		Map<String, Object> res = new HashMap<String,Object>();
 		
 		String targetTable = String.valueOf(System.currentTimeMillis());
 		//创建任务
 		TaskInfo taskInfo = new TaskInfo();
 		Date date = new Date();
 		taskInfo.setId("TASK_"+date.getTime());
-		taskInfo.setStatus("do");
+		taskInfo.setName("暂时还未确定规则");
+		taskInfo.setDescription("描述信息");
+		taskInfo.setStatus("1");
 		taskInfo.setCreateTime(date);
 		taskInfo.setUserId(userId);
+		taskInfo.setProjectId("暂时没有project");
 		taskInfoMapper.insert(taskInfo);
 		//数据迁移
 		SparkSql.migration(rdb, targetTable);
@@ -394,10 +400,12 @@ public class DateSetServiceImpl implements DataSetService{
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+		Integer start = getIntStart(page,rows);
+		Integer end = getIntEnd(page,rows);
 		
-		list = dataSourceUtil.queryLocalTableColumnData(url, userName, password, targetTable, columnNames);
+		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, targetTable, columnNames, start, end);
 		
-		return list.subList(page, rows);
+		return res;
 	}
 	
 	public Rdb getRdb(Map<String, Object> map){
