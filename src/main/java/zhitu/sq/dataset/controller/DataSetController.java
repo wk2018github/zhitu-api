@@ -330,7 +330,7 @@ public class DataSetController extends BaseController{
 	}
 
 	private static final String queryRdbData = "{\"page\":1,\"rows\":10,\"host\":\"localhost\",\"port\":\"3306\","
-			+ "\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"db_kg\",\"tableName\":\"zt_sys_dict\"}";
+			+ "\"databaseType\":\"mysql\",\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"db_kg\",\"tableName\":\"zt_sys_dict\"}";
 
 	/**
 	 * @author qwm
@@ -380,7 +380,7 @@ public class DataSetController extends BaseController{
 	
 	private static final String rdbColumnData = "{\"page\":1,\"rows\":10,\"host\":\"192.168.100.111\",\"port\":\"30620\",\"databaseType\":\"01\","
 			+ "\"charset\":\"utf-8\",\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"ldp_test\","
-			+ "\"tableName\":\"ldp_asset_object\",\"columnNames\":\"id,code,name\"}";
+			+ "\"tableName\":\"ldp_asset_object\",\"columnNames\":\"id,code,name\",\"dataSetId\":\"DATASET_1531139698243\"}";
 	/**
 	 * @author qwm
 	 * @param request

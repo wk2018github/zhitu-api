@@ -313,13 +313,27 @@ public class DateSetServiceImpl implements DataSetService{
 
 	@Override
 	public List<String> queryDBTables(Rdb rdb) throws Exception {
+		List<String> list = new ArrayList<String>();
 		String ip = rdb.getHost();
 		Integer port = rdb.getPort();
 		String userName = rdb.getUser();
 		String password = rdb.getPassword();
 		String databaseName = rdb.getDbName();
 		
-		List<String> list = dataSourceUtil.queryDataBaseTableInMysql(ip, port, userName, password, databaseName);
+		String dbType = rdb.getDatabaseType().toLowerCase();
+		// 数据库名称包含oracle,测试连接
+//		if (dbType.contains("oracle")) {
+//			
+//		}
+		// 数据库名称包含mysql,测试连接
+		if (dbType.contains("mysql")) {
+			list = dataSourceUtil.queryDataBaseTableInMysql(ip, port, userName, password, databaseName);
+		}
+		// 数据库名称包含sqlserver,测试连接
+//		if (dbType.contains("sqlserver")) {
+//			
+//		}
+		
 		
 		return list;
 	}
@@ -339,9 +353,21 @@ public class DateSetServiceImpl implements DataSetService{
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
 		Integer start = getIntStart(page,rows);
 		Integer end = getIntEnd(page,rows);
-		//查找数据库
-		res = dataSourceUtil.queryTableData(ip, port, userName, password, databaseName, tableName, start, end);
 		
+		String dbType = String.valueOf(map.get("databaseType")).toLowerCase();
+		// 数据库名称包含oracle,测试连接
+//		if (dbType.contains("oracle")) {
+//			
+//		}
+		// 数据库名称包含mysql,测试连接
+		if (dbType.contains("mysql")) {
+			res = dataSourceUtil.queryTableData(ip, port, userName, password, databaseName, tableName, start, end);
+		}
+		// 数据库名称包含sqlserver,测试连接
+//		if (dbType.contains("sqlserver")) {
+//			
+//		}
+		//查找数据库
 		if(null == res){
 			throw new Exception("查询表中的数据时出现异常");
 		}
@@ -358,8 +384,19 @@ public class DateSetServiceImpl implements DataSetService{
 		String databaseName = String.valueOf(map.get("dbName"));
 		String tableName = String.valueOf(map.get("tableName"));
 		
-		//查找数据库
-		list = dataSourceUtil.queryTableColumn(ip, port, userName, password, databaseName, tableName);
+		String dbType = String.valueOf(map.get("databaseType")).toLowerCase();
+		// 数据库名称包含oracle,测试连接
+//		if (dbType.contains("oracle")) {
+//			
+//		}
+		// 数据库名称包含mysql,测试连接
+		if (dbType.contains("mysql")) {
+			list = dataSourceUtil.queryTableColumn(ip, port, userName, password, databaseName, tableName);
+		}
+		// 数据库名称包含sqlserver,测试连接
+//		if (dbType.contains("sqlserver")) {
+//			
+//		}
 		
 		if(null == list){
 			throw new Exception("查询表中的列名称出现异常");
@@ -401,11 +438,24 @@ public class DateSetServiceImpl implements DataSetService{
 		String password = config.getString("spring.datasource.password");
 		String columnNames = String.valueOf(map.get("columnNames"));
 		
-		Rdb rdb = getRdb(map);
 		Map<String, Object> res = new HashMap<String,Object>();
 		
-		String targetTable = String.valueOf(System.currentTimeMillis());
-		//创建任务
+		//RDB表插入一条数据
+		String rdbId = "RDB_"+new Date().getTime();
+		map.put("rdbId", rdbId);
+		Rdb rdb = getRdb(map);
+		int i = rdbMapper.insert(rdb);
+		//数据表插入一条数据
+		String id = "DATASET_"+new Date().getTime();
+		map.put("id", id);
+		String dataTable = "zt_data_"+id;//本地表名称 zt_data_数据集ID
+		map.put("dataTable",dataTable);
+		DataSet dataSet = getDataSet(map);
+		int j = dataSetMapper.insert(dataSet);
+		if(i<1 || j<1){
+			throw new Exception("数据集信息保存异常"); 
+		}
+		//任务表插入一条数据,创建任务
 		TaskInfo taskInfo = new TaskInfo();
 		Date date = new Date();
 		taskInfo.setId("TASK_"+date.getTime());
@@ -416,8 +466,9 @@ public class DateSetServiceImpl implements DataSetService{
 		taskInfo.setUserId(userId);
 		taskInfo.setProjectId("暂时没有project");
 		taskInfoMapper.insert(taskInfo);
+		
 		//数据迁移
-		SparkSql.migration(rdb, targetTable,taskInfo.getId());
+		SparkSql.migration(rdb, dataTable,taskInfo.getId());
 		
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
@@ -425,13 +476,25 @@ public class DateSetServiceImpl implements DataSetService{
 		Integer start = getIntStart(page,rows);
 		Integer end = getIntEnd(page,rows);
 		
-		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, targetTable, columnNames, start, end);
-		
+		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, dataTable, columnNames, start, end);
+		res.put("taskStatus", 1);
 		return res;
 	}
-	
+	public DataSet getDataSet(Map<String, Object> map){
+		DataSet ds = new DataSet();
+		ds.setId(String.valueOf(map.get("id")));
+		ds.setCreateTime(new Date());
+		ds.setName(String.valueOf(map.get("name")));
+		ds.setDescription(String.valueOf(map.get("description")));
+		ds.setTypeId("local_rdb");
+		ds.setUserId(String.valueOf(map.get("userId")));
+		ds.setProjectId(String.valueOf(map.get("dataTable")));
+		ds.setProjectId(String.valueOf(map.get("rdbId")));
+		return ds;
+	}
 	public Rdb getRdb(Map<String, Object> map){
 		Rdb rdb = new Rdb();
+		rdb.setId(String.valueOf(map.get("rdbId")));
 		rdb.setCharset(String.valueOf(map.get("charset")));
 		rdb.setColumnNames(String.valueOf(map.get("columnNames")));
 		rdb.setDatabaseType(String.valueOf(map.get("databaseType")));
@@ -469,7 +532,8 @@ public class DateSetServiceImpl implements DataSetService{
 		InputStream in = file.getInputStream();
 		
 		ftp.setBufferSize(1024*1024*50);
-		flag = ftp.storeFile(fileName, in);//
+		String aaa = ftpPath+File.separator+fileName;
+		flag = ftp.storeFile(new String(aaa.getBytes("GBK"),"ISO-8859-1"), in);//
 
 		return flag;
 
