@@ -51,6 +51,7 @@ public class SparkSql {
             System.out.println("远程数据库必填信息项有为空的项！！");
             return;
         }
+        //task新增接口，任务启动后向zt_sys_task_info表中新增一条记录。
         String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useUnicode=true";
 
         try {
@@ -81,6 +82,7 @@ public class SparkSql {
                 public void onProcessComplete(int exitValue) {
                     super.onProcessComplete(exitValue);
                     System.out.println("my success");
+                    //task更新接口，任务执行成功后将status字段更新为complete
 //                    return "success";
                 }
 
