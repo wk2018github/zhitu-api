@@ -229,7 +229,7 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public int saveSqlDataSet(DataSetRdbVo dRdbVo, String userId) {
+	public String saveSqlDataSet(DataSetRdbVo dRdbVo, String userId) {
 //		String typeId = StringHandler.objectToString(dRdbVo.getTypeId());
 		
 		DataSet dataSet = new DataSet();
@@ -269,7 +269,11 @@ public class DateSetServiceImpl implements DataSetService{
 		dataSet.setDescription(dRdbVo.getDescription());
 		dataSet.setProjectId(dRdbVo.getProjectId());
 		int i = dataSetMapper.insert(dataSet);
-		return i;
+		if(i>0){
+			return id;
+		}
+		return null;
+//		return i;
 	}
 
 	@Override
@@ -413,7 +417,7 @@ public class DateSetServiceImpl implements DataSetService{
 		taskInfo.setProjectId("暂时没有project");
 		taskInfoMapper.insert(taskInfo);
 		//数据迁移
-		SparkSql.migration(rdb, targetTable);
+		SparkSql.migration(rdb, targetTable,taskInfo.getId());
 		
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));

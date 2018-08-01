@@ -1,15 +1,18 @@
 package zhitu.util;
 
-import java.util.Date;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
+
 import zhitu.sq.dataset.model.Rdb;
+import zhitu.sq.dataset.model.TaskInfo;
+import zhitu.sq.dataset.service.TaskInfoService;
 
 public class SparkSql {
-
+	
+	
     public static void main(String[] args){
         /*String url = "jdbc:mysql://172.18.32.91:3306/db_kg?useUnicode=true";
         String encoding = "UTF-8";
@@ -18,6 +21,7 @@ public class SparkSql {
         String fromTable = "zt_sys_user";//远程数据库表名
         String field = "id,createTime,email";//导入的字段*/
         String targetTable = "result";//导入到本地之后的数据库表名
+        String userId = "";
         Rdb rdb = new Rdb();
         rdb.setHost("192.168.100.111");
         rdb.setPort(30620);
@@ -27,7 +31,7 @@ public class SparkSql {
         rdb.setPassword("123456");
         rdb.setTableName("ldp_asset_object");
         rdb.setColumnNames("id,code,name");
-        migration(rdb,targetTable);
+        migration(rdb,targetTable,userId);
     }
 
     /**
@@ -35,8 +39,10 @@ public class SparkSql {
      * @param  rdb
      * @param  targetTable
      */
-    public static void migration(Rdb rdb,String targetTable){
+    public static void migration(Rdb rdb,String targetTable,String taskId){
 
+    	TaskInfoService taskInfoService = (TaskInfoService) SpringContextUtil.getBean("taskInfoService");
+    	
         String host = rdb.getHost();//远程数据库主机IP
         Integer port = rdb.getPort();//远程数据库端口号
         String dbName = rdb.getDbName();//远程数据库库名
@@ -81,13 +87,20 @@ public class SparkSql {
                 public void onProcessComplete(int exitValue) {
                     super.onProcessComplete(exitValue);
                     System.out.println("my success");
-//                    return "success";
+                    TaskInfo taskInfo = new TaskInfo();
+                    taskInfo.setId(taskId);
+                    taskInfo.setStatus("2");
+                    taskInfoService.updateTask(taskInfo);
                 }
 
                 @Override
                 public void onProcessFailed(ExecuteException e) {
                     super.onProcessFailed(e);
                     System.out.println("my fail");
+                    TaskInfo taskInfo = new TaskInfo();
+                    taskInfo.setId(taskId);
+                    taskInfo.setStatus("3");
+                    taskInfoService.updateTask(taskInfo);
                 }
             };
 

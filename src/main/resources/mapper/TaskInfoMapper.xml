@@ -67,6 +67,30 @@
       </if>
     </trim>
   </insert>
+   <update id="updateTask" parameterType="zhitu.sq.dataset.model.TaskInfo" >
+    update zt_sys_task_info
+    <set >
+      <if test="createTime != null" >
+    	 createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+      	 description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+         projectId =#{projectId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
   <select id="selectAllTask" resultMap="BaseResultMap" parameterType="java.lang.String">
   	select * from zt_sys_task_info
   </select>

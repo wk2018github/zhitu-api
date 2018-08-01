@@ -50,6 +50,7 @@ public class DataSetController extends BaseController{
     		@ApiParam(value = "{\"page\":1,\"rows\":10,\"name\":\"项目名称\"}")@RequestBody Map<String, Object> map) {
     	try {
         	Map<String, Object> result = new HashMap<String, Object>();
+        	User user = (User)request.getSession().getAttribute("user");
         	//获取登录用户Id
     		String userId = "USER_1293910401";
     		PageInfo<Map<String, Object>> dateSet = dataSetService.queryDateSet(map,userId);
@@ -162,13 +163,13 @@ public class DataSetController extends BaseController{
     public SQApiResponse<Map<String, Object>> saveSqlDb(HttpServletRequest request,
     		@RequestBody DataSetRdbVo dRdbVo) {
     	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
         	//获取登录用户Id
+    		User user = (User)request.getSession().getAttribute("user");
     		String userId = "USER_1293910401";
-    		int i = dataSetService.saveSqlDataSet(dRdbVo,userId);
-    		if(i>0){
-    			return success();
-    		}
-    		return error("保存失败");
+    		String id = dataSetService.saveSqlDataSet(dRdbVo,userId);
+    		result.put("id", id);
+    		return success(result);
 		} catch (Exception e) {
 			LOG.error("保存失败:" + e.getMessage(),e);
 			return error("保存失败");
@@ -267,6 +268,7 @@ public class DataSetController extends BaseController{
     	try {
     		Map<String, Object> result = new HashMap<String, Object>();
     		//获取登录用户Id
+    		User user = (User)request.getSession().getAttribute("user");
     		String userId = "USER_1293910401";
     		String name = StringHandler.objectToString(map.get("name"));
     		String projectId = StringHandler.objectToString(map.get("projectId"));
@@ -415,6 +417,9 @@ public class DataSetController extends BaseController{
 			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
 		try {
 			Map<String, Object> result = new HashMap<String,Object>();
+			
+			//获取登录用户Id
+			User user = (User)request.getSession().getAttribute("user");
 			String userId = "USER_1293910401";
 			result = dataSetService.queryLocalTableColumnData(map,userId);
 
