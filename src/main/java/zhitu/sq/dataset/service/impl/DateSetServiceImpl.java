@@ -78,7 +78,7 @@ public class DateSetServiceImpl implements DataSetService{
 			MultipartFile file) throws Exception {
 		
 		FtpFile ftpFile = new FtpFile();
-		String id = "DATASET_" + new Date().getTime();
+		String id = "DATASET_" + String.valueOf(System.currentTimeMillis());
 		
 		FTPClient ftp = dataSourceUtil.getFTPClient();
 		if (null == ftp) {
@@ -240,7 +240,7 @@ public class DateSetServiceImpl implements DataSetService{
 			 * 首先保存数据库连接rdb数据，在保存dataset信息
 			 */
 			Rdb rdb = new Rdb();
-			String rdbId = "RDB_"+new Date().getTime();
+			String rdbId = "RDB_"+String.valueOf(System.currentTimeMillis());
 			rdb.setId(rdbId);
 			rdb.setCharset(dRdbVo.getCharset());
 			rdb.setColumnNames(dRdbVo.getColumnNames());
@@ -261,7 +261,7 @@ public class DateSetServiceImpl implements DataSetService{
 			
 			
 		}*/
-		String id = "DATASET_"+new Date().getTime();
+		String id = "DATASET_"+String.valueOf(System.currentTimeMillis());
 		dataSet.setId(id);
 		dataSet.setCreateTime(new Date());
 		dataSet.setName(dRdbVo.getName());
@@ -441,12 +441,12 @@ public class DateSetServiceImpl implements DataSetService{
 		Map<String, Object> res = new HashMap<String,Object>();
 		
 		//RDB表插入一条数据
-		String rdbId = "RDB_"+new Date().getTime();
+		String rdbId = "RDB_"+String.valueOf(System.currentTimeMillis());
 		map.put("rdbId", rdbId);
 		Rdb rdb = getRdb(map);
 		int i = rdbMapper.insert(rdb);
 		//数据表插入一条数据
-		String id = "DATASET_"+new Date().getTime();
+		String id = "DATASET_"+String.valueOf(System.currentTimeMillis());
 		map.put("id", id);
 		String dataTable = "zt_data_"+id;//本地表名称 zt_data_数据集ID
 		map.put("dataTable",dataTable);
@@ -457,12 +457,11 @@ public class DateSetServiceImpl implements DataSetService{
 		}
 		//任务表插入一条数据,创建任务
 		TaskInfo taskInfo = new TaskInfo();
-		Date date = new Date();
-		taskInfo.setId("TASK_"+date.getTime());
+		taskInfo.setId("TASK_"+String.valueOf(System.currentTimeMillis()));
 		taskInfo.setName("暂时还未确定规则");
 		taskInfo.setDescription("描述信息");
 		taskInfo.setStatus("1");
-		taskInfo.setCreateTime(date);
+		taskInfo.setCreateTime(new Date());
 		taskInfo.setUserId(userId);
 		taskInfo.setProjectId("暂时没有project");
 		taskInfoMapper.insert(taskInfo);

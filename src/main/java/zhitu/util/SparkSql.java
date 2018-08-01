@@ -5,13 +5,21 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import zhitu.sq.dataset.model.Rdb;
 import zhitu.sq.dataset.model.TaskInfo;
 import zhitu.sq.dataset.service.TaskInfoService;
 
+@Component
 public class SparkSql {
 	
+	public static TaskInfoService staticTaskInfoService;
+	@Autowired
+	public void setStaticTaskInfoService(TaskInfoService taskInfoService) {
+		staticTaskInfoService = taskInfoService;
+	}
 	
     public static void main(String[] args){
         /*String url = "jdbc:mysql://172.18.32.91:3306/db_kg?useUnicode=true";
@@ -20,7 +28,7 @@ public class SparkSql {
         String password = "142536";//数据库密码
         String fromTable = "zt_sys_user";//远程数据库表名
         String field = "id,createTime,email";//导入的字段*/
-        String targetTable = "result";//导入到本地之后的数据库表名
+        String targetTable = "ss";//导入到本地之后的数据库表名
         String userId = "";
         Rdb rdb = new Rdb();
         rdb.setHost("192.168.100.111");
@@ -41,7 +49,7 @@ public class SparkSql {
      */
     public static void migration(Rdb rdb,String targetTable,String taskId){
 
-    	TaskInfoService taskInfoService = (TaskInfoService) SpringContextUtil.getBean("taskInfoService");
+//    	TaskInfoService taskInfoService = (TaskInfoService) SpringContextUtil.getBean("taskInfoService");
     	
         String host = rdb.getHost();//远程数据库主机IP
         Integer port = rdb.getPort();//远程数据库端口号
@@ -67,7 +75,7 @@ public class SparkSql {
             String fromTable = rdb.getTableName();//远程数据库表名
             String field = rdb.getColumnNames();//导入的字段*/
 
-            String pythonExePath = "E:\\spark-2.2.0-bin-hadoop2.7\\bin\\spark-submit.cmd";
+            String pythonExePath = "E:\\\\Spark\\bin\\spark-submit.cmd";
             CommandLine cmdLine = CommandLine.parse(pythonExePath);
             cmdLine.addArgument("--packages");
             cmdLine.addArgument("mysql:mysql-connector-java:5.1.46");
@@ -80,6 +88,8 @@ public class SparkSql {
             cmdLine.addArgument("--toTable").addArgument(targetTable);
             cmdLine.addArgument("--field").addArgument(field);
 
+            System.out.println("=====================");
+            System.out.println(cmdLine.toString());
 
 
             DefaultExecuteResultHandler handler = new DefaultExecuteResultHandler(){
@@ -90,7 +100,7 @@ public class SparkSql {
                     TaskInfo taskInfo = new TaskInfo();
                     taskInfo.setId(taskId);
                     taskInfo.setStatus("2");
-                    taskInfoService.updateTask(taskInfo);
+                    SparkSql.staticTaskInfoService.updateTask(taskInfo);
                 }
 
                 @Override
@@ -100,7 +110,7 @@ public class SparkSql {
                     TaskInfo taskInfo = new TaskInfo();
                     taskInfo.setId(taskId);
                     taskInfo.setStatus("3");
-                    taskInfoService.updateTask(taskInfo);
+                    SparkSql.staticTaskInfoService.updateTask(taskInfo);
                 }
             };
 
