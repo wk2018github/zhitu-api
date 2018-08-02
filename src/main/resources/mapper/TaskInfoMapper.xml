@@ -92,6 +92,9 @@
     where id = #{id}
   </update>
   <select id="selectAllTask" resultMap="BaseResultMap" parameterType="java.lang.String">
-  	select * from zt_sys_task_info
+  	select * from zt_sys_task_info ORDER BY createTime DESC
+  </select>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select * from zt_sys_task_info where id = #{taskId}
   </select>
 </mapper>

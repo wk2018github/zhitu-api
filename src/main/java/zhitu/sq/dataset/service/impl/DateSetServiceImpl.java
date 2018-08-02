@@ -73,12 +73,9 @@ public class DateSetServiceImpl implements DataSetService{
 		return new PageInfo<>(list);
 	}
 
-	@Override
 	public int saveLocalDataSet(String userId, String name, String describe, String projectId,
 			MultipartFile file) throws Exception {
-		
-		FtpFile ftpFile = new FtpFile();
-		String id = "DATASET_" + String.valueOf(System.currentTimeMillis());
+		String dataSetId = "DATASET_" + System.currentTimeMillis();
 		
 		FTPClient ftp = dataSourceUtil.getFTPClient();
 		if (null == ftp) {
@@ -91,39 +88,36 @@ public class DateSetServiceImpl implements DataSetService{
 		String fileName = file.getOriginalFilename();
 		f.setFileName(fileName);
 		//调用中科院的接口获取 文件摘要内容一般取前5000字
-		
+		String su = fileName.substring(fileName.lastIndexOf("."));
 		String fileAbstract = TikaUtils.parseFile(file);
 		f.setFileAbstract(fileAbstract);
 		// 文件上传到ftp
 		String directory = "zhituFile"+System.currentTimeMillis();
-		String ftpName = String.valueOf(System.currentTimeMillis());
+		String ftpName = String.valueOf(System.currentTimeMillis())+su;
 		boolean flag = upload(ftp, file, directory, ftpName);
 		if (!flag) {
 			throw new Exception(fileName + "上传失败");
 		}
+		System.out.println("upload success");
 		ftp.disconnect();
 		
 		Configuration config = new PropertiesConfiguration("file.properties");
 		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
 		f.setFtpurl(ftpurl);
-		f.setDatasetId(id);
+		f.setDatasetId(dataSetId);
 		
 		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
 		DataSet dataSet = new DataSet();
-		dataSet.setId(id);
+		dataSet.setId(dataSetId);
 		dataSet.setCreateTime(new Date());
 		dataSet.setName(name);
 		dataSet.setUserId(userId);
 		dataSet.setProjectId(projectId);
 		dataSet.setTypeId("ftp_file");
-		dataSet.setDataTable("zt_data_" + id);
+		dataSet.setDataTable("zt_data_" + dataSetId);
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
-		int j = dataSetMapper.insertFtpFile(ftpFile);
-		// 创建zt_data_DATASET_1428399384表
-		// 字段 id（唯一ID，必须以PDF_毫秒时间戳为格式） createTime创建时间
-		// fileName（pdf文件名带后缀） abstract （pdf内容摘要）
-		// ftpurl (pdf文件路径)
+		int j = dataSetMapper.insertFtpFile(f);
 		return i>0&&j>0?1:0;
 	}
 
@@ -404,7 +398,6 @@ public class DateSetServiceImpl implements DataSetService{
 		return list;
 	}
 
-	@Override
 	public Map<String, Object> queryTableColumnData(Map<String, Object> map) throws Exception {
 		Map<String, Object> res = new HashMap<String,Object>();
 		
@@ -416,6 +409,8 @@ public class DateSetServiceImpl implements DataSetService{
 		String tableName = String.valueOf(map.get("tableName"));
 		String columnNames = String.valueOf(map.get("columnNames"));
 		
+		DataSet ds = dataSetMapper.selectByPrimaryKey(String.valueOf(map.get("dataSetId")));
+		res.put("dataSet", ds);
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
@@ -430,7 +425,6 @@ public class DateSetServiceImpl implements DataSetService{
 		return res;
 	}
 
-	@Override
 	public Map<String, Object> queryLocalTableColumnData(Map<String, Object> map,String userId) throws Exception {
 		Configuration config = new PropertiesConfiguration("application.properties");
 		String url = config.getString("spring.datasource.url");
@@ -441,27 +435,30 @@ public class DateSetServiceImpl implements DataSetService{
 		Map<String, Object> res = new HashMap<String,Object>();
 		
 		//RDB表插入一条数据
-		String rdbId = "RDB_"+String.valueOf(System.currentTimeMillis());
+		String rdbId = "RDB_"+System.currentTimeMillis();
 		map.put("rdbId", rdbId);
 		Rdb rdb = getRdb(map);
+		rdb.setCreateTime(new Date());
 		int i = rdbMapper.insert(rdb);
 		//数据表插入一条数据
-		String id = "DATASET_"+String.valueOf(System.currentTimeMillis());
+		String id = "DATASET_"+System.currentTimeMillis();
 		map.put("id", id);
 		String dataTable = "zt_data_"+id;//本地表名称 zt_data_数据集ID
 		map.put("dataTable",dataTable);
 		DataSet dataSet = getDataSet(map);
+		dataSet.setUserId(userId);
 		int j = dataSetMapper.insert(dataSet);
 		if(i<1 || j<1){
 			throw new Exception("数据集信息保存异常"); 
 		}
 		//任务表插入一条数据,创建任务
 		TaskInfo taskInfo = new TaskInfo();
-		taskInfo.setId("TASK_"+String.valueOf(System.currentTimeMillis()));
+		Date date = new Date();
+		taskInfo.setId("TASK_"+System.currentTimeMillis());
 		taskInfo.setName("暂时还未确定规则");
 		taskInfo.setDescription("描述信息");
 		taskInfo.setStatus("1");
-		taskInfo.setCreateTime(new Date());
+		taskInfo.setCreateTime(date);
 		taskInfo.setUserId(userId);
 		taskInfo.setProjectId("暂时没有project");
 		taskInfoMapper.insert(taskInfo);
@@ -469,16 +466,21 @@ public class DateSetServiceImpl implements DataSetService{
 		//数据迁移
 		SparkSql.migration(rdb, dataTable,taskInfo.getId());
 		
-		//分页参数
-		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
-		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
-		Integer start = getIntStart(page,rows);
-		Integer end = getIntEnd(page,rows);
-		
-		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, dataTable, columnNames, start, end);
-		res.put("taskStatus", 1);
+//		//分页参数
+//		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
+//		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
+//		Integer start = getIntStart(page,rows);
+//		Integer end = getIntEnd(page,rows);
+//		
+//		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, dataTable, columnNames, start, end);//表数据
+//		res.put("taskStatus", 1);//任务状态
+//		DataSet ds = dataSetMapper.selectByPrimaryKey(String.valueOf(map.get("dataSetId")));//数据集相关信息
+//		res.put("dataSet", ds);
+		res.put("id", dataSet.getId());
+		res.put("taskId",taskInfo.getId());
 		return res;
 	}
+	
 	public DataSet getDataSet(Map<String, Object> map){
 		DataSet ds = new DataSet();
 		ds.setId(String.valueOf(map.get("id")));
@@ -511,7 +513,6 @@ public class DateSetServiceImpl implements DataSetService{
 	public Integer getIntEnd(int page,int rows){
 		return page*rows;
 	}
-	@SuppressWarnings("resource")
 	public boolean upload(FTPClient ftp, MultipartFile file, String directory, String fileName) throws Exception {
 		boolean flag = false;
 		String ftpPath = new String(directory.getBytes("GBK"),"iso-8859-1");
@@ -523,19 +524,23 @@ public class DateSetServiceImpl implements DataSetService{
 		if (!m) {
 			throw new Exception("进入文件夹失败");
 		}
-		ftp.enterLocalActiveMode();
-		ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+		ftp.enterLocalPassiveMode(); //被动模式
+//		ftp.enterLocalActiveMode(); //主动模式
 		// 上传文件
 		// FTP协议规定文件编码格式为ISO-8859-1
 		fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
 		InputStream in = file.getInputStream();
 		
 		ftp.setBufferSize(1024*1024*50);
-		String aaa = ftpPath+File.separator+fileName;
-		flag = ftp.storeFile(new String(aaa.getBytes("GBK"),"ISO-8859-1"), in);//
-
+		flag = ftp.storeFile(new String(fileName.getBytes("GBK"),"ISO-8859-1"), in);//
+		
 		return flag;
 
+	}
+
+	@Override
+	public DataSet selectById(String datasetId) {
+		return dataSetMapper.selectByPrimaryKey(datasetId);
 	}
 
 }

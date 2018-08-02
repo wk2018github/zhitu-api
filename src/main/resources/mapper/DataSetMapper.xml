@@ -104,7 +104,7 @@
 	<insert id="insertFtpFile" parameterType="zhitu.sq.dataset.model.FtpFile" >
 		insert into zt_data_ftp_file (id, createTime, fileName, fileAbstract, ftpurl, datasetId)
         values
-        (#{item.id,jdbcType=VARCHAR}, now(),#{item.fileName,jdbcType=VARCHAR},
-        #{item.fileAbstract,jdbcType=LONGVARCHAR}, #{item.ftpurl,jdbcType=VARCHAR},#{item.datasetId,jdbcType=VARCHAR})
+        (#{id,jdbcType=VARCHAR}, now(),#{fileName,jdbcType=VARCHAR},
+        #{fileAbstract,jdbcType=LONGVARCHAR}, #{ftpurl,jdbcType=VARCHAR},#{datasetId,jdbcType=VARCHAR})
 	</insert>
 </mapper>

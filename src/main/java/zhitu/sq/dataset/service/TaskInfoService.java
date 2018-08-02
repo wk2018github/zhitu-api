@@ -23,5 +23,12 @@ public interface TaskInfoService {
 	 * @return
 	 */
 	int updateTask(TaskInfo taskInfo);
+
+	/**
+	 * 根据任务id查询
+	 * @param taskId
+	 * @return
+	 */
+	TaskInfo selectById(String taskId);
 	
 }

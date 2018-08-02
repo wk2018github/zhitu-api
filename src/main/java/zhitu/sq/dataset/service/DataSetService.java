@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 
+import thredds.catalog2.Dataset;
 import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
 import zhitu.sq.dataset.controller.vo.RdbVo;
 import zhitu.sq.dataset.controller.vo.Select;
@@ -155,6 +156,13 @@ public interface DataSetService {
 	PageInfo<Map<String, Object>> findByIdFtpFile(Map<String, Object> map)throws Exception;
 
 	PageInfo<Map<String, Object>> findByIdLcoal(Map<String, Object> map)throws Exception;
+
+	/**
+	 * 根据数据集id查询数据
+	 * @param datasetId
+	 * @return
+	 */
+	DataSet selectById(String datasetId);
 
 
 }

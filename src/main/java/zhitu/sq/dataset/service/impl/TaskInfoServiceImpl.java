@@ -32,6 +32,11 @@ public class TaskInfoServiceImpl implements TaskInfoService{
 	public int updateTask(TaskInfo taskInfo) {
 		return taskInfoMapper.updateTask(taskInfo);
 	}
+
+	@Override
+	public TaskInfo selectById(String taskId) {
+		return taskInfoMapper.selectById(taskId);
+	}
 	
 	
 }
