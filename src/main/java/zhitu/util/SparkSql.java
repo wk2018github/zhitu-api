@@ -98,8 +98,6 @@ public class SparkSql {
                 public void onProcessComplete(int exitValue) {
                     super.onProcessComplete(exitValue);
                     System.out.println("my success");
-                    //task更新接口，任务执行成功后将status字段更新为complete
-//                    return "success";
                     TaskInfo taskInfo = new TaskInfo();
                     taskInfo.setId(taskId);
                     taskInfo.setStatus("2");
