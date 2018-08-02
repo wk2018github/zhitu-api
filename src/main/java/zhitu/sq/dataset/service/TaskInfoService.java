@@ -16,5 +16,12 @@ public interface TaskInfoService {
 	 * @return
 	 */
 	PageInfo<TaskInfo> selectAllTask(Map<String, Object> map);
+
+	/**
+	 * 更新任务
+	 * @param taskInfo
+	 * @return
+	 */
+	int updateTask(TaskInfo taskInfo);
 	
 }

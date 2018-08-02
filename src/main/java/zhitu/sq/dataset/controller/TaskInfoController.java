@@ -1,7 +1,6 @@
 package zhitu.sq.dataset.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,16 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageInfo;
-import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.sq.dataset.model.TaskInfo;
-import zhitu.sq.dataset.model.User;
 import zhitu.sq.dataset.service.TaskInfoService;
-import zhitu.sq.dataset.service.UserService;
 
 @RequestMapping("taskInfo")
 @RestController
@@ -51,5 +47,22 @@ public class TaskInfoController extends BaseController {
 		}
 	}
 	
+	@ApiOperation(value = "任务列表更新", notes = "任务列表更新")
+	@ResponseBody
+	@RequestMapping(value = "/updateTask", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> updateTask(HttpServletRequest request,
+			@ApiParam(value = user) @RequestBody TaskInfo taskInfo) {
+		try {
+			if(taskInfo.getId().isEmpty()){
+				return error("任务id不能为空！");
+			}
+			String userId = "USER_1293910401";
+			int i = taskInfoService.updateTask(taskInfo);
+			return success();
+		} catch (Exception e) {
+			logger.error("taskInfo/updateTask",e);
+			return error("查询异常");
+		}
+	}
 
 }

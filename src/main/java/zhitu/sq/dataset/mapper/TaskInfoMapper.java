@@ -8,9 +8,12 @@ import zhitu.sq.dataset.model.TaskInfo;
 
 @Mapper
 public interface TaskInfoMapper {
+	
     int insert(TaskInfo record);
 
     int insertSelective(TaskInfo record);
 
 	List<TaskInfo> selectAllTask();
+
+	int updateTask(TaskInfo taskInfo);
 }

@@ -27,6 +27,11 @@ public class TaskInfoServiceImpl implements TaskInfoService{
 		List<TaskInfo> list = taskInfoMapper.selectAllTask();
 		return new PageInfo<>(list);
 	}
+
+	@Override
+	public int updateTask(TaskInfo taskInfo) {
+		return taskInfoMapper.updateTask(taskInfo);
+	}
 	
 	
 }

@@ -50,6 +50,7 @@ public class DataSetController extends BaseController{
     		@ApiParam(value = "{\"page\":1,\"rows\":10,\"name\":\"项目名称\"}")@RequestBody Map<String, Object> map) {
     	try {
         	Map<String, Object> result = new HashMap<String, Object>();
+        	User user = (User)request.getSession().getAttribute("user");
         	//获取登录用户Id
     		String userId = "USER_1293910401";
     		PageInfo<Map<String, Object>> dateSet = dataSetService.queryDateSet(map,userId);
@@ -81,7 +82,7 @@ public class DataSetController extends BaseController{
             	result = mergeJqGridData(data);
     		}else{
     			Map<String, Object> data = dataSetService.findById(map);
-            	result.put("data", data);
+            	result = data;
     		}
     		return success(result);
 		} catch (Exception e) {
@@ -162,13 +163,13 @@ public class DataSetController extends BaseController{
     public SQApiResponse<Map<String, Object>> saveSqlDb(HttpServletRequest request,
     		@RequestBody DataSetRdbVo dRdbVo) {
     	try {
+    		Map<String, Object> result = new HashMap<String, Object>();
         	//获取登录用户Id
+    		User user = (User)request.getSession().getAttribute("user");
     		String userId = "USER_1293910401";
-    		int i = dataSetService.saveSqlDataSet(dRdbVo,userId);
-    		if(i>0){
-    			return success();
-    		}
-    		return error("保存失败");
+    		String id = dataSetService.saveSqlDataSet(dRdbVo,userId);
+    		result.put("id", id);
+    		return success(result);
 		} catch (Exception e) {
 			LOG.error("保存失败:" + e.getMessage(),e);
 			return error("保存失败");
@@ -267,6 +268,7 @@ public class DataSetController extends BaseController{
     	try {
     		Map<String, Object> result = new HashMap<String, Object>();
     		//获取登录用户Id
+    		User user = (User)request.getSession().getAttribute("user");
     		String userId = "USER_1293910401";
     		String name = StringHandler.objectToString(map.get("name"));
     		String projectId = StringHandler.objectToString(map.get("projectId"));
@@ -327,8 +329,8 @@ public class DataSetController extends BaseController{
 		}
 	}
 
-	private static final String queryRdbData = "{\"page\":1,\"rows\":10,\"host\":\"localhost\",\"port\":\"3306\","
-			+ "\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"db_kg\",\"tableName\":\"zt_sys_dict\"}";
+	private static final String queryRdbData = "{\"page\":1,\"rows\":10,\"host\":\"localhost\",\n\"port\":\"3306\","
+			+ "\"databaseType\":\"mysql\",\"user\":\"root\",\n\"password\":\"123456\",\"dbName\":\"db_kg\",\"tableName\":\"zt_sys_dict\"}";
 
 	/**
 	 * @author qwm
@@ -376,9 +378,9 @@ public class DataSetController extends BaseController{
 		}
 	}
 	
-	private static final String rdbColumnData = "{\"page\":1,\"rows\":10,\"host\":\"192.168.100.111\",\"port\":\"30620\",\"databaseType\":\"01\","
-			+ "\"charset\":\"utf-8\",\"user\":\"root\",\"password\":\"123456\",\"dbName\":\"ldp_test\","
-			+ "\"tableName\":\"ldp_asset_object\",\"columnNames\":\"id,code,name\"}";
+	private static final String rdbColumnData = "{\"page\":1,\"rows\":10,\"host\":\"192.168.100.111\",\n\"port\":\"30620\",\"databaseType\":\"01\",\n"
+			+ "\"charset\":\"utf-8\",\"user\":\"root\",\n\"password\":\"123456\",\"dbName\":\"ldp_test\","
+			+ "\"tableName\":\"ldp_asset_object\",\n\"columnNames\":\"id,code,name\",\"dataSetId\":\"DATASET_1531139698243\"}";
 	/**
 	 * @author qwm
 	 * @param request
@@ -415,6 +417,9 @@ public class DataSetController extends BaseController{
 			@ApiParam(value = rdbColumnData) @RequestBody Map<String, Object> map) {
 		try {
 			Map<String, Object> result = new HashMap<String,Object>();
+			
+			//获取登录用户Id
+			User user = (User)request.getSession().getAttribute("user");
 			String userId = "USER_1293910401";
 			result = dataSetService.queryLocalTableColumnData(map,userId);
 
