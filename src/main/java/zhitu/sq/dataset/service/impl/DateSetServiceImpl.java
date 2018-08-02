@@ -467,7 +467,7 @@ public class DateSetServiceImpl implements DataSetService{
 		taskInfoMapper.insert(taskInfo);
 		
 		//数据迁移
-		SparkSql.migration(rdb, dataTable,taskInfo.getId());
+		SparkSql.migration(rdb, dataTable/*,taskInfo.getId()*/);
 		
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
