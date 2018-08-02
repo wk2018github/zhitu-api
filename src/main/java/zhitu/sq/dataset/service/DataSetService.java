@@ -66,7 +66,7 @@ public interface DataSetService {
 	 * @param userId
 	 * @return
 	 */
-	int saveSqlDataSet(DataSetRdbVo dRdbVo, String userId)throws Exception;
+	String saveSqlDataSet(DataSetRdbVo dRdbVo, String userId)throws Exception;
 
 
 	/**
