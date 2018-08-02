@@ -17,6 +17,7 @@ import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.sq.dataset.model.TaskInfo;
 import zhitu.sq.dataset.service.TaskInfoService;
+import zhitu.util.StringHandler;
 
 @RequestMapping("taskInfo")
 @RestController
@@ -65,4 +66,21 @@ public class TaskInfoController extends BaseController {
 		}
 	}
 
+	@ApiOperation(value = "根据任务id查询任务情况", notes = "根据任务id查询任务情况")
+	@ResponseBody
+	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> selectById(HttpServletRequest request,
+			@ApiParam(value = user) @RequestBody Map<String, Object> map) {
+		try {
+			Map<String, Object> result = new HashMap<String, Object>();
+			String taskId = StringHandler.objectToString(map.get("taskId"));
+			TaskInfo taskInfo = taskInfoService.selectById(taskId);
+			result.put("data", taskInfo);
+			return success(result);
+		} catch (Exception e) {
+			logger.error("taskInfo/updateTask",e);
+			return error("查询异常");
+		}
+	}
+	
 }

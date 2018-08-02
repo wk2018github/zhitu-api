@@ -543,9 +543,6 @@ public class DataSourceUtil {
 				String columnName = metaDataCount.getColumnLabel(1);
 				Integer value = count.getInt(columnName);
 				logger.info(tableName+"中数据总条数:"+value);
-				if(value<1){
-					return null;
-				}
 				result.put("total", value);
 			}
 			
@@ -629,9 +626,6 @@ public class DataSourceUtil {
 				String columnName = metaDataCount.getColumnLabel(1);
 				Integer value = count.getInt(columnName);
 				logger.info(tableName+"中数据总条数:"+value);
-				if(value<1){
-					return null;
-				}
 				result.put("total", value);
 			}
 			

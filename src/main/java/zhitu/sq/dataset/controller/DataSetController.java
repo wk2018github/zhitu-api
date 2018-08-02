@@ -52,7 +52,10 @@ public class DataSetController extends BaseController{
         	Map<String, Object> result = new HashMap<String, Object>();
         	User user = (User)request.getSession().getAttribute("user");
         	//获取登录用户Id
-    		String userId = "USER_1293910401";
+        	if(user==null){
+        		return error("请重新登录!");
+        	}
+    		String userId = user.getId();
     		PageInfo<Map<String, Object>> dateSet = dataSetService.queryDateSet(map,userId);
     		result = mergeJqGridData(dateSet);
     		return success(result);
@@ -145,8 +148,10 @@ public class DataSetController extends BaseController{
 			
 			// 获取登录用户Id
 			User user = (User)request.getSession().getAttribute("user");
-			
-			int i = dataSetService.saveLocalDataSet("USER_12314123", name, describe, projectId, file);
+			if(user==null){
+        		return error("请重新登录!");
+        	}
+			int i = dataSetService.saveLocalDataSet(user.getId(), name, describe, projectId, file);
 			if (i > 0) {
 				return success();
 			}
@@ -166,7 +171,10 @@ public class DataSetController extends BaseController{
     		Map<String, Object> result = new HashMap<String, Object>();
         	//获取登录用户Id
     		User user = (User)request.getSession().getAttribute("user");
-    		String userId = "USER_1293910401";
+    		if(user==null){
+        		return error("请重新登录!");
+        	}
+    		String userId = user.getId();
     		String id = dataSetService.saveSqlDataSet(dRdbVo,userId);
     		result.put("id", id);
     		return success(result);
@@ -269,7 +277,10 @@ public class DataSetController extends BaseController{
     		Map<String, Object> result = new HashMap<String, Object>();
     		//获取登录用户Id
     		User user = (User)request.getSession().getAttribute("user");
-    		String userId = "USER_1293910401";
+    		if(user==null){
+        		return error("请重新登录!");
+        	}
+    		String userId = user.getId();
     		String name = StringHandler.objectToString(map.get("name"));
     		String projectId = StringHandler.objectToString(map.get("projectId"));
 //    		if(projectId.isEmpty()){
@@ -420,7 +431,10 @@ public class DataSetController extends BaseController{
 			
 			//获取登录用户Id
 			User user = (User)request.getSession().getAttribute("user");
-			String userId = "USER_1293910401";
+			if(user==null){
+        		return error("请重新登录!");
+        	}
+			String userId = user.getId();
 			result = dataSetService.queryLocalTableColumnData(map,userId);
 
 			return success(result);
