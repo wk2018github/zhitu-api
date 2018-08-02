@@ -1,15 +1,26 @@
 package zhitu.util;
 
-import java.util.Date;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecuteResultHandler;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.ExecuteException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import zhitu.sq.dataset.model.Rdb;
+import zhitu.sq.dataset.model.TaskInfo;
+import zhitu.sq.dataset.service.TaskInfoService;
 
+@Component
 public class SparkSql {
-
+	
+	public static TaskInfoService staticTaskInfoService;
+	@Autowired
+	public void setStaticTaskInfoService(TaskInfoService taskInfoService) {
+		staticTaskInfoService = taskInfoService;
+	}
+	
     public static void main(String[] args){
         /*String url = "jdbc:mysql://172.18.32.91:3306/db_kg?useUnicode=true";
         String encoding = "UTF-8";
@@ -17,7 +28,8 @@ public class SparkSql {
         String password = "142536";//数据库密码
         String fromTable = "zt_sys_user";//远程数据库表名
         String field = "id,createTime,email";//导入的字段*/
-        String targetTable = "result";//导入到本地之后的数据库表名
+        String targetTable = "ss";//导入到本地之后的数据库表名
+        String userId = "";
         Rdb rdb = new Rdb();
         rdb.setHost("192.168.100.111");
         rdb.setPort(30620);
@@ -27,7 +39,7 @@ public class SparkSql {
         rdb.setPassword("123456");
         rdb.setTableName("ldp_asset_object");
         rdb.setColumnNames("id,code,name");
-        migration(rdb,targetTable);
+        migration(rdb,targetTable,userId);
     }
 
     /**
@@ -35,8 +47,10 @@ public class SparkSql {
      * @param  rdb
      * @param  targetTable
      */
-    public static void migration(Rdb rdb,String targetTable){
+    public static void migration(Rdb rdb,String targetTable,String taskId){
 
+//    	TaskInfoService taskInfoService = (TaskInfoService) SpringContextUtil.getBean("taskInfoService");
+    	
         String host = rdb.getHost();//远程数据库主机IP
         Integer port = rdb.getPort();//远程数据库端口号
         String dbName = rdb.getDbName();//远程数据库库名
@@ -51,7 +65,6 @@ public class SparkSql {
             System.out.println("远程数据库必填信息项有为空的项！！");
             return;
         }
-        //task新增接口，任务启动后向zt_sys_task_info表中新增一条记录。
         String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useUnicode=true";
 
         try {
@@ -62,7 +75,7 @@ public class SparkSql {
             String fromTable = rdb.getTableName();//远程数据库表名
             String field = rdb.getColumnNames();//导入的字段*/
 
-            String pythonExePath = "E:\\spark-2.2.0-bin-hadoop2.7\\bin\\spark-submit.cmd";
+            String pythonExePath = "E:\\\\Spark\\bin\\spark-submit.cmd";
             CommandLine cmdLine = CommandLine.parse(pythonExePath);
             cmdLine.addArgument("--packages");
             cmdLine.addArgument("mysql:mysql-connector-java:5.1.46");
@@ -75,6 +88,8 @@ public class SparkSql {
             cmdLine.addArgument("--toTable").addArgument(targetTable);
             cmdLine.addArgument("--field").addArgument(field);
 
+            System.out.println("=====================");
+            System.out.println(cmdLine.toString());
 
 
             DefaultExecuteResultHandler handler = new DefaultExecuteResultHandler(){
@@ -82,14 +97,20 @@ public class SparkSql {
                 public void onProcessComplete(int exitValue) {
                     super.onProcessComplete(exitValue);
                     System.out.println("my success");
-                    //task更新接口，任务执行成功后将status字段更新为complete
-//                    return "success";
+                    TaskInfo taskInfo = new TaskInfo();
+                    taskInfo.setId(taskId);
+                    taskInfo.setStatus("2");
+                    SparkSql.staticTaskInfoService.updateTask(taskInfo);
                 }
 
                 @Override
                 public void onProcessFailed(ExecuteException e) {
                     super.onProcessFailed(e);
                     System.out.println("my fail");
+                    TaskInfo taskInfo = new TaskInfo();
+                    taskInfo.setId(taskId);
+                    taskInfo.setStatus("3");
+                    SparkSql.staticTaskInfoService.updateTask(taskInfo);
                 }
             };
 
