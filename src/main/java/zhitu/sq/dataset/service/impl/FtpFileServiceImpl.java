@@ -14,6 +14,7 @@ import zhitu.sq.dataset.mapper.FtpFileMapper;
 import zhitu.sq.dataset.model.FtpFile;
 import zhitu.sq.dataset.service.FtpFileService;
 import zhitu.util.NumberDealHandler;
+import zhitu.util.StringHandler;
 
 @Service
 public class FtpFileServiceImpl implements FtpFileService{
@@ -27,10 +28,11 @@ public class FtpFileServiceImpl implements FtpFileService{
 	}
 
 	@Override
-	public PageInfo<FtpFile> queryFtpFile(Map<String, Object> map) {
+	public PageInfo<Map<String, Object>> queryFtpFile(Map<String, Object> map) {
 		PageHelper.startPage(NumberDealHandler.objectToInt(map.get("page")),
 				NumberDealHandler.objectToInt(map.get("rows")));
-		List<FtpFile> list = ftpFileMapper.queryAll();
+		String id = StringHandler.objectToString(map.get("id"));
+		List<Map<String, Object>> list = ftpFileMapper.findByDataSetId(id);
 		return new PageInfo<>(list);
 	}
 

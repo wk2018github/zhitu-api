@@ -15,6 +15,6 @@ public interface FtpFileService {
 	 */
 	int updateFtpFile(FtpFile ftpFile);
 
-	PageInfo<FtpFile> queryFtpFile(Map<String, Object> map);
+	PageInfo<Map<String, Object>> queryFtpFile(Map<String, Object> map);
 
 }
