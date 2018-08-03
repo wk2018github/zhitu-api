@@ -27,4 +27,6 @@ public interface FtpFileMapper {
 	int deleteByDataSetId(@Param("datasetId")String datasetId);
 
 	List<String> findFields();
+
+	List<FtpFile> queryAll();
 }

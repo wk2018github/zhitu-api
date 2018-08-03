@@ -9,7 +9,7 @@
     <result column="datasetId" property="datasetId" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="zhitu.sq.dataset.model.FtpFile" extends="BaseResultMap" >
-    <result column="fileAbstract" property="fileabstract" jdbcType="LONGVARCHAR" />
+    <result column="fileAbstract" property="fileAbstract" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, createTime, fileName, ftpurl, datasetId
@@ -34,7 +34,7 @@
       ftpurl, datasetId, fileAbstract
       )
     values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fileName,jdbcType=VARCHAR}, 
-      #{ftpurl,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR}, #{fileabstract,jdbcType=LONGVARCHAR}
+      #{ftpurl,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR}, #{fileAbstract,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="zhitu.sq.dataset.model.FtpFile" >
@@ -55,7 +55,7 @@
       <if test="datasetId != null" >
         datasetId,
       </if>
-      <if test="fileabstract != null" >
+      <if test="fileAbstract != null" >
         fileAbstract,
       </if>
     </trim>
@@ -75,8 +75,8 @@
       <if test="datasetId != null" >
         #{datasetId,jdbcType=VARCHAR},
       </if>
-      <if test="fileabstract != null" >
-        #{fileabstract,jdbcType=LONGVARCHAR},
+      <if test="fileAbstract != null" >
+        #{fileAbstract,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -95,8 +95,8 @@
       <if test="datasetId != null" >
         datasetId = #{datasetId,jdbcType=VARCHAR},
       </if>
-      <if test="fileabstract != null" >
-        fileAbstract = #{fileabstract,jdbcType=LONGVARCHAR},
+      <if test="fileAbstract != null" >
+        fileAbstract = #{fileAbstract,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -107,7 +107,7 @@
       fileName = #{fileName,jdbcType=VARCHAR},
       ftpurl = #{ftpurl,jdbcType=VARCHAR},
       datasetId = #{datasetId,jdbcType=VARCHAR},
-      fileAbstract = #{fileabstract,jdbcType=LONGVARCHAR}
+      fileAbstract = #{fileAbstract,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.FtpFile" >
@@ -129,5 +129,12 @@
   </delete>
    <select id="findFields" resultType="java.lang.String">
 	select DISTINCT COLUMN_NAME from information_schema.COLUMNS where table_name = 'zt_data_ftp_file';
+  </select>
+   <select id="queryAll" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from zt_data_ftp_file
   </select>
 </mapper>

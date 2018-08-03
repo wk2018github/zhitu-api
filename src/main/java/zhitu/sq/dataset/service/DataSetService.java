@@ -91,7 +91,7 @@ public interface DataSetService {
 	 * @param rdbVo
 	 * @return
 	 */
-	PageInfo<Map<String, Object>> findByTable(RdbVo rdbVo) throws Exception;
+	Map<String, Object> findByTable(RdbVo rdbVo) throws Exception;
 	
 	/**
 	 * 根据表查询表字段

@@ -93,6 +93,7 @@
   <select id="findByName" resultType="java.util.Map" parameterType="java.lang.String" >
     SELECT
 	k.*, d.typeId,
+	if(d.typeId='ftp_file',0,1) as type,
 	t.description as typeName
 	FROM
 	zt_sys_knowledge k
