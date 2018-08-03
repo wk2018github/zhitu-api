@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiParam;
 import thredds.catalog2.Dataset;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
+import zhitu.sq.dataset.controller.vo.KnowledgeVo;
 import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.model.Knowledge;
 import zhitu.sq.dataset.service.DataSetService;
@@ -135,4 +136,20 @@ public class KnowledgeController extends BaseController {
 		}
 	}
 	
+	@ApiOperation(value = "根据选择知识库查询表-关系配置", notes = "根据选择知识库查询表-关系配置")
+	@ResponseBody
+	@RequestMapping(value = "/selectByDataSetId", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> selectByDataSetId(HttpServletRequest request,
+			@ApiParam(value = user) @RequestBody Map<String, Object> map) {
+		try {
+			Map<String, Object> result = new HashMap<>();
+			List<String> datasetIds = (List<String>) map.get("datasetIds");
+			List<Map<String, Object>> list = knowledgeService.selectByDataSetId(datasetIds);
+			result.put("data", list);
+			return success(result);
+		} catch (Exception e) {
+			logger.error("knowledge/deleteKnowledge",e);
+			return error("保存异常");
+		}
+	}
 }

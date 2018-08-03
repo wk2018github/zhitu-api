@@ -1,9 +1,6 @@
 package zhitu.sq.dataset.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -114,7 +111,8 @@ public class DateSetServiceImpl implements DataSetService{
 		dataSet.setUserId(userId);
 		dataSet.setProjectId(projectId);
 		dataSet.setTypeId("ftp_file");
-		dataSet.setDataTable("zt_data_" + dataSetId);
+		dataSet.setDescription(describe);
+//		dataSet.setDataTable("zt_data_" + dataSetId);
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
 		int j = dataSetMapper.insertFtpFile(f);
@@ -283,13 +281,29 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	@Override
-	public PageInfo<Map<String, Object>> findByTable(RdbVo rdbVo) throws Exception{
+	public Map<String, Object> findByTable(RdbVo rdbVo) throws Exception{
+		
 		int page = rdbVo.getPage();
-		int rows = rdbVo.getRows();
+    	int rows = rdbVo.getRows();
+//    	String rdbId = StringHandler.objectToString(map.get("rdbId"));
+    	PageHelper.startPage(page,rows);
+		//先查询远程连接信息及表名
 		Rdb rdb = new Rdb();
 		BeanUtils.copyProperties(rdb, rdbVo);
-		List<Map<String, Object>> list = JdbcDbUtils.jdbcTable(rdb,page,rows);
-		return new PageInfo<>(list);
+		List<Map<String, Object>> list  = JdbcDbUtils.jdbcTable(rdb,page,rows);
+		Integer records = JdbcDbUtils.jdbcTableCount(rdb);
+		Integer total = 0;
+		if(records>0){
+			float d = (float)records/rows;
+			total = (int)Math.ceil(d);
+		}
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("total", total);
+		map2.put("records", records);
+		map2.put("page", page);
+		map2.put("rows", list);
+		map2.put("userdata", "");
+		return map2;
 	}
 
 	@Override
@@ -409,8 +423,8 @@ public class DateSetServiceImpl implements DataSetService{
 		String tableName = String.valueOf(map.get("tableName"));
 		String columnNames = String.valueOf(map.get("columnNames"));
 		
-		DataSet ds = dataSetMapper.selectByPrimaryKey(String.valueOf(map.get("dataSetId")));
-		res.put("dataSet", ds);
+		DataSet ds = dataSetMapper.selectByPrimaryKey(String.valueOf(map.get("id")));
+//		res.put("dataSet", ds);
 		//分页参数
 		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
 		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
@@ -422,6 +436,7 @@ public class DateSetServiceImpl implements DataSetService{
 		if(null == res){
 			throw new Exception("查询表中指定列数据出现异常");
 		}
+		res.put("dataSetName", ds.getName());
 		return res;
 	}
 
@@ -447,6 +462,7 @@ public class DateSetServiceImpl implements DataSetService{
 		map.put("dataTable",dataTable);
 		DataSet dataSet = getDataSet(map);
 		dataSet.setUserId(userId);
+		dataSet.setDataTable(dataTable);
 		int j = dataSetMapper.insert(dataSet);
 		if(i<1 || j<1){
 			throw new Exception("数据集信息保存异常"); 
@@ -489,8 +505,8 @@ public class DateSetServiceImpl implements DataSetService{
 		ds.setDescription(String.valueOf(map.get("description")));
 		ds.setTypeId("local_rdb");
 		ds.setUserId(String.valueOf(map.get("userId")));
-		ds.setProjectId(String.valueOf(map.get("dataTable")));
-		ds.setProjectId(String.valueOf(map.get("rdbId")));
+		ds.setProjectId(String.valueOf(map.get("projectId")));
+		ds.setRdbId(String.valueOf(map.get("rdbId")));
 		return ds;
 	}
 	public Rdb getRdb(Map<String, Object> map){

@@ -30,13 +30,20 @@ public interface KnowledgeService {
 	 * @param ids
 	 * @return
 	 */
-	int deleteKnowledge(List<String> ids);
+	int deleteKnowledge(List<String> ids)throws Exception;
 
 	/**
 	 * 保存知识库信息
 	 * @param knowledge
 	 * @return
 	 */
-	int saveKnowledge(Knowledge knowledge);
+	int saveKnowledge(Knowledge knowledge)throws Exception;
+
+	/**
+	 * 根据数据集id 查询 表字段
+	 * @param datasetIds
+	 * @return
+	 */
+	List<Map<String, Object>> selectByDataSetId(List<String> datasetIds)throws Exception;
 
 }
