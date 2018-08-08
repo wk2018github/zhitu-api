@@ -1,115 +1,169 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="zhitu.sq.dataset.mapper.KnowledgeMapper" >
-  <resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.Knowledge" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="datasetId" property="datasetId" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, createTime, name, description, datasetId
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from zt_sys_knowledge
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from zt_sys_knowledge
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <insert id="insert" parameterType="zhitu.sq.dataset.model.Knowledge" >
-    insert into zt_sys_knowledge (id, createTime, name, 
-      description, datasetId)
-    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="zhitu.sq.dataset.model.Knowledge" >
-    insert into zt_sys_knowledge
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="createTime != null" >
-        createTime,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="description != null" >
-        description,
-      </if>
-      <if test="datasetId != null" >
-        datasetId,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="datasetId != null" >
-        #{datasetId,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="zhitu.sq.dataset.model.Knowledge" >
-    update zt_sys_knowledge
-    <set >
-      <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        description = #{description,jdbcType=VARCHAR},
-      </if>
-      <if test="datasetId != null" >
-        datasetId = #{datasetId,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.Knowledge" >
-    update zt_sys_knowledge
-    set createTime = #{createTime,jdbcType=TIMESTAMP},
-      name = #{name,jdbcType=VARCHAR},
-      description = #{description,jdbcType=VARCHAR},
-      datasetId = #{datasetId,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <select id="findByName" resultType="java.util.Map" parameterType="java.lang.String" >
-    SELECT
-	k.*, d.typeId,
-	if(d.typeId='ftp_file',0,1) as type,
-	t.description as typeName
-	FROM
-	zt_sys_knowledge k
-	LEFT JOIN zt_sys_dataset d ON k.datasetId = d.id
-	LEFT JOIN zt_sys_dataset_type t ON t.typeId = d.typeId
-    where 1=1
-    <if test="name !=null and name!='' ">
-     and k.name like concat(concat('%',#{name}),'%')
-    </if>
-    ORDER BY createTime DESC
-  </select>
-  <delete id="deleteKnowledge" parameterType="java.util.List" >
-    delete from zt_sys_knowledge 
-    where id in
-	<foreach collection="ids" item="id" open="(" close=")" separator=",">
-		#{id}
-	</foreach>
-  </delete>
+<mapper namespace="zhitu.sq.dataset.mapper.KnowledgeMapper">
+	<resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.Knowledge">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="datasetId" property="datasetId" jdbcType="VARCHAR" />
+		<result column="tableName" jdbcType="VARCHAR" property="tableName" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, createTime, name, description, datasetId,tableName
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select *
+		from zt_sys_knowledge
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from zt_sys_knowledge
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="zhitu.sq.dataset.model.Knowledge">
+		insert into zt_sys_knowledge (id, createTime, name,
+		description, datasetId, tableName)
+		values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{name,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="zhitu.sq.dataset.model.Knowledge">
+		insert into zt_sys_knowledge
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="datasetId != null">
+				datasetId,
+			</if>
+			<if test="tableName != null">
+				tableName,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="datasetId != null">
+				#{datasetId,jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				#{tableName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="zhitu.sq.dataset.model.Knowledge">
+		update zt_sys_knowledge
+		<set>
+			<if test="createTime != null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="datasetId != null">
+				datasetId = #{datasetId,jdbcType=VARCHAR},
+			</if>
+			<if test="tableName != null">
+				tableName = #{tableName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.Knowledge">
+		update zt_sys_knowledge
+		set createTime = #{createTime,jdbcType=TIMESTAMP},
+		name = #{name,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		datasetId = #{datasetId,jdbcType=VARCHAR},
+		tableName = #{tableName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="findByName" resultType="java.util.Map"
+		parameterType="java.lang.String">
+		SELECT
+		k.*, d.typeId,
+		if(d.typeId='ftp_file',0,1) as type,
+		t.description as typeName
+		FROM
+		zt_sys_knowledge k
+		LEFT JOIN zt_sys_dataset d ON k.datasetId = d.id
+		LEFT JOIN zt_sys_dataset_type t ON t.typeId = d.typeId
+		where 1=1
+		<if test="name !=null and name!='' ">
+			and k.name like concat(concat('%',#{name}),'%')
+		</if>
+		ORDER BY createTime DESC
+	</select>
+	<delete id="deleteKnowledge" parameterType="java.util.List">
+		delete from zt_sys_knowledge
+		where id in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=",">
+			#{id}
+		</foreach>
+	</delete>
+
+	<select id="queryKnowledge" resultType="zhitu.sq.dataset.controller.vo.KnowledgeVo">
+		SELECT
+		k.id, k.name
+		FROM
+		zt_sys_knowledge k
+		ORDER BY createTime DESC
+	</select>
+
+	<select id="queryDataSetByKnId" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.model.DataSet">
+		SELECT
+		d.id,d.typeId,d.dataTable,d.rdbId
+		FROM
+		zt_sys_dataset d
+		LEFT JOIN zt_sys_knowledge k
+		ON d.id = k.datasetId
+		WHERE k.id =
+		#{knowledgeId}
+		ORDER BY d.createTime DESC
+	</select>
+
+	<select id="queryColumnByRdbId" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		SELECT
+		columnNames
+		FROM
+		zt_sys_dataset_rdb
+		WHERE id = #{rdbId}
+	</select>
+
+	<select id="queryRdbById" parameterType="java.lang.String"
+		resultType="zhitu.sq.dataset.model.Rdb">
+		SELECT
+		*
+		FROM
+		zt_sys_dataset_rdb
+		WHERE id = #{rdbId}
+	</select>
+
 </mapper>

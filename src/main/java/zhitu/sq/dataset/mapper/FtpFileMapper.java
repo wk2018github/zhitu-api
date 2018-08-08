@@ -29,4 +29,6 @@ public interface FtpFileMapper {
 	List<String> findFields();
 
 	List<FtpFile> queryAll();
+	
+	List<FtpFile> selectByDataSetId(@Param("datasetId")String datasetId);
 }
