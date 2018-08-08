@@ -339,8 +339,10 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 	@Override
 	public Map<String, Object> addToMap(Map<String, Object> map) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
-
+		
+		map.put("knowledgeId", map.get("sourceId"));
 		DataSet source = knowledgeMapper.queryDataSetByKnId(map);
+		map.put("knowledgeId", map.get("targetId"));
 		DataSet target = knowledgeMapper.queryDataSetByKnId(map);
 
 		String sourceDataSetType = source.getTypeId();// 源数据集的类型

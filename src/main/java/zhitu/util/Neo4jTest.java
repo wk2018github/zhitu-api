@@ -141,7 +141,7 @@ public class Neo4jTest {
 		try (Session session = driver.session()) {
 
 			String cypher = "match (n:" + sourceTable + "),(m:" + targetTable + ") where n." + sourceKey + " " + "= m."
-					+ targetKey + "  cretae (n)-[r:" + relationship + "]->(m)";
+					+ targetKey + "  create (n)-[r:" + relationship + "]->(m)";
 			session.run(cypher);
 
 		}
@@ -162,7 +162,7 @@ public class Neo4jTest {
 		for (Entry<String, Object> e : map.entrySet()) {
 			str.append(e.getKey()).append(":\"").append(e.getValue()).append("\",");
 		}
-		str.deleteCharAt(json.lastIndexOf(","));
+		str.deleteCharAt(str.lastIndexOf(","));
 		str.append("}");
 		
 		return str.toString();
