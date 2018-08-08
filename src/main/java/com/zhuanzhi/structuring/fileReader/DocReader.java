@@ -23,6 +23,8 @@ public class DocReader extends Reader {
 
         try {
             file = new File(path);
+            System.out.println(path);
+            System.out.println(file.getAbsolutePath());
             FileInputStream fis = new FileInputStream(file.getAbsolutePath());
             HWPFDocument document = new HWPFDocument(fis);
             extractor = new WordExtractor(document);

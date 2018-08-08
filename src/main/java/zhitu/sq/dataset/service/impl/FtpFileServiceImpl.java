@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,6 +18,7 @@ import zhitu.util.NumberDealHandler;
 import zhitu.util.StringHandler;
 
 @Service
+@Transactional
 public class FtpFileServiceImpl implements FtpFileService{
 
 	@Autowired

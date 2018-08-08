@@ -7,19 +7,43 @@ import com.zhuanzhi.structuring.fileReader.Reader;
 import com.zhuanzhi.structuring.model.*;
 import com.zhuanzhi.structuring.scriptEngine.GroovyEngine;
 
+import zhitu.sq.dataset.mapper.DataTableMapper;
+import zhitu.sq.dataset.model.FtpFile;
+import zhitu.sq.dataset.service.TaskInfoService;
+import zhitu.util.DataSourceUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class App {
 
-    //    private static String base_dir = "/home/cds/chouqu/extract/data/";
-    private static String base_dir = "G:\\\\data\\";
+	public static DataTableMapper dataTableMapper;
+	public static DataSourceUtil dataSourceUtil;
+	
+    @Autowired
+	public static void setDataTableMapper(DataTableMapper dataTableMapper) {
+		App.dataTableMapper = dataTableMapper;
+	}
+    @Autowired
+   	public static void setDataSourceUtil(DataSourceUtil dataSourceUtil) {
+   		App.dataSourceUtil = dataSourceUtil;
+   	}
+
+
+	//    private static String base_dir = "/home/cds/chouqu/extract/data/";
+    private static String base_dir = "G:\\项目\\海南\\文档\\文档提取整理\\";
 
     public static String[] fileList = {
             "AA省审计厅关于SS市人防易地建设费征收管理情况的专项审计调查报告-未标注.doc",
             "AA省审计厅关于对省民族宗教事务局2012年预算执行情况的审计报告 -未标注.doc",
             "工伤生育市本级审计报告 -未标注.doc"
+            
     };
 
 
@@ -27,9 +51,9 @@ public class App {
         HashMap<String, ArrayList<HashMap<String, String>>> allEntitiesHashMap =
                 new HashMap<String, ArrayList<HashMap<String, String>>>();
 
-        for (String file: fileList) {
-            processFile(base_dir + file, allEntitiesHashMap);
-        }
+//        for (String file: fileList) {
+//            processFile(base_dir + file, allEntitiesHashMap);
+//        }
         //allEntitiesHashMap中有6个key（problem，activity,advice,enforcement，underlying，opinion）
         /*Set<String> keys = allEntitiesHashMap.keySet();
         for(String key :keys){
@@ -140,7 +164,6 @@ public class App {
             }
         }
 
-
     }
 
     private static void saveEntityHashMap(String key,
@@ -154,4 +177,8 @@ public class App {
             allEntitiesHashMap.put(key, entityHashMaps);
         }
     }
+    
+    public static void ftpFileList(List<FtpFile> files,Map<String, Object> tMap) {
+		//连接f't
+	}
 }

@@ -359,9 +359,10 @@ public class DataSourceUtil {
 			logger.error("DataSourceUtil/closeConnect", e);
 		}
 	}
-	
+
 	/**
 	 * 查询mysql数据库指定表中的数据
+	 * 
 	 * @param ip
 	 * @param port
 	 * @param username
@@ -370,18 +371,18 @@ public class DataSourceUtil {
 	 * @param tableName
 	 * @return
 	 */
-	public Map<String, Object> queryTableData(String ip, int port, String userName, String password, String databaseName,
-			String tableName, Integer start, Integer end) {
-		Map<String, Object> result = new HashMap<String,Object>();
-		
+	public Map<String, Object> queryTableData(String ip, int port, String userName, String password,
+			String databaseName, String tableName, Integer start, Integer end) {
+		Map<String, Object> result = new HashMap<String, Object>();
+
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
 		Statement stmtCount = null;
-		
-		String sql = "select * from "+tableName + " LIMIT "+start+","+end;
-		String sqlCount = "select count(*) from "+tableName;
-		
+
+		String sql = "select * from " + tableName + " LIMIT " + start + "," + end;
+		String sqlCount = "select count(*) from " + tableName;
+
 		ResultSet res = null;
 		ResultSet count = null;
 		JSONArray array = null;
@@ -396,7 +397,7 @@ public class DataSourceUtil {
 			conn = getMySqlConn(map);
 			stmt = conn.createStatement();
 			stmtCount = conn.createStatement();
-			
+
 			count = stmtCount.executeQuery(sqlCount);
 			// 获取列数
 			ResultSetMetaData metaDataCount = count.getMetaData();
@@ -405,14 +406,14 @@ public class DataSourceUtil {
 				// 遍历列
 				String columnName = metaDataCount.getColumnLabel(1);
 				Integer value = count.getInt(columnName);
-				logger.info(tableName+"中数据总条数:"+value);
-//				if(value<1){
-//					result.put("total", 0);
-//					return result;
-//				}
+				logger.info(tableName + "中数据总条数:" + value);
+				// if(value<1){
+				// result.put("total", 0);
+				// return result;
+				// }
 				result.put("total", value);
 			}
-			
+
 			res = stmt.executeQuery(sql);
 			// json数组
 			array = new JSONArray();
@@ -435,23 +436,25 @@ public class DataSourceUtil {
 				JSONObject obj = array.getJSONObject(i);
 				list.add(obj.toString());
 			}
-			
+
 			result.put("list", list);
-			
+
 			conn.close();
 			stmt.close();
 			stmtCount.close();
 			res.close();
 			count.close();
-			
+
 			return result;
 		} catch (Exception e) {
-			logger.error("dataSourceUtil/queryTableData",e);
+			logger.error("dataSourceUtil/queryTableData", e);
 			return null;
 		}
 	}
+
 	/**
 	 * 查询mysql数据库指定表的所有列
+	 * 
 	 * @param ip
 	 * @param port
 	 * @param username
@@ -465,11 +468,11 @@ public class DataSourceUtil {
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
-		String sql = "SHOW COLUMNS FROM "+tableName;
+		String sql = "SHOW COLUMNS FROM " + tableName;
 
 		ResultSet res = null;
 		try {
-			
+
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("ip", ip);
 			map.put("port", port);
@@ -477,13 +480,13 @@ public class DataSourceUtil {
 			map.put("username", userName);
 			map.put("password", password);
 			conn = getMySqlConn(map);
-			
+
 			stmt = conn.createStatement();
 			res = stmt.executeQuery(sql);
 
 			// 获取列数
 			ResultSetMetaData metaData = res.getMetaData();
-//			int columnCount = metaData.getColumnCount();
+			// int columnCount = metaData.getColumnCount();
 			list = new ArrayList<String>();
 			// 遍历ResultSet中的每条数据
 			while (res.next()) {
@@ -493,14 +496,16 @@ public class DataSourceUtil {
 			}
 			return list;
 		} catch (Exception e) {
-			logger.error("dataSourceUtil/queryTableColumn",e);
+			logger.error("dataSourceUtil/queryTableColumn", e);
 			return null;
 		} finally {
 			closeConnect(conn, stmt, res);
 		}
 	}
+
 	/**
 	 * 查询远程mysql数据库指定表的指定的列的数据
+	 * 
 	 * @param ip
 	 * @param port
 	 * @param userName
@@ -510,22 +515,22 @@ public class DataSourceUtil {
 	 * @param columnNames
 	 * @return
 	 */
-	public Map<String,Object> queryTableColumnData(String ip, int port, String userName, String password, String databaseName,
-			String tableName, String columnNames,Integer start, Integer end) {
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Map<String, Object> queryTableColumnData(String ip, int port, String userName, String password,
+			String databaseName, String tableName, String columnNames, Integer start, Integer end) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
 		Statement stmtCount = null;
-		String sql = "select "+columnNames+" from "+tableName + " LIMIT "+start+","+end;
-		String sqlCount = "select count(*) from "+tableName;
-		
+		String sql = "select " + columnNames + " from " + tableName + " LIMIT " + start + "," + end;
+		String sqlCount = "select count(*) from " + tableName;
+
 		ResultSet res = null;
 		ResultSet count = null;
 		JSONArray array = null;
 
 		try {
-			
+
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("ip", ip);
 			map.put("port", port);
@@ -533,7 +538,7 @@ public class DataSourceUtil {
 			map.put("username", userName);
 			map.put("password", password);
 			conn = getMySqlConn(map);
-			
+
 			stmtCount = conn.createStatement();
 			count = stmtCount.executeQuery(sqlCount);
 			ResultSetMetaData metaDataCount = count.getMetaData();
@@ -542,10 +547,10 @@ public class DataSourceUtil {
 				// 遍历列
 				String columnName = metaDataCount.getColumnLabel(1);
 				Integer value = count.getInt(columnName);
-				logger.info(tableName+"中数据总条数:"+value);
+				logger.info(tableName + "中数据总条数:" + value);
 				result.put("total", value);
 			}
-			
+
 			stmt = conn.createStatement();
 			res = stmt.executeQuery(sql);
 
@@ -567,25 +572,27 @@ public class DataSourceUtil {
 				}
 				array.put(jsonObj);
 			}
-			
+
 			list = new ArrayList<String>();
 			for (int i = 0; i < array.length(); i++) {
 				JSONObject obj = array.getJSONObject(i);
 				list.add(obj.toString());
 			}
-			
+
 			result.put("list", list);
 			return result;
 		} catch (Exception e) {
-			logger.error("dataSourceUtil/queryTableData",e);
+			logger.error("dataSourceUtil/queryTableData", e);
 			return null;
 		} finally {
 			closeConnect(conn, stmt, res);
 			closeConnect(null, stmtCount, count);
 		}
 	}
+
 	/**
 	 * 查询本地mysql数据库指定表的指定的列的数据
+	 * 
 	 * @param ip
 	 * @param port
 	 * @param userName
@@ -595,20 +602,21 @@ public class DataSourceUtil {
 	 * @param columnNames
 	 * @return
 	 */
-	public Map<String,Object> queryLocalTableColumnData(String url, String userName, String password, String tableName, String columnNames, Integer start, Integer end) {
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Map<String, Object> queryLocalTableColumnData(String url, String userName, String password, String tableName,
+			String columnNames, Integer start, Integer end) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
 		Statement stmtCount = null;
-		String sql = "select "+columnNames+" from "+tableName + " LIMIT "+start+","+end;
-		String sqlCount = "select count(*) from "+tableName;
+		String sql = "select " + columnNames + " from " + tableName + " LIMIT " + start + "," + end;
+		String sqlCount = "select count(*) from " + tableName;
 		ResultSet res = null;
 		ResultSet count = null;
 		JSONArray array = null;
 
 		try {
-			
+
 			String driverName = "com.mysql.jdbc.Driver";
 
 			// 加载驱动
@@ -625,10 +633,10 @@ public class DataSourceUtil {
 				// 遍历列
 				String columnName = metaDataCount.getColumnLabel(1);
 				Integer value = count.getInt(columnName);
-				logger.info(tableName+"中数据总条数:"+value);
+				logger.info(tableName + "中数据总条数:" + value);
 				result.put("total", value);
 			}
-			
+
 			stmt = conn.createStatement();
 			res = stmt.executeQuery(sql);
 
@@ -656,10 +664,10 @@ public class DataSourceUtil {
 				list.add(obj.toString());
 			}
 			result.put("list", list);
-			
+
 			return result;
 		} catch (Exception e) {
-			logger.error("dataSourceUtil/queryLocalTableColumnData",e);
+			logger.error("dataSourceUtil/queryLocalTableColumnData", e);
 			return null;
 		} finally {
 			closeConnect(conn, stmt, res);
@@ -667,4 +675,147 @@ public class DataSourceUtil {
 		}
 	}
 
+	/**
+	 * 查询本地mysql数据库指定表的指定的列的数据(不分页)
+	 * 
+	 * @param ip
+	 * @param port
+	 * @param userName
+	 * @param password
+	 * @param databaseName
+	 * @param tableName
+	 * @param columnNames
+	 * @return
+	 */
+	public List<String> queryLocalTableColumnDataNoLimit(String url, String userName, String password, String tableName,
+			String columnNames) {
+		List<String> list = null;
+		Connection conn = null;
+		Statement stmt = null;
+		String sql = "select " + columnNames + " from " + tableName;
+
+		ResultSet res = null;
+		JSONArray array = null;
+
+		try {
+
+			String driverName = "com.mysql.jdbc.Driver";
+
+			// 加载驱动
+			Class.forName(driverName);
+			conn = DriverManager.getConnection(url, userName, password);
+			if (null == conn) {
+				return null;
+			}
+
+			stmt = conn.createStatement();
+			res = stmt.executeQuery(sql);
+
+			// json数组
+			array = new JSONArray();
+
+			// 获取列数
+			ResultSetMetaData metaData = res.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			// 遍历ResultSet中的每条数据
+			while (res.next()) {
+				JSONObject jsonObj = new JSONObject();
+				// 遍历每一列
+				for (int i = 1; i <= columnCount; i++) {
+					String columnName = metaData.getColumnLabel(i);
+					String value = res.getString(columnName);
+					jsonObj.put(columnName, value);
+				}
+				array.put(jsonObj);
+			}
+			list = new ArrayList<String>();
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				list.add(obj.toString());
+			}
+
+			return list;
+		} catch (Exception e) {
+			logger.error("dataSourceUtil/queryLocalTableColumnDataNoLimit", e);
+			return null;
+		} finally {
+			// closeConnect(conn, stmt, res);
+		}
+	}
+
+	/**
+	 * 查询远程mysql数据库指定表的指定的列的数据(不分页)
+	 * 
+	 * @param ip
+	 * @param port
+	 * @param userName
+	 * @param password
+	 * @param databaseName
+	 * @param tableName
+	 * @param columnNames
+	 * @return
+	 */
+	public List<String> queryTableColumnDataNoLimit(String ip, int port, String userName, String password,
+			String databaseName, String tableName, String columnNames) {
+
+		List<String> list = null;
+		Connection conn = null;
+		Statement stmt = null;
+		String sql = "select " + columnNames + " from " + tableName;
+
+		ResultSet res = null;
+		JSONArray array = null;
+
+		try {
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("ip", ip);
+			map.put("port", port);
+			map.put("databasename", databaseName);
+			map.put("username", userName);
+			map.put("password", password);
+			conn = getMySqlConn(map);
+
+			stmt = conn.createStatement();
+			res = stmt.executeQuery(sql);
+
+			// json数组
+			array = new JSONArray();
+
+			// 获取列数
+			ResultSetMetaData metaData = res.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			// 遍历ResultSet中的每条数据
+			while (res.next()) {
+				JSONObject jsonObj = new JSONObject();
+				// 遍历每一列
+				for (int i = 1; i <= columnCount; i++) {
+					String columnName = metaData.getColumnLabel(i);
+					String value = res.getString(columnName);
+					jsonObj.put(columnName, value);
+				}
+				array.put(jsonObj);
+			}
+
+			list = new ArrayList<String>();
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				list.add(obj.toString());
+			}
+
+			return list;
+		} catch (Exception e) {
+			logger.error("dataSourceUtil/queryTableColumnDataNoLimit", e);
+			return null;
+		} finally {
+			closeConnect(conn, stmt, res);
+		}
+	}
+
+	public void main(String[] args) {
+		FTPClient ftpClient = getFTPClient();
+		// ftpClient.r
+	}
 }

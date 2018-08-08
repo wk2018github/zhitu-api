@@ -14,4 +14,43 @@
  <select id="findFields" resultType="java.lang.String">
 	select DISTINCT COLUMN_NAME from information_schema.COLUMNS where table_name = #{dataTable}
   </select>
-</mapper>
+  <update id="createTalbe" parameterType="java.lang.String">
+  		${sql}
+  </update>
+ <insert id="insertActivity" parameterType="zhitu.sq.dataset.controller.vo.ActivityVo">
+  	insert into ${tableName} (auditReporter, auditTime2Event, auditTarget, 
+  	auditTime, auditIndustry, auditClassification, auditLaws)
+    values
+    (#{activityVo.auditReporter,jdbcType=VARCHAR},#{activityVo.auditTime2Event,jdbcType=VARCHAR},
+    #{activityVo.auditTarget,jdbcType=LONGVARCHAR},#{activityVo.auditTime,jdbcType=VARCHAR},
+    #{activityVo.auditIndustry,jdbcType=VARCHAR},#{activityVo.auditClassification,jdbcType=VARCHAR},
+    #{activityVo.auditLaws,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertAdvice" parameterType="zhitu.sq.dataset.controller.vo.AdviceVo">
+  	insert into ${tableName} (advices) values (#{adviceVo.advices})
+  </insert>
+   <insert id="insertOpinion" parameterType="zhitu.sq.dataset.controller.vo.OpinionVo">
+  	insert into ${tableName} (auditTarget, auditCoverage, auditTotalFunds)
+    values
+    (#{opinionVo.auditTarget},#{opinionVo.auditCoverage},#{opinionVo.auditTotalFunds})
+  </insert>
+  <insert id="insertUnderlying" parameterType="zhitu.sq.dataset.controller.vo.UnderlyingVo">
+  	insert into ${tableName} (auditName, budgetUnit, theTotalNumberOfPeople, 
+  	Administrate, fullSubsidyCareeaStaffing, theActualNumber, functionsDepartment,
+  	fd_Administrate,fd_Careea,fd_theActualNumber)
+    values
+    (#{underlyingVo.auditName},#{underlyingVo.budgetUnit},#{underlyingVo.theTotalNumberOfPeople},
+    #{underlyingVo.Administrate},#{underlyingVo.fullSubsidyCareeaStaffing},#{underlyingVo.theActualNumber},
+    #{underlyingVo.functionsDepartment},#{underlyingVo.fd_Administrate},#{underlyingVo.fd_Careea},
+    #{underlyingVo.fd_theActualNumber})
+  </insert>
+  <insert id="insertProblem" parameterType="zhitu.sq.dataset.controller.vo.ProblemVo">
+  	insert into ${tableName} (auditProblemsAndLaws)
+    values (#{problemVo.auditProblemsAndLaws})
+  </insert>
+ <insert id="insertEnforcement" parameterType="zhitu.sq.dataset.controller.vo.EnforcementVo">
+  	insert into ${tableName} (auditType,auditTime,auditTarget,auditItems)
+    values(#{enforcementVo.auditType},#{enforcementVo.auditTime},
+    #{enforcementVo.auditTarget},#{enforcementVo.auditItems})
+  </insert> 
+  </mapper>

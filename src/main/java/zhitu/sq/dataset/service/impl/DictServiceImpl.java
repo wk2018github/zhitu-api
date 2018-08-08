@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import zhitu.sq.dataset.mapper.DictMapper;
 import zhitu.sq.dataset.model.Dict;
 import zhitu.sq.dataset.service.DictService;
 
 @Service
+@Transactional
 public class DictServiceImpl implements DictService{
 
 	@Autowired

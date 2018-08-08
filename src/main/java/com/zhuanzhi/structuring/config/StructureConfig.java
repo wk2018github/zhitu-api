@@ -18,7 +18,7 @@ public class StructureConfig {
 
 //        System.setProperty("CONF_DIR", "/zhuanzhi_conf");
 //        System.setProperty("CONF_DIR", "/home/cds/chouqu/extract/structuring");
-        System.setProperty("CONF_DIR", "G:\\\\knowledge\\ZhituBackend\\src\\main\\resources");
+        System.setProperty("CONF_DIR", "F:\\ZhiTu\\ZhituBackend\\src\\main\\resources");
 
         try{
             CONF_DIR = System.getProperty("CONF_DIR");

@@ -137,4 +137,8 @@
     <include refid="Blob_Column_List" />
     from zt_data_ftp_file
   </select>
+  <select id="selectByDataSetId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select * from zt_data_ftp_file
+    where datasetId = #{datasetId}
+  </select>
 </mapper>

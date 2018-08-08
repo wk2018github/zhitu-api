@@ -12,6 +12,8 @@ public class Knowledge {
     private String description;
 
     private String datasetId;
+    
+    private String tableName;
 
 	public String getId() {
 		return id;
@@ -51,6 +53,14 @@ public class Knowledge {
 
 	public void setDatasetId(String datasetId) {
 		this.datasetId = datasetId;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
    
