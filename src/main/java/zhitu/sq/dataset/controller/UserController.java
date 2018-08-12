@@ -29,12 +29,12 @@ public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
 	
-	private static final String user = "{\"email\":\"superadmin\",\"password\":\"123456\"}";
+	private static final String user1 = "{\"email\":\"superadmin\",\"password\":\"123456\"}";
 	@ApiOperation(value = "登录接口", notes = "登录接口")
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public SQApiResponse<Map<String, Object>> login(HttpServletRequest request,
-			@ApiParam(value = user) @RequestBody User user) {
+			@ApiParam(value = user1) @RequestBody User user) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
 			if(null == user || StringUtils.isNullOrEmpty(user.getEmail()) || StringUtils.isNullOrEmpty(user.getPassword())){
