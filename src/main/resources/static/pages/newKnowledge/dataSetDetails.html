@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>数据集详情</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/newKnowledge/dataSetDetail.css" />
+    </head>
+
+    <body>
+        <div class="main-header">
+            <div class="top-bar">
+                <div class="location-bar">
+                    <span class="location-root">新建知识表</span>
+                    <span>></span><span class="location-parent" id="location-parent"></span>
+                </div>
+            </div>
+        </div>
+        <div class="main-body">
+            <div class="body-left">
+                <div class="table-con">
+                    <table class="layui-table" id="table"></table>
+                    <div id="pager" class="pager">
+
+                    </div>
+                    <script type="text/html" id="order-num">
+                        <!--layui 为表格设置序号-->
+                        {{d.LAY_TABLE_INDEX+1}}
+                    </script>
+                    <script type="text/html" id="format-date">
+                        <!--layui 转换table中的操作-->
+                        {{# return formatData(d.createTime); }}
+                    </script>
+                </div>
+            </div>
+            <div class="body-right-detail" id="list-detail">
+                <form class="layui-form layui-row">
+                    <div class="layui-form-in layui-col-xs12"  id="modal-form">
+                        <div class="right-item">
+                            <div class="item-title">
+                                <span>选择知识抽取器</span>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <select name="modules" lay-filter="knowledgeChoice" lay-verify="required" lay-search="" id="knowledge-choice">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-item">
+                            <div class="item-title">
+                                <span>选择槽位</span>
+                            </div>
+                            <div class="layui-form-item" pane="">
+                                <div class="layui-input-block" id="slot">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="right-item btn-wrap">
+                    <button class="layui-btn layui-btn-lg layui-btn-my" id="knowledge-get">进入知识抽取</button>
+                </div>
+            </div>
+        </div>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="../../dist/layui-table-public.js"></script>
+        <script src="../../dist/public.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../src/js/newKnowledge/dataSetDetailsN.js" type="text/javascript" charset="utf-8"></script>
+
+    </body>
+
+</html>

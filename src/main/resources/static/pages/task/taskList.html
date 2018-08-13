@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>任务列表</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/task/taskList.css" />
+        <style type="text/css">
+            .table-con {
+                flex: 1;
+            }
+            
+            .main-body {
+                background-color: #fff;
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                top: 20px;
+                padding: 10px 15px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="main-body">
+            <div class="table-con">
+                <table id="table" class="layui-table"></table>
+                <div id="pager" class="pager">
+
+                </div>
+                <script type="text/html" id="order-num">
+                    <!--layui 为表格设置序号-->
+                    {{d.LAY_TABLE_INDEX+1}}
+                </script>
+                <script type="text/javascript" src="../../src/js/common/layui-table-public.js"></script>
+                <script type="text/html" id="format-date">
+                    <!--layui 转换table中的操作-->
+                    {{# return formatData(d.createTime); }}
+                </script>
+            </div>
+        </div>
+
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../dist/public.js"></script>
+        <script src="../../dist/taskList.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+
+</html>

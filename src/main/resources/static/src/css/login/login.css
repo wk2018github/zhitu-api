@@ -1,0 +1,80 @@
+.main-body{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #373e49;
+}
+.main-content{
+    width: 980px;
+    min-height: 580px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #fff;
+}
+.content-left{
+    position: absolute;
+    left: 0;
+    right: 50%;
+    bottom: 0;
+    top: 0;
+    background: url("../../img/login.png") no-repeat;
+    background-size: 100% 100%;
+}
+.content-left{
+    color: #fff;
+    padding: 314px 40px 40px;
+    line-height: 40px;
+}
+.content-left h1{
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 60px;
+}
+.content-left p{
+    font-size: 12px;
+    line-height: 26px;
+}
+.content-right{
+    position: absolute;
+    left: 50%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.goback{
+    color: #a7b6d1;
+    font-size: 12px;
+    position: absolute;
+    left: 40px;
+    top: 20px;
+}
+.login-head{
+    margin-top: 60px;
+    width: 100%;
+    text-align: center;
+}
+.login-head img{
+    width: 200px;
+}
+.login-head div{
+    font-size: 16px;
+    line-height: 40px;
+}
+.layui-input-block-login{
+    margin-left: 0;
+}
+.layui-input-block-login button{
+    width: 100%;
+    background-color: #4680fe;
+}
+.login-content{
+    padding: 128px 60px;
+}
+.layui-input{
+    border-width: 0;
+    border-bottom: 1px solid #e2e8ed;
+}

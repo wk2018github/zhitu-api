@@ -153,7 +153,7 @@ public class DataSetController extends BaseController{
 ////        		return error("请重新登录!");
 //				user.setId("USER_1353923423");
 //        	}
-			int i = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file);
+			int i = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file, request);
 			if (i > 0) {
 				return success();
 			}

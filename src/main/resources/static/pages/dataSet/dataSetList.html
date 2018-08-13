@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>数据集</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/dataSet/dataSetList.css" />
+    </head>
+
+    <body>
+        <div class="main-body">
+            <div class="body-left">
+                <table class="layui-table" id="table" lay-even lay-skin="nob"></table>
+                <script type="text/html" id="order-num">
+                    <!--layui 为表格设置序号-->
+                    {{d.LAY_TABLE_INDEX+1}}
+                </script>
+                <div id="pager" class="pager">
+
+                </div>
+            </div>
+            <!-- 常规 -->
+            <div class="body-right" id="list-normal">
+                <div class="right-up">
+                    <div class="search-div">
+                        <input type="text" id="keyWords" value="" placeholder="搜索数据集" autocomplete="off"/>
+                        <span class="search-icon" id="search-icon"></span>
+                    </div>
+                    <div class="button-div bottom-border">
+                        <button class="btn btn-blue" id="add">新建数据集</button>
+                        <button class="btn btn-white" id="doDel">删除数据集</button>
+                    </div>
+                    <div class="chart-div">
+                        <div id="container" style="position: absolute;left: 0;right: 3px;bottom: 0;top: 109px;"></div>
+                    </div>
+                </div>
+                <div class="right-down">
+                    <div class="right-item">
+                        <div class="item-title">
+                            <span>修订日志</span>
+                        </div>
+                        <div class="item-body">
+                            <div class="time-line">
+                                <ul class="layui-timeline">
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h4 class="layui-timeline-title">创建C数据集</h4>
+                                            <p>20分钟前</p>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h4 class="layui-timeline-title">创建B数据集</h4>
+                                            <p>30分钟前</p>
+                                        </div>
+                                    </li>
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h4 class="layui-timeline-title">结构化A数据集</h4>
+                                            <p>40分钟前</p>
+                                        </div>
+                                    </li>
+                                    <!--<li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">创建A数据集</h3>
+                                            <p>50分钟前</p>
+                                        </div>
+                                    </li>-->
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 详情 -->
+            <div class="body-right-detail hide" id="list-detail">
+                <div class="right-item">
+                    <div class="item-title">
+                        <span>类型</span>
+                    </div>
+                    <div class="item-body font-con">
+                        <p id="msg-type"></p>
+                    </div>
+                </div>
+                <div class="right-item">
+                    <div class="item-title">
+                        <span>样本数</span>
+                    </div>
+                    <div class="item-body font-con">
+                        <p id="msg-total"></p>
+                    </div>
+                </div>
+                <div class="right-item">
+                    <div class="item-title">
+                        <span>字段名</span>
+                    </div>
+                    <div class="item-body">
+                        <div class="flex-wrap" id="chose-field">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="right-item btn-wrap">
+                    <button class="btn btn-blue font-6">进入知识抽取</button>
+                </div>
+            </div>
+
+        </div>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/highCharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="../../dist/layui-table-public.js"></script>
+        <script type="text/html" id="format-date">
+            <!--layui 转换table中的操作-->
+            {{# return formatData(d.createTime); }}
+        </script>
+        <script type="text/html" id="barDemo">
+            <a class="btn-edit" lay-event="details">查看详情</a>
+            <a class="btn-edit" lay-event="edit">编辑</a>
+            <a class="btn-del" lay-event="del">删除</a>
+
+            <!-- 这里同样支持 laytpl 语法，如： -->
+            <!--{{# if(d.auth > 2){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+            {{# } }}-->
+        </script>
+        <script src="../../dist/public.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../dist/dataSetList.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+
+</html>

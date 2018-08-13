@@ -1,0 +1,195 @@
+.main-body{
+    background-color: #fff;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    top: 5px;
+    overflow-y: auto;
+}
+.main-step{
+    width: 560px;
+    margin: 0 auto;
+}
+.step-head{
+    margin: 30px 0;
+}
+.step-head{
+    content: '';
+    display: table;
+    clear: both;
+}
+.step-head li{
+    float: left;
+    background-image: url("../../img/process.png");
+    background-repeat: no-repeat;
+    background-size: 253px;
+    width: 253px;
+    height: 80px;
+    background-position: 0 0;
+}
+.step-head li.second-step{
+    background-position: 0 -111px;
+}
+.step-head li.third-step{
+    width: 54px;
+    background-position: 0 -239px;
+}
+.step-head li.first-step-s{
+    background-position: 0 -718px;
+}
+.step-head li.second-step-s{
+    background-position: 0 -360px;
+}
+.step-head li.second-step-t{
+    background-position: 0 -474px;
+}
+.step-head li.third-step-t{
+    width: 54px;
+    background-position: 0 -598px;
+}
+.step-content-out{
+    min-height: 321px;
+}
+.step-content{
+    box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -wekit-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -moz-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    padding: 8px 12px;
+    margin-top: 50px;
+}
+.step-content-title{
+    color: #4680ff;
+    font-size: 12px;
+    line-height: 20px;
+}
+.step-content-title span{
+    border-bottom: 1px solid #4680ff;
+    padding-bottom: 3px;
+}
+.layui-form{
+    margin: 30px 15px 30px 8px;
+    font-size: 12px;
+}
+.layui-input-block{
+    margin-left: 53px;
+}
+.layui-input-block-big{
+    margin-left: 87px;
+}
+.layui-form-label{
+    width: 38px;
+    padding: 5px 15px 5px 0;
+}
+.layui-form-label-big{
+    width: 72px;
+}
+.layui-form-label-spe{
+    padding: 5px 7px;
+}
+.layui-input, .layui-select{
+    height: 32px;
+}
+.btn-out{
+    text-align: center;
+    margin-top: 40px;
+}
+.layui-btn-my {
+    height: 36px;
+    line-height: 30px;
+    padding: 0 39px;
+    font-size: 16px;
+    background-color: #4680ff;
+}
+.layui-btn-disabled{
+    height: 36px;
+    line-height: 30px;
+    padding: 0 39px;
+    font-size: 16px;
+}
+.layui-input:focus, .layui-textarea:focus {
+    border-color: #4680ff!important;
+    caret-color:#4680ff;
+}
+.layui-form-radio {
+    margin: 1px 10px 0 0;
+}
+.layui-form-item-my {
+    width: 221px;
+    margin: 0 auto;
+}
+.drag-div{
+    padding: 50px 0;
+    text-align: center;
+    color: #999;
+    background-color: #eef1f3;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    position: relative;
+}
+.layui-btn-warm {
+    height: 28px;
+    line-height: 28px;
+    padding: 0 10px;
+}
+.drag-div img{
+    width: 65px;
+}
+.drag-div div{
+    margin: 12px 0;
+}
+.drag-div .tips{
+    font-size: 16px;
+    margin: 0;
+}
+.drag-div .tipsC{
+    margin-bottom: 40px;
+}
+.drag-div .loading{
+    width: 236px;
+    margin-bottom: 35px;
+    margin-top: 30px;
+}
+.drag-div .complete{
+    width: 49px;
+    margin-bottom: 15px;
+}
+.upload-input{
+    opacity: 0;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 104px;
+    height: 28px;
+}
+.layui-form-in{
+    float: left;
+}
+/*failed*/
+.failed-content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-80%);
+    text-align: center;
+}
+.failed-content img{
+    width: 120px;
+    margin-bottom: 25px;
+}
+.failed-content p{
+    line-height: 40px;
+    font-size: 18px;
+    color: #666;
+}
+.failed-content .red{
+    color: #fb5858;
+}
+.failed-content .layui-btn-my{
+    margin-top: 20px;
+    font-size: 14px;
+}

@@ -1,0 +1,124 @@
+@charset 'utf-8';
+@import "../common/colors.scss"; //颜色文件
+body {
+    background-color: $body_bgcolor;
+}
+
+.main-body {
+    background-color: $body_bgcolor;
+    display: flex;
+    position: absolute;
+    top: 50px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    .body-left {
+        flex: 3;
+        background-color: #fff;
+        padding: 10px 15px;
+        overflow-x: auto;
+    }
+    .body-right {
+        flex: 1;
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        &>div {
+            background-color: #fff;
+        }
+        .right-up {
+            flex: 1;
+            &>div {
+                width: 90%;
+                margin: 10px auto;
+            }
+        }
+        .right-down {
+            margin-top: 10px;
+            flex: 1;
+        }
+        .right-item {
+            margin-top: 10px;
+            .item-title {
+                span {
+                    margin-left: 10px;
+                    color: $_blue_color;
+                    padding-left: 8px;
+                    border-left: 2px solid $_blue_color;
+                }
+            }
+        }
+    }
+}
+
+.top-bar .location-bar .font-7 {
+    width: 125px;
+}
+
+.right-item {
+    width: 90%;
+    margin: 10px auto;
+    .item-title {
+        border-bottom: 1px solid #e3e3e3;
+        padding: 3px 0;
+        span {
+            color: $_blue_color;
+            padding-left: 8px;
+            border-left: 2px solid $_blue_color;
+        }
+    }
+    .item-body {
+        margin: 10px 0px;
+        background-color: #e3effa;
+    }
+    .font-con {
+        height: 5rem;
+        text-align: center;
+        line-height: 5rem;
+        p {
+            color: $_blue_color;
+            font-weight: bold;
+        }
+    }
+}
+
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px 8px;
+    justify-content: space-between;
+    .span-item {
+        flex-basis: auto;
+        /* flex: 1; */
+        display: inline-block;
+        text-align: center;
+        width: 5rem;
+        padding: 5px 0px;
+        margin: 5px 5px;
+        background-color: #f5f9fd;
+        cursor: pointer;
+    }
+    span.chose {
+        background-color: #fff;
+        color: #333;
+    }
+}
+
+.radio-item{
+    display: inline-block;
+    margin: 0px 10px;
+}
+div.bgcolor-white{
+    background-color: #fff !important;
+}
+.loca-cart{
+    display: inline-block;
+    vertical-align: middle;
+    border:6px solid transparent;
+    width: 0;
+    height: 0;
+    border-left: 6px solid #4680fe;
+}
+.search-input{
+    width: 73%;
+}

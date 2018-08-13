@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建数据集</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+    <link rel="stylesheet" href="../../src/css/newData/firstStep.css">
+</head>
+<body>
+<div class="main-body">
+    <div class="main-step">
+        <div class="step-content-out">
+            <div class="step-content" id="step-content11">
+                <!--<div class="step-content-title">>><span>知识抽取</span></div>-->
+                <form class="layui-form">
+                    <div class="drag-div">
+                        <div class="tips">
+                            完成后会通知您哦~
+                        </div>
+                        <img class="loading" src="../../src/img/loading.gif" alt="">
+                    </div>
+                </form>
+            </div>
+            <div class="step-content" id="step-content12"  style="display: none">
+                <!--<div class="step-content-title">>><span>知识抽取</span></div>-->
+                <form class="layui-form">
+                    <div class="drag-div">
+                        <img class="complete" src="../../src/img/complete.png" alt="">
+                        <div class="tips tipsC">
+                            知识抽取完成！
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="btn-out">
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-disabled" id="compD" >完成</button>
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-my" style="display: none" id="compC">完成</button>
+        </div>
+    </div>
+</div>
+<script src="../../assets/jquery/jquery-2.1.1.js"></script>
+<script src="../../assets/layui/layui.all.js"></script>
+<script src="../../dist/public.js"></script>
+<script src="../../assets/valid/valid-form-louddt.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../dist/lastStep.js"></script>
+</body>
+</html>

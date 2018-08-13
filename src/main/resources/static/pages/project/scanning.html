@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>数据集详情</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/project/scanning.css" />
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+<div class="main-body layui-row layui-col-space10">
+    <div class="layui-col-md2">
+        <div class="scanning-content scanning-content1">
+            <div class="item-title">
+                <span>智能问答</span>
+            </div>
+            <div class="right-item">
+                <div class="search-div">
+                    <input type="text" id="keyWords" value="" placeholder="搜索数据集" autocomplete="off">
+                    <span class="search-icon" id="search-icon"></span>
+                </div>
+                <div class="answer-div">
+                    <div class="answer-title">回答:</div>
+                    <div class="answer-content"><span>399230</span>  元</div>
+                </div>
+            </div>
+            <div class="item-title">
+                <span>相关内容</span>
+            </div>
+            <div class="item-body">
+                <div class="time-line">
+                    <ul class="layui-timeline">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h4 class="layui-timeline-title">创建C数据集</h4>
+                                <p>20分钟前</p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h4 class="layui-timeline-title">创建B数据集</h4>
+                                <p>30分钟前</p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h4 class="layui-timeline-title">结构化A数据集</h4>
+                                <p>40分钟前</p>
+                            </div>
+                        </li>
+                        <!--<li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">创建A数据集</h3>
+                                <p>50分钟前</p>
+                            </div>
+                        </li>-->
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="to-left to-to">
+            <div class="to-left-arrow"></div>
+        </div>
+    </div>
+    <div class="layui-col-md7">
+        <div class="scanning-content">
+            <div class="scan-img"></div>
+            <div class="btn-out">
+                <button class="layui-btn layui-btn-lg layui-btn-my" id="scan">关闭预览</button>
+                <button class="layui-btn layui-btn-lg layui-btn-my" id="publish">发布项目</button>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-md3">
+        <div class="scanning-content">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">关系分析</li>
+                    <li>时序分析</li>
+                    <li>异常分析</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="item-title">
+                            <span>实体</span>
+                        </div>
+                        <ul class="thing-content thing-content1">
+                            <li>
+                                <span class="objl">分析对象1</span>
+                                <span class="objm"></span>
+                                <span class="objr">高速公路项目</span>
+                            </li>
+                        </ul>
+                        <div class="item-title">
+                            <span>关系</span>
+                        </div>
+                        <ul class="thing-content thing-content2">
+                            <li>
+                                <span class="objl">关系1</span>
+                                <span class="objm"></span>
+                                <span class="objr">招标</span>
+                            </li>
+                        </ul>
+                        <div class="btn-out">
+                            <button class="layui-btn layui-btn-lg layui-btn-my" id="knowledge-get">开始分析</button>
+                        </div>
+                        <div class="item-title">
+                            <span>关系分析</span>
+                        </div>
+                        <ul class="thing-content thing-content3">
+                            <li>
+                                <span class="objl">高速公路项目</span>
+                                <span class="objr">A高速开发公司</span>
+                                <span class="objl objl1">高速公路项目</span>
+                                <span class="objm">|A招标咨询公司|</span>
+                                <span class="objr objr1">A高速开发公司</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="layui-tab-item">内容2</div>
+                    <div class="layui-tab-item">内容3</div>
+                </div>
+            </div>
+        </div>
+        <div class="to-right to-to">
+            <div class="to-right-arrow"></div>
+        </div>
+    </div>
+</div>
+<script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../dist/public.js"></script>
+<script src="../../src/js/project/scanning.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+
+</html>

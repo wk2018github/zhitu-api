@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>员工数据集</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/dataSet/userDataSet.css" />
+    </head>
+
+    <body>
+
+        <div class="main-body">
+            <div class="main-header">
+                <div class="top-bar">
+                    <div class="location-bar">
+                        <span class="location-root">数据集</span>
+                        <span>></span><span class="location-parent" id="location-parent"></span>
+                        <span>一</span><span class="location-target" id="location-target"></span>
+                    </div>
+                    <!--<div class="tool-bar">-->
+                    <!--<span>-->
+                    <!--&lt;!&ndash; span标签连在一行中写可以消除蜜汁间距&ndash;&gt;-->
+                    <!--<input type="text" name="keyWords" placeholder="请输入关键字" id="keyWords" value="" class="search-input"/><span class="search-btn">搜索</span>-->
+                    <!--<span class="search-filter">筛选</span>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="table-con">
+                <div class="table-out">
+                    <table id="table" class="layui-table"></table>
+                    <div id="pager" class="pager">
+
+                    </div>
+                </div>
+                <div class="button-wrap">
+                    <button class="btn-orange add">添加</button>
+                    <button class="btn-blue font-6">进入知识抽取</button>
+                </div>
+
+                <script type="text/html" id="order-num">
+                    <!--layui 为表格设置序号-->
+                    {{d.LAY_TABLE_INDEX+1}}
+                </script>
+                <script type="text/javascript" src="../../src/js/common/layui-table-public.js"></script>
+                <script type="text/html" id="change-option">
+                    <!--layui 转换table中的操作-->
+                    {{# return changeOptions(d.id); }}
+                </script>
+            </div>
+            <div class="option-con">
+                <div class="option-title">
+                    <p>添加</p>
+                </div>
+                <div class="option-body">
+                    <div class="form-wrap">
+                        <div class="form-item">
+                            <label for="user-name">姓名：</label>
+                            <input type="text" name="user-name" id="user-name" value="" />
+                        </div>
+                        <div class="form-item">
+                            <label for="user-name">性别：</label>
+                            <input type="text" name="user-name" id="user-name" value="" />
+                        </div>
+                        <div class="form-item">
+                            <label for="user-name">年龄：</label>
+                            <input type="text" name="user-name" id="user-name" value="" />
+                        </div>
+                        <div class="button-div mar-top">
+                            <button class="btn btn-blue">保存</button>
+                            <button class="btn btn-white" onclick="hideOption()">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script type="text/html" id="barDemo">
+            <a class="btn-edit" lay-event="edit">编辑</a>
+            <a class="btn-del" lay-event="del">删除</a>
+
+            <!-- 这里同样支持 laytpl 语法，如： -->
+            <!--{{# if(d.auth > 2){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+            {{# } }}-->
+        </script>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../dist/public.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../dist/userDataSet.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+
+</html>

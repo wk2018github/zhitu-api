@@ -1,0 +1,158 @@
+.table-con {
+  flex: 1;
+}
+.main-body {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    top: 10px;
+    display: flex;
+}
+.body-left{
+    position: relative;
+    flex: 3;
+    background-color: #fff;
+    padding: 5px 40px;
+}
+.main-body .body-right-detail {
+    position: relative;
+    flex: 1;
+    margin-left: 10px;
+    flex-direction: column;
+    background-color: #fff;
+}
+.main-body .body-right-detail .right-item {
+    width: 90%;
+    margin: 10px auto; }
+.main-body .body-right-detail .right-item .item-title {
+    border-bottom: 1px solid #e3e3e3;
+    padding: 3px 0; }
+.main-body .body-right-detail .right-item .item-title span {
+    color: #4680fe;
+    padding-left: 8px;
+    border-left: 2px solid #4680fe; }
+.main-body .body-right-detail .right-item .item-body {
+    margin: 10px 0px;
+    background-color: #e3effa;
+    /*max-height: 200px;*/
+    height: 200px;
+    overflow-y: auto;
+}
+.main-body .body-right-detail .right-item .font-con {
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem; }
+.main-body .body-right-detail .right-item .font-con p {
+    color: #4680fe;
+    font-weight: bold; }
+.layui-btn-my {
+    height: 36px;
+    line-height: 30px;
+    padding: 0 39px;
+    font-size: 16px;
+    background-color: #4680ff;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%);
+}
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px 8px;
+    justify-content: space-between;
+}
+.flex-wrap .span-item {
+    border-radius: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 2px;
+    flex-basis: auto;
+    /* flex: 1; */
+    display: inline-block;
+    text-align: center;
+    width: 5rem;
+    /*padding: 5px 0px;*/
+    margin: 5px 5px;
+    background-color: #f5f9fd;
+    cursor: pointer;
+}
+.item-body .flex-wrap span.chose {
+    padding: 4px 1px;
+    background-color: #fff;
+    color: #333;
+}
+.item-body .flex-wrap span.chose {
+    border:1px solid #4680fe;
+}
+.item-body1 .flex-wrap span.chose {
+    border:1px solid #fd894b;
+}
+.main-body .body-right-detail .right-item .item-body.item-body1{
+    background-color: #fff6f2;
+}
+.item-body1 .flex-wrap .span-item{
+    background-color: #f5ece9;
+}
+.layui-tab{
+    margin: 0;
+}
+.layui-tab-title li{
+    padding: 0;
+    font-size: 16px;
+    color: #4680ff;
+    font-weight: bolder;
+}
+.layui-tab-title{
+    border-bottom:1px solid #4680ff;
+}
+.layui-form-label-no {
+    padding: 6px 10px 6px 0;
+    width: 42px;
+}
+.layui-form-item .layui-input-inline {
+    width: 260px;
+}
+.layui-input, .layui-textarea{
+    height: 32px;
+}
+.layui-form-item .layui-inline{
+    margin: 30px 0;
+}
+.layui-input:focus, .layui-textarea:focus {
+    border-color: #4680ff!important;
+    caret-color: #4680ff;
+}
+.layui-card-header{
+    text-align: center;
+    color: #fff;
+    background-color: #fd894b;
+    border-bottom: 0;
+}
+.layui-card{
+    box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -wekit-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -moz-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+}
+.layui-card-body {
+    padding: 25px 15px 10px;
+}
+.layui-btn-my-a{
+    bottom: 70px;
+}
+/*删除样式*/
+.delete{
+    position: absolute;
+    background-color: #fff;
+    padding: 2px 10px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    color: red;
+    box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -wekit-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    -moz-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);
+    display: none;
+    cursor: pointer;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建数据集</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+    <link rel="stylesheet" href="../../src/css/newData/firstStep.css">
+</head>
+<body>
+<div class="main-body">
+    <div class="main-step">
+        <!--<ul class="step-head">-->
+            <!--<li class="first-step"></li>-->
+            <!--<li class="second-step"></li>-->
+            <!--<li class="third-step"></li>-->
+        <!--</ul>-->
+        <div class="step-content">
+            <div class="step-content-title">>><span>新建项目</span></div>
+            <form class="layui-form" id="modal-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="name" name="title"  valid-type="require" valid-key="名称" lay-verify="title" autocomplete="off" placeholder="请输入图谱名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">简介：</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入简介" id="description" rows="8"  valid-type="require" valid-key="简介" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="btn-out">
+            <button class="layui-btn layui-btn-lg layui-btn-my layui-btn-my-p" id="next">下一步</button>
+        </div>
+    </div>
+</div>
+<script src="../../assets/jquery/jquery-2.1.1.js"></script>
+<script src="../../assets/layui/layui.all.js"></script>
+<script src="../../dist/public.js"></script>
+<script src="../../assets/valid/valid-form-louddt.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../dist/firstStep.js"></script>
+</body>
+</html>
