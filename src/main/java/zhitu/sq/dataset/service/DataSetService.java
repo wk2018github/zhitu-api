@@ -3,6 +3,8 @@ package zhitu.sq.dataset.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
@@ -34,7 +36,7 @@ public interface DataSetService {
 	 * @return
 	 */
 	int saveLocalDataSet(String userId, String name, String describe, String projectId,
-			MultipartFile file)throws Exception;
+			MultipartFile file, HttpServletRequest request)throws Exception;
 
 	/**
 	 * 更新数据集信息

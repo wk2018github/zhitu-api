@@ -1,0 +1,465 @@
+@charset "utf-8";
+$_blue_color:#4680fe;
+$_blue_font:#8a9ef2;
+$body_bgcolor:#edf2f3;
+$_red_font:#f4746e;
+* {
+    margin: 0;
+    padding: 0;
+}
+
+//css reset
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+form,
+fieldset,
+legend,
+button,
+input,
+textarea,
+th,
+td {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font: 12px/1.5tahoma, arial, \5b8b\4f53;
+    color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%;
+}
+
+address,
+cite,
+dfn,
+em,
+var {
+    font-style: normal;
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: couriernew, courier, monospace;
+}
+
+small {
+    font-size: 12px;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+sup {
+    vertical-align: text-top;
+}
+
+sub {
+    vertical-align: text-bottom;
+}
+
+legend {
+    color: #000;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+//重写layui样式
+.layui-laypage {
+    float: right;
+}
+
+//重写layui样式结束
+.table-wrap {
+    width: 80vw;
+    background-color: #fff;
+    margin: 20px auto 0 auto;
+    padding: 10px 2rem 2rem 2rem;
+}
+
+.body-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &>.header-left {
+        flex: 0 1 20rem;
+    }
+    &>.header-center {
+        display: flex;
+        justify-content: center;
+        flex: 1;
+        .menu-wrap {
+            &>span {
+                color: #333;
+                padding: 0 10px 0px 10px;
+                display: inline-block;
+            }
+            &>span:hover {
+                cursor: pointer;
+                color: $_blue_color;
+            }
+            .border-right {
+                border-right: 1px solid #333;
+            }
+            .active {
+                color: $_blue_color;
+            }
+        }
+    }
+    &>.header-right {
+        flex: 0 1 20rem;
+    }
+    .bgcolor-white {
+        background-color: white;
+        //color: #333;
+    }
+    .layui-nav .layui-nav-item a {
+        color: #333;
+    }
+    .layui-nav-item a:hover {
+        color: #007DDB;
+    }
+}
+
+.body-main {
+    background-color: #edf2f3;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 70px; //header的高度
+    overflow: hidden;
+}
+
+span.option {
+    cursor: pointer;
+    margin: 0px 5px;
+}
+
+.btn-wrap {
+    text-align: center;
+}
+
+.button-div {
+    text-align: center;
+}
+
+.btn {
+    cursor: pointer;
+    width: 8rem;
+    height: 2rem;
+}
+
+.btn-orange {
+    background-color: #fcc448;
+    color: #fff;
+    border-radius: 3px;
+    width: 80px;
+    height: 30px;
+    border: none;
+}
+
+.btn-white {
+    background-color: #fff;
+    color: $_blue_color;
+    border-radius: 3px;
+    width: 80px;
+    height: 30px;
+    border: 1px solid $_blue_color;
+}
+
+.btn-blue {
+    background-color: $_blue_color;
+    color: #FFF9EC;
+    width: 80px;
+    height: 30px;
+    border: 1px solid transparent;
+}
+
+button.font-6 {
+    width: 150px;
+    height: 35px;
+}
+
+span.edit,
+span.see-details {
+    color: $_blue_color;
+}
+
+span.del {
+    color: red;
+}
+
+.top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 10px 0px 10px;
+    .location-bar {
+        flex: 3;
+        line-height: 25px;
+        &>span {
+            display: inline-block;
+        }
+        .location-root {
+            //border: 1px solid $_blue_color;
+            //color: #333;
+            //background-color: #e3effa;
+            //border-radius: 25px;
+            //width: 6rem;
+            //text-align: center;
+            //padding: 0.3rem 0;
+        }
+        .location-parent {}
+        .location-target {
+            background-color: #edf2f3;
+            color: orangered;
+            width: 5rem;
+            border-radius: 25px;
+            text-align: center;
+            padding: 0.2rem 0;
+        }
+    }
+    .tool-bar {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        >span{
+            width: 100%;
+            margin-left: 10px
+        }
+    }
+}
+
+.main-body {
+    //  padding: 0px 8px;
+}
+
+.search-input {
+    width: 200px;
+    height: 24px;
+    border: 1px solid $_blue_color;
+}
+
+.search-btn {
+    display: inline-block;
+    height: 26px;
+    width: 48px;
+    vertical-align: bottom;
+    text-align: center;
+    line-height: 26px;
+    background-color: $_blue_color;
+    color: #fff;
+}
+
+.position-r {
+    position: relative;
+}
+
+.layui-form-radio>i,
+.layui-form-radio * {
+    font-size: 12px;
+}
+
+.menu-wrap {
+    .menu-icon-1,
+    .menu-icon-2,
+    .menu-icon-3,
+    .menu-icon-4 {
+        display: inline-block;
+        width: 85px;
+        text-align: center;
+        &>span {
+            display: inline-block;
+            height: 16px;
+            width: 16px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            vertical-align: text-bottom;
+            margin-right: 10px;
+        }
+    }
+    .menu-icon-1>span {
+        background-image: url(../../img/indexIcon/menu-2.png);
+    }
+    .menu-icon-2>span {
+        background-image: url(../../img/indexIcon/menu-1.png);
+    }
+    .menu-icon-3>span {
+        background-image: url(../../img/indexIcon/menu-4.png);
+    }
+    .menu-icon-4>span {
+        background-image: url(../../img/indexIcon/menu-3.png);
+    }
+    
+    //选中状态
+    .menu-icon-1>span.active {
+        background-image: url(../../img/indexIcon/menu-2-1.png);
+    }
+    .menu-icon-2>span.active {
+        background-image: url(../../img/indexIcon/menu-1-1.png);
+    }
+    .menu-icon-3>span.active {
+        background-image: url(../../img/indexIcon/menu-4-1.png);
+    }
+    .menu-icon-4>span.active {
+        background-image: url(../../img/indexIcon/menu-3-1.png);
+    }
+}
+
+.main-icon {
+    display: inline-block;
+    background-image: url(../../img/indexIcon/logo.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    vertical-align: text-bottom;
+    width: 150px;
+    height: 30px;
+    margin-left: 40px;
+}
+
+.btn-edit {
+    color: $_blue_font;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-del {
+    color: $_red_font;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+//layer
+.diy-layer-wrap {
+    width: 380px;
+    height: 400px;
+    padding: 20px 0px;
+    margin: 0 auto;
+    .form-wrap {
+        .edit-item {
+            text-align: center;
+            width: 360px;
+            margin: 10px auto;
+            label {
+                display: inline-block;
+                width: 80px;
+                text-align: right;
+                padding-right: 10px;
+                vertical-align: top;
+            }
+            input {
+                display: inline-block;
+                width: 200px;
+            }
+            textarea {
+                display: inline-block;
+                width: 200px;
+                height: 150px;
+            }
+        }
+    }
+}
+
+//form表单校验
+.input-check {
+    padding: 13px 10px;
+    color: #ff723a;
+    box-shadow: 0px 1px 27px 1px rgba(0, 0, 0, 0.18);
+    z-index: 100000000;
+    position: absolute;
+    left: 10px;
+    background: #fff;
+    border-radius: 6px;
+    width: 260px;
+    &:before {
+        display: block;
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+        content: 'Mr.zhang';
+        background: transparent;
+        border: 0px solid transparent;
+        border-bottom-color: #ffffff;
+        border-width: 10px 5px;
+        top: -19px;
+    }
+    .warning-icon {
+        position: absolute;
+    }
+    .tip-txt {
+        display: block;
+        margin-left: 25px;
+    }
+}
+.layui-table{
+    margin: 0;
+}
+.layui-table, .layui-table-view{
+    margin: 0;
+}
+.pager{
+    overflow: hidden;
+}
+.layui-table-view{
+    border-width: 0;
+}
+.layui-table-header{
+    border: 0;
+}

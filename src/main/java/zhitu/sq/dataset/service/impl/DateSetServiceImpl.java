@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -37,6 +39,7 @@ import zhitu.util.SparkSql;
 import zhitu.util.StringHandler;
 import zhitu.util.TikaUtils;
 import zhitu.util.DataSourceUtil;
+import zhitu.util.FileUpload;
 import zhitu.util.JdbcDbUtils;
 
 @Service
@@ -72,13 +75,13 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	public int saveLocalDataSet(String userId, String name, String describe, String projectId,
-			MultipartFile file) throws Exception {
+			MultipartFile file, HttpServletRequest request) throws Exception {
 		String dataSetId = "DATASET_" + System.currentTimeMillis();
 		
-		FTPClient ftp = dataSourceUtil.getFTPClient();
-		if (null == ftp) {
-			throw new Exception("获取FTP失败");
-		}
+//		FTPClient ftp = dataSourceUtil.getFTPClient();
+//		if (null == ftp) {
+//			throw new Exception("获取FTP失败");
+//		}
 		
 		FtpFile f = new FtpFile();
 		f.setId("PDF_"+System.currentTimeMillis());
@@ -90,18 +93,24 @@ public class DateSetServiceImpl implements DataSetService{
 		String fileAbstract = TikaUtils.parseFile(file);
 		f.setFileAbstract(fileAbstract);
 		// 文件上传到ftp
-		String directory = "zhituFile"+System.currentTimeMillis();
-		String ftpName = String.valueOf(System.currentTimeMillis())+su;
-		boolean flag = upload(ftp, file, directory, ftpName);
-		if (!flag) {
-			throw new Exception(fileName + "上传失败");
-		}
-		System.out.println("upload success");
-		ftp.disconnect();
+//		String directory = "zhituFile"+System.currentTimeMillis();
+//		String ftpName = String.valueOf(System.currentTimeMillis())+su;
+//		boolean flag = upload(ftp, file, directory, ftpName);
+//		if (!flag) {
+//			throw new Exception(fileName + "上传失败");
+//		}
+//		System.out.println("upload success");
+//		ftp.disconnect();
 		
-		Configuration config = new PropertiesConfiguration("file.properties");
-		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
-		f.setFtpurl(ftpurl);
+//		Configuration config = new PropertiesConfiguration("file.properties");
+//		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
+		
+		//文件上传本地
+		String path = FileUpload.upload(request);
+		if(null == path){
+			return 0;
+		}
+		f.setFtpurl(path);
 		f.setDatasetId(dataSetId);
 		
 		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")

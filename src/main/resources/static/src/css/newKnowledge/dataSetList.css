@@ -1,0 +1,107 @@
+.main-body{
+    background-color: #fff;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    top: 20px;
+    display: flex;
+}
+.layui-card{
+    box-shadow: none;
+    -wekit-box-shadow: none;
+    -moz-box-shadow: none;
+    /*box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);*/
+    /*-wekit-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);*/
+    /*-moz-box-shadow: 0 3px 20px 0 rgba(0,0,0,.17);*/
+    height: 424px;
+}
+.layui-card-header{
+    background-color: #edf7ff;
+    font-size: 16px;
+    border-bottom: 0;
+}
+.search-div{
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%);
+}
+.search-div input {
+    width: 90%;
+    height: 1.5rem;
+    border: 1px solid #4680fe;
+    padding: 0 10px;
+}
+.search-div .search-icon {
+    position: absolute;
+    display: inline-block;
+    background-image: url(../../img/indexIcon/search-w.png);
+    height: 26px;
+    width: 47px;
+    background-position: center;
+    background-repeat: no-repeat;
+    vertical-align: text-bottom;
+    top: 0;
+    right: -50px;
+    background-color: #4680ff;
+    background-size: 40%;
+}
+.content-content{
+    margin-top: 66px;
+}
+.data-per{
+    background-color: #f6f6f6;
+    padding: 10px 20px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    /*cursor: pointer;*/
+}
+.data-per:hover,.data-per.active{
+    background-color: #fff;
+    padding: 9px 19px;
+    border: 1px solid #4a83ff;
+}
+.data-per p {
+    font-size: 12px;
+    color: #828282;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.clock{
+    font-size: 12px;
+    color: #828282;
+    float: right;
+    padding-left: 20px;
+    background-image: url(../../img/clock.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 15px;
+}
+.layui-col-space30>*{
+    padding: 15px 15px 0px;
+}
+.pager{
+    text-align: center;
+}
+.pager:after{
+    content: '';
+    clear: both;
+    display: table;
+}
+.layui-laypage{
+    float: none;
+}
+.btn-out{
+    text-align: center;
+    margin-top: 20px;
+}
+.layui-btn-my {
+    height: 36px;
+    line-height: 30px;
+    padding: 0 39px;
+    font-size: 16px;
+    background-color: #4680ff;
+}

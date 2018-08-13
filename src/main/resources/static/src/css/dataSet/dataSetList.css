@@ -1,0 +1,214 @@
+@charset "UTF-8";
+/*存放网站颜色的scss文件*/
+.main-body {
+  background-color: #edf2f3;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  top: 20px;
+  display: flex; }
+  .main-body .body-left {
+    flex: 3;
+    background-color: #fff;
+    padding: 15px 10px; }
+  .main-body .body-right {
+    flex: 1;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative; }
+    .main-body .body-right > div {
+      background-color: #fff; }
+    .main-body .body-right .right-up {
+      flex: 1;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 50%;
+      top: 0; }
+      .main-body .body-right .right-up > div {
+        width: 90%;
+        margin: 10px auto; }
+    .main-body .body-right .right-down {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 50%;
+      margin-top: 10px;
+      flex: 1; }
+    .main-body .body-right .right-item {
+      margin-top: 10px; }
+      .main-body .body-right .right-item .item-title span {
+        margin-left: 10px;
+        color: #4680fe;
+        padding-left: 8px;
+        border-left: 2px solid #4680fe; }
+  .main-body .body-right-detail {
+    flex: 1;
+    margin-left: 10px;
+    flex-direction: column;
+    background-color: #fff; }
+    .main-body .body-right-detail .right-item {
+      width: 90%;
+      margin: 10px auto; }
+      .main-body .body-right-detail .right-item .item-title {
+        border-bottom: 1px solid #e3e3e3;
+        padding: 3px 0; }
+        .main-body .body-right-detail .right-item .item-title span {
+          color: #4680fe;
+          padding-left: 8px;
+          border-left: 2px solid #4680fe; }
+      .main-body .body-right-detail .right-item .item-body {
+        margin: 10px 0px;
+        background-color: #e3effa; }
+      .main-body .body-right-detail .right-item .font-con {
+        height: 5rem;
+        text-align: center;
+        line-height: 5rem; }
+        .main-body .body-right-detail .right-item .font-con p {
+          color: #4680fe;
+          font-weight: bold; }
+
+.hide {
+  display: none; }
+
+.search-div {
+  padding: 10px 0 0 0;
+  text-align: center;
+  position: relative; }
+  .search-div input {
+    width: 90%;
+    height: 1.5rem;
+    border: 1px solid #4680fe;
+    padding: 0 5px; }
+  .search-div .search-icon {
+    position: absolute;
+    display: inline-block;
+    background-image: url(../../img/indexIcon/search.png);
+    height: 16px;
+    width: 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    vertical-align: text-bottom;
+    top: 15px;
+    right: 16px; }
+
+.button-div {
+  padding: 10px 0;
+  text-align: center; }
+  .button-div > button {
+    margin: 0px 10px; }
+  .button-div .btn {
+    width: 35%;
+    height: 2rem; }
+  .button-div .btn.btn-blue {
+    background-color: #4680fe;
+    color: #FFF9EC;
+    border: 1px solid transparent; }
+  .button-div .btn.btn-white {
+    background-color: #fff;
+    color: #4680fe;
+    border: 1px solid #4680fe; }
+
+.bottom-border {
+  border-bottom: 1px solid #e3e3e3; }
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px 8px;
+  justify-content: space-between; }
+  .flex-wrap .span-item {
+    flex-basis: auto;
+    display: inline-block;
+    text-align: center;
+    width: 5rem;
+    padding: 5px 0px;
+    margin: 5px 5px;
+    background-color: #f5f9fd;
+    cursor: pointer; }
+  .flex-wrap span.chose {
+    background-color: #fff;
+    color: #333; }
+
+.time-line {
+  width: 10rem;
+  margin: 20px auto; }
+
+/*知识库首页样式*/
+.total-num > div {
+  color: #999; }
+
+.total-num > p {
+  font-size: 20px;
+  margin: 20px 10px; }
+
+.body-right-detail {
+  position: relative; }
+
+#container {
+  position: absolute;
+  bottom: 215px;
+  right: 3px;
+  left: 0;
+  top: 170px; }
+
+.btn-wrap-r {
+  position: absolute;
+  bottom: 30px;
+  right: 3px;
+  left: 0; }
+
+/*项目首页特殊样式*/
+.body-left-scroll {
+  overflow-y: auto; }
+
+.project-list > div {
+  color: #fff;
+  border-radius: 3px;
+  padding: 10px; }
+
+.project-btns {
+  height: 20px;
+  position: relative; }
+
+.project-btns span {
+  position: absolute;
+  background-image: url("../../img/project.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  width: 15px;
+  height: 15px; }
+
+.project-btns span.project-edit {
+  background-position: 0 -46px;
+  left: 0; }
+
+.project-btns span.project-close {
+  right: 0; }
+
+.project-left h4 {
+  font-size: 20px;
+  line-height: 40px; }
+
+.project-left .introduction {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 25px; }
+
+.project-content {
+  margin: 0 10px; }
+
+.add {
+  height: 105px;
+  background: url("../../img/add.png") no-repeat;
+  background-size: 100% 100%;
+  cursor: pointer; }
+
+/*# sourceMappingURL=dataSetList.css.map */

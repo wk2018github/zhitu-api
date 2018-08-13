@@ -120,7 +120,7 @@ public class Neo4jTest {
 				str = changeJson(str);
 
 				String cypher = "create (n:" + tableName + " " + str + ")";
-
+//				String cypher = "create (n:" + tableName + ":"+图谱id+" " + str + ")";
 				session.run(cypher);
 
 			}

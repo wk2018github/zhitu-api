@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>企业高管人员表</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/dataSet/mangerDataSet.css" />
+        <style>
+            .flex-wrap .span-item{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 5px 2px;
+                border-radius: 3px;
+            }
+            .flex-wrap span.chose {
+                padding: 4px 1px;
+                border: 1px solid #4680fe;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="table-con">
+            <div class="main-header">
+                <div class="top-bar">
+                    <div class="location-bar">
+                        <span class="loca-cart"></span>
+                        <span class="location-root font-7" id="tableName"></span>
+                        <!--<span>></span><span class="location-parent">员工数据集</span>
+                        <span>一</span><span class="location-target">非关系型</span>-->
+                    </div>
+                    <!--<div class="tool-bar">-->
+                        <!--<span>-->
+                        <!--&lt;!&ndash; span标签连在一行中写可以消除蜜汁间距&ndash;&gt;-->
+                        <!--<input type="text" name="keyWords" placeholder="请输入关键字" id="keyWords" value="" class="search-input"/><span class="search-btn">搜索</span>-->
+                        <!--<span class="search-filter">筛选</span>-->
+                        <!--</span>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="main-body">
+                <div class="body-left">
+                    <table id="table" class="layui-table"></table>
+                    <div id="pager" class="pager">
+
+                    </div>
+                </div>
+                <div class="body-right">
+                    <div class="right-up">
+                        <div class="right-item">
+                            <div class="item-title">
+                                <span>选择字段</span>
+                            </div>
+                            <div class="item-body">
+                                <div class="flex-wrap" id="flex-wrap">
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                    <!--<span class="span-item">姓名</span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-down">
+                        <div class="right-item">
+                            <div class="item-title">
+                                <span>类型</span>
+                            </div>
+                            <div class="item-body font-con bgcolor-white layui-form">
+                                <input type="radio" name="database-type" value="0" title="本地数据库">
+                                <input type="radio" name="database-type" value="1" title="远程连接数据库" checked>
+                            </div>
+                        </div>
+                        <div class="right-item btn-wrap">
+                            <button class="btn btn-blue font-6" id="sure-btn">确定</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <script type="text/html" id="order-num">
+            <!--layui 为表格设置序号-->
+            {{d.LAY_TABLE_INDEX+1}}
+        </script>
+        <script type="text/html" id="barDemo">
+            <a class="btn-edit" lay-event="edit">编辑</a>
+            <a class="btn-del" lay-event="del">删除</a>
+
+            <!-- 这里同样支持 laytpl 语法，如： -->
+            <!--{{# if(d.auth > 2){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+            {{# } }}-->
+        </script>
+        <script type="text/javascript" src="../../src/js/common/layui-table-public.js"></script>
+        <script type="text/html" id="change-option">
+            <!--layui 转换table中的操作-->
+            {{# return changeOptions(d.id); }}
+        </script>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../dist/public.js"></script>
+        <script src="../../dist/mangerDataSet.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+
+</html>

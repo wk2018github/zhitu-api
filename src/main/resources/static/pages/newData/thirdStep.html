@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建数据集</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+    <link rel="stylesheet" href="../../src/css/newData/firstStep.css">
+</head>
+<body>
+<div class="main-body">
+    <div class="main-step">
+        <ul class="step-head">
+            <li class="first-step-s"></li>
+            <li class="second-step-t"></li>
+            <li class="third-step-t"></li>
+        </ul>
+        <div class="step-content-out">
+            <div class="step-content" id="step-content1">
+                <div class="step-content-title">>><span>文件上传</span></div>
+                <form class="layui-form">
+                    <div class="drag-div" id="drag-div">
+                        <img src="../../src/img/upload.png" alt="">
+                        <div>
+                            拖拽文件至此<br>
+                            或者
+                        </div>
+                        <button type="button" class="layui-btn layui-btn-warm">点击选择文件</button>
+                        <!--<input type="file" class="upload-input">-->
+                    </div>
+                    <div class="layui-upload-list" style="display: none">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>大小</th>
+                                <!--<th>状态</th>-->
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="demoList"></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="step-content" id="step-content2" style="display: none">
+                <div class="step-content-title">>><span>连接数据库</span></div>
+                <form class="layui-form layui-row">
+                    <div class="layui-form-in layui-col-xs8"  id="modal-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">服务器地址：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <input id="host" value="192.168.100.111"  valid-type="require" valid-key="服务器地址" type="text" lay-verify="title" autocomplete="off" placeholder="请输入服务器地址" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">数据库名：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <input id="dbName" value="ldp_test" type="text" lay-verify="title" autocomplete="off"  valid-type="require" valid-key="数据库名" placeholder="请输入数据库名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">数据库类型：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <select name="interest" lay-filter="databaseType" id="databaseType"  valid-type="require" valid-key="数据库类型">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">编码格式：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <input id="charset" value="utf-8" type="text" lay-verify="title"  valid-type="require" valid-key="编码格式" autocomplete="off" placeholder="请输入编码格式" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">账号：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <input id="user" value="root" type="text" lay-verify="title"  valid-type="require" valid-key="账号" autocomplete="off" placeholder="请输入账号" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-big">密码：</label>
+                            <div class="layui-input-block layui-input-block-big">
+                                <input id="password" value="123456" type="password" lay-verify="title"  valid-type="require" valid-key="密码" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item" id="tableNameOut">
+                            <label class="layui-form-label layui-form-label-big">数据表名：</label>
+                            <div class="layui-input-block  layui-input-block-big">
+                                <select name="modules"  lay-filter="tableName" lay-verify="required"  lay-search="" id="tableName">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-in layui-col-xs4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label layui-form-label-spe">端口：</label>
+                            <div class="layui-input-block">
+                                <input id="port" value="30620" type="text"  valid-type="require" valid-key="端口" lay-verify="title" autocomplete="off" placeholder="请输入端口" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="step-content" id="step-content11" style="display: none">
+                <div class="step-content-title">>><span>导入数据</span></div>
+                <form class="layui-form">
+                    <div class="drag-div">
+                        <div class="tips">
+                            完成后会通知您哦~
+                        </div>
+                        <img class="loading" src="../../src/img/loading.gif" alt="">
+                    </div>
+                </form>
+            </div>
+            <div class="step-content" id="step-content12"  style="display: none">
+                <div class="step-content-title">>><span>导入数据</span></div>
+                <form class="layui-form">
+                    <div class="drag-div">
+                        <img class="complete" src="../../src/img/complete.png" alt="">
+                        <div class="tips tipsC">
+                            数据导入完成！
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="btn-out">
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-my" id="next">下一步</button>
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-disabled" id="compD"  style="display: none">完成</button>
+            <button type="button" class="layui-btn layui-btn-lg layui-btn-my" style="display: none" id="compC">完成</button>
+        </div>
+    </div>
+</div>
+<script src="../../assets/jquery/jquery-2.1.1.js"></script>
+<script src="../../assets/layui/layui.all.js"></script>
+<script src="../../dist/public.js"></script>
+<script src="../../assets/valid/valid-form-louddt.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../dist/thirdStep.js"></script>
+</body>
+</html>

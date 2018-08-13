@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>图谱关系配置</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/newKnowledge/atlasRelation.css" />
+    </head>
+
+    <body>
+        <div class="main-body">
+            <div class="body-left">
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li class="">关系配置</li>
+                    </ul>
+                </div>
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label layui-form-label-no">关系名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="" lay-verify="" autocomplete="off" class="layui-input" id="relationship">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 0 50px;">
+                        <div class="layui-row layui-col-space15">
+                            <div class="layui-col-md6">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">源知识表</div>
+                                    <div class="layui-card-body">
+                                        <div class="layui-form-item" id="">
+                                            <label class="layui-form-label layui-form-label-big">选择知识表</label>
+                                            <div class="layui-input-block  layui-input-block-big">
+                                                <select name="modules"  lay-filter="tableName1" id="tableName1">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item" id="">
+                                            <label class="layui-form-label layui-form-label-big">选择外键</label>
+                                            <div class="layui-input-block  layui-input-block-big">
+                                                <select name="modules"  lay-filter="fileds1" id="fileds1">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">目标知识表</div>
+                                    <div class="layui-card-body">
+                                        <div class="layui-form-item" id="">
+                                            <label class="layui-form-label layui-form-label-big">选择知识表</label>
+                                            <div class="layui-input-block  layui-input-block-big">
+                                                <select name="modules"  lay-filter="tableName2" id="tableName2">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item" id="">
+                                            <label class="layui-form-label layui-form-label-big">选择外键</label>
+                                            <div class="layui-input-block  layui-input-block-big">
+                                                <select name="modules"  lay-filter="fileds2" id="fileds2">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="right-item btn-wrap">
+                    <button class="layui-btn layui-btn-lg layui-btn-my layui-btn-my-a" id="knowledge-add">添加关系至图谱</button>
+                </div>
+            </div>
+            <div class="body-right-detail" id="list-detail">
+                <div class="right-item">
+                    <div class="item-title">
+                        <span>节点标签</span>
+                    </div>
+                    <div class="item-body">
+                        <div class="flex-wrap" id="point-tag">
+                        </div>
+                    </div>
+                </div>
+                <div class="right-item">
+                    <div class="item-title">
+                        <span>关系类型</span>
+                    </div>
+                    <div class="item-body item-body1">
+                        <div class="flex-wrap" id="relation-type">
+                        </div>
+                    </div>
+                </div>
+                <div class="delete">删除</div>
+                <div class="right-item btn-wrap">
+                    <button class="layui-btn layui-btn-lg layui-btn-my" id="knowledge-get">预览图谱</button>
+                </div>
+            </div>
+        </div>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="../../dist/layui-table-public.js"></script>
+        <script type="text/html" id="format-date">
+            <!--layui 转换table中的操作-->
+            {{# return formatData(d.createTime); }}
+        </script>
+        <script type="text/html" id="order-num">
+            <!--layui 为表格设置序号-->
+            {{d.LAY_TABLE_INDEX+1}}
+        </script>
+        <script src="../../dist/public.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../src/js/atlas/atlasRelation.js" type="text/javascript" charset="utf-8"></script>
+
+    </body>
+
+</html>

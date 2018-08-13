@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>知识化</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/dataSet/dataSetList.css" />
+    </head>
+
+    <body>
+        <div class="main-body">
+            <div class="body-left">
+                <table class="layui-table" id="table"></table>
+                <script type="text/html" id="order-num">
+                    <!--layui 为表格设置序号-->
+                    {{d.LAY_TABLE_INDEX+1}}
+                </script>
+                <div id="pager" class="pager">
+
+                </div>
+            </div>
+            
+            <!-- 详情 -->
+            <div class="body-right-detail" id="list-detail">
+                <div class="right-item">
+                    <div class="search-div">
+                        <input type="text" id="keyWords" value="" placeholder="搜索数据集" autocomplete="off"/>
+                        <span class="search-icon" id="search-icon"></span>
+                    </div>
+                    <div class="button-div bottom-border">
+                        <button class="btn btn-blue" id="add">新建知识表</button>
+                        <button class="btn btn-white" id="doDel">删除知识表</button>
+                    </div>
+                </div>
+                <div class="right-item total-num">
+                    <div>
+                        知识表数
+                    </div>
+                    <p>7</p>
+                </div>
+                <div class="right-item">
+                    <div class="chart-div">
+                        <div id="container"></div>
+                    </div>
+                </div>
+                <div class="right-item btn-wrap btn-wrap-r">
+                    <button class="btn btn-blue font-6" id="atlas-relate">图谱关系配置</button>
+                </div>
+            </div>
+
+        </div>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/highCharts/highcharts.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="../../dist/layui-table-public.js"></script>
+        <script type="text/javascript" src="../../dist/public.js"></script>
+        <script type="text/html" id="format-date">
+            <!--layui 转换table中的操作-->
+            {{# return formatData(d.createTime); }}
+        </script>
+        <script type="text/html" id="barDemo">
+            <!--<a class="btn-edit" lay-event="details">查看详情</a>-->
+            <a class="btn-edit" lay-event="edit">编辑</a>
+            <a class="btn-del" lay-event="del">删除</a>
+
+            <!-- 这里同样支持 laytpl 语法，如： -->
+            <!--{{# if(d.auth > 2){ }}
+            <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+            {{# } }}-->
+        </script>
+
+        <script src="../../dist/knowledgeList.js" type="text/javascript" charset="utf-8"></script>
+    </body>
+
+</html>

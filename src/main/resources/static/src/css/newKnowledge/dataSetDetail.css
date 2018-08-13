@@ -1,0 +1,92 @@
+.table-con {
+    flex: 1;
+}
+.main-body {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    top: 47px;
+    display: flex;
+}
+.body-left{
+    flex: 3;
+    background-color: #fff;
+    padding: 15px 10px;
+}
+.main-body .body-right-detail {
+    position: relative;
+    flex: 1;
+    margin-left: 10px;
+    flex-direction: column;
+    background-color: #fff;
+    margin-top: -37px;
+}
+.main-body .body-right-detail .right-item {
+    width: 90%;
+    margin: 10px auto; }
+.main-body .body-right-detail .right-item .item-title {
+    border-bottom: 1px solid #e3e3e3;
+    padding: 3px 0; }
+.main-body .body-right-detail .right-item .item-title span {
+    color: #4680fe;
+    padding-left: 8px;
+    border-left: 2px solid #4680fe; }
+.main-body .body-right-detail .right-item .item-body {
+    margin: 10px 0px;
+    background-color: #e3effa; }
+.main-body .body-right-detail .right-item .font-con {
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem; }
+.main-body .body-right-detail .right-item .font-con p {
+    color: #4680fe;
+    font-weight: bold; }
+.layui-form-item{
+    margin-top: 15px;
+}
+.layui-input-block{
+    margin-left: 0;
+    min-height: 30px;
+}
+.layui-input, .layui-select, .layui-textarea{
+    height: 30px;
+}
+.layui-input:focus, .layui-textarea:focus{
+    border-color: #4680ff!important;
+    caret-color: #4680ff;
+}
+.layui-form-checked[lay-skin=primary] i{
+    border-color: #4a82ff;
+    background-color: #fff;
+}
+.layui-form-item .layui-form-checkbox.layui-form-checked .layui-icon-ok:before{
+    color: #4a82ff;
+    content: "\e605";
+}
+.layui-form-item .layui-form-checkbox .layui-icon-ok:before{
+    color: #4a82ff;
+    content: "";
+}
+.layui-form-checkbox[lay-skin=primary]:hover i {
+    border-color: #4a82ff;
+}
+.layui-btn-my {
+    height: 36px;
+    line-height: 30px;
+    padding: 0 39px;
+    font-size: 16px;
+    background-color: #4680ff;
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translate(-50%);
+}
+.top-bar .location-bar > span.location-root {
+    border: 1px solid #4680fe;
+    color: #333;
+    background-color: #e3effa;
+    border-radius: 25px;
+    width: 6rem;
+    text-align: center;
+}

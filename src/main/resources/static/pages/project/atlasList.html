@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>数据集详情</title>
+        <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+        <style type="text/css">
+            .table-con {
+                flex: 1;
+            }
+            .main-body {
+                background-color: #fff;
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                top: 20px;
+                padding: 10px 15px;
+            }
+            .layui-btn-my {
+                height: 36px;
+                line-height: 30px;
+                padding: 0 39px;
+                font-size: 16px;
+                background-color: #4680ff;
+            }
+            .btn-out {
+                text-align: center;
+                margin-top: 40px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="main-body">
+            <div class="table-con">
+                <table class="layui-table" id="table"></table>
+                <div id="pager" class="pager">
+
+                </div>
+            </div>
+            <div class="btn-out">
+                <button class="layui-btn layui-btn-lg layui-btn-my" id="scan">预览图谱</button>
+                <button class="layui-btn layui-btn-lg layui-btn-my" id="publish">发布项目</button>
+            </div>
+        </div>
+        <script src="../../assets/jquery/jquery-2.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../assets/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript" src="../../dist/layui-table-public.js"></script>
+        <script type="text/javascript" src="../../dist/public.js"></script>
+        <script type="text/html" id="format-date">
+            <!--layui 转换table中的操作-->
+            {{# return formatData(d.createTime); }}
+        </script>
+        <script type="text/html" id="order-num">
+            <!--layui 为表格设置序号-->
+            {{d.LAY_TABLE_INDEX+1}}
+        </script>
+        <script src="../../src/js/project/atlasList.js" type="text/javascript" charset="utf-8"></script>
+
+    </body>
+
+</html>

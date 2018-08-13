@@ -1,0 +1,103 @@
+@charset "UTF-8";
+/*存放网站颜色的scss文件*/
+body {
+  background-color: #edf2f3; }
+
+.main-body {
+  background-color: #edf2f3;
+  display: flex;
+  position: absolute;
+  top: 50px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px; }
+  .main-body .body-left {
+    flex: 3;
+    background-color: #fff;
+    padding: 10px 15px;
+    overflow-x: auto; }
+  .main-body .body-right {
+    flex: 1;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column; }
+    .main-body .body-right > div {
+      background-color: #fff; }
+    .main-body .body-right .right-up {
+      flex: 1; }
+      .main-body .body-right .right-up > div {
+        width: 90%;
+        margin: 10px auto; }
+    .main-body .body-right .right-down {
+      margin-top: 10px;
+      flex: 1; }
+    .main-body .body-right .right-item {
+      margin-top: 10px; }
+      .main-body .body-right .right-item .item-title span {
+        margin-left: 10px;
+        color: #4680fe;
+        padding-left: 8px;
+        border-left: 2px solid #4680fe; }
+
+.top-bar .location-bar .font-7 {
+  width: 125px; }
+
+.right-item {
+  width: 90%;
+  margin: 10px auto; }
+  .right-item .item-title {
+    border-bottom: 1px solid #e3e3e3;
+    padding: 3px 0; }
+    .right-item .item-title span {
+      color: #4680fe;
+      padding-left: 8px;
+      border-left: 2px solid #4680fe; }
+  .right-item .item-body {
+    margin: 10px 0px;
+    background-color: #e3effa; }
+  .right-item .font-con {
+    height: 5rem;
+    text-align: center;
+    line-height: 5rem; }
+    .right-item .font-con p {
+      color: #4680fe;
+      font-weight: bold; }
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px 8px;
+  justify-content: space-between; }
+  .flex-wrap .span-item {
+    flex-basis: auto;
+    /* flex: 1; */
+    display: inline-block;
+    text-align: center;
+    width: 5rem;
+    padding: 5px 0px;
+    margin: 5px 5px;
+    background-color: #f5f9fd;
+    cursor: pointer; }
+  .flex-wrap span.chose {
+    background-color: #fff;
+    color: #333; }
+
+.radio-item {
+  display: inline-block;
+  margin: 0px 10px; }
+
+div.bgcolor-white {
+  background-color: #fff !important; }
+
+.loca-cart {
+  display: inline-block;
+  vertical-align: middle;
+  border: 6px solid transparent;
+  width: 0;
+  height: 0;
+  border-left: 6px solid #4680fe; }
+
+.search-input {
+  width: 73%; }
+
+/*# sourceMappingURL=mangerDataSet.css.map */

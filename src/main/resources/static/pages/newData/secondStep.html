@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建数据集</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="../../src/css/common/style.css" />
+    <link rel="stylesheet" href="../../src/css/newData/firstStep.css">
+</head>
+<body>
+<div class="main-body">
+    <div class="main-step">
+        <ul class="step-head">
+            <li class="first-step-s"></li>
+            <li class="second-step-s"></li>
+            <li class="third-step"></li>
+        </ul>
+        <div class="step-content-out">
+            <div class="step-content">
+                <div class="step-content-title">>><span>选择数据源</span></div>
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-item-my">
+                        <label class="layui-form-label">数据源</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="source" value="本地文件" title="本地文件" checked>
+                            <input type="radio" name="source" value="数据库" title="数据库">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="btn-out">
+            <button class="layui-btn layui-btn-lg layui-btn-my" id="next">下一步</button>
+        </div>
+    </div>
+</div>
+<script src="../../assets/jquery/jquery-2.1.1.js"></script>
+<script src="../../assets/layui/layui.all.js"></script>
+<script src="../../dist/public.js"></script>
+<script src="../../dist/secondStep.js"></script>
+</body>
+</html>
