@@ -1,8 +1,14 @@
 package zhitu.sq.dataset.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DataSet{
+public class DataSet implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 唯一ID，必须以`DATASET_毫秒时间戳`为格式
@@ -48,6 +54,27 @@ public class DataSet{
      * 关系数据库描述信息ID，外键：引用zt_sys_dataset_rdb.id，对于文件类型（local_file），该字段为null
      */
     private String rdbId;
+    
+	public DataSet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public DataSet(String id, Date createTime, String name, String description, String typeId, String userId,
+			String projectId, String dataTable, String rdbId) {
+		super();
+		this.id = id;
+		this.createTime = createTime;
+		this.name = name;
+		this.description = description;
+		this.typeId = typeId;
+		this.userId = userId;
+		this.projectId = projectId;
+		this.dataTable = dataTable;
+		this.rdbId = rdbId;
+	}
+
+
 
 	public String getId() {
 		return id;

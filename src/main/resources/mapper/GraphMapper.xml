@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="zhitu.sq.dataset.mapper.GraphMapper">
+	<resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.Graph">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+
+	<select id="queryAllGraph" parameterType="java.util.Map" resultType="zhitu.sq.dataset.model.Graph">
+		SELECT *
+		FROM zt_sys_graph
+		WHERE 1=1
+		<if test = " name != null and name != ''">
+			AND name LIKE '%${name}%'
+		</if>
+	</select>
+	
+	<insert id="insertGraph" parameterType="java.util.Map">
+		INSERT INTO zt_sys_graph
+		VALUES(#{id},NOW(),#{name},#{description})
+	</insert>
+	
+	<!-- 修改圖譜 -->
+	<update id="editGraph" parameterType="zhitu.sq.dataset.model.Graph">
+		UPDATE zt_sys_graph
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			id = #{id,jdbcType=VARCHAR}
+		</set>
+		WHERE id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 删除圖譜 -->
+	<update id="deleteGraph" parameterType="java.lang.String">
+		DELETE FROM zt_sys_graph
+		WHERE id IN ( ${ids} )
+	</update>
+	
+	
+</mapper>

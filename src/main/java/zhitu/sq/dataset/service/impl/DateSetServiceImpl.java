@@ -1,5 +1,6 @@
 package zhitu.sq.dataset.service.impl;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -74,7 +75,7 @@ public class DateSetServiceImpl implements DataSetService{
 		return new PageInfo<>(list);
 	}
 
-	public int saveLocalDataSet(String userId, String name, String describe, String projectId,
+	public String saveLocalDataSet(String userId, String name, String describe, String projectId,
 			MultipartFile file, HttpServletRequest request) throws Exception {
 		String dataSetId = "DATASET_" + System.currentTimeMillis();
 		
@@ -89,7 +90,7 @@ public class DateSetServiceImpl implements DataSetService{
 		String fileName = file.getOriginalFilename();
 		f.setFileName(fileName);
 		//调用中科院的接口获取 文件摘要内容一般取前5000字
-		String su = fileName.substring(fileName.lastIndexOf("."));
+//		String su = fileName.substring(fileName.lastIndexOf("."));
 		String fileAbstract = TikaUtils.parseFile(file);
 		f.setFileAbstract(fileAbstract);
 		// 文件上传到ftp
@@ -106,27 +107,29 @@ public class DateSetServiceImpl implements DataSetService{
 //		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
 		
 		//文件上传本地
-		String path = FileUpload.upload(request);
-		if(null == path){
-			return 0;
-		}
-		f.setFtpurl(path);
-		f.setDatasetId(dataSetId);
+		List<String> paths = FileUpload.upload(request);
 		
 		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
-		DataSet dataSet = new DataSet();
-		dataSet.setId(dataSetId);
-		dataSet.setCreateTime(new Date());
-		dataSet.setName(name);
-		dataSet.setUserId(userId);
-		dataSet.setProjectId(projectId);
-		dataSet.setTypeId("ftp_file");
-		dataSet.setDescription(describe);
+		DataSet dataSet = new DataSet(dataSetId, new Date(), name, describe, "ftp_file", userId, projectId, null, null);
 //		dataSet.setDataTable("zt_data_" + dataSetId);
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
-		int j = dataSetMapper.insertFtpFile(f);
-		return i>0&&j>0?1:0;
+		f.setDatasetId(dataSetId);
+		if(i>0){
+			for (int j = 0; j < paths.size(); j++) {
+				String[] p = paths.get(j).split(File.separator);
+				if(p.length>2){
+					f.setFtpurl(paths.get(j));
+					int k = dataSetMapper.insertFtpFile(f);
+					if(k>0){
+						paths.remove(j);
+						j--;
+					}
+				}
+			}
+		}
+		
+		return String.join(",", paths);
 	}
 
 	@Override
