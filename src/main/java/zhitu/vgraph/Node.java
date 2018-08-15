@@ -1,15 +1,20 @@
 package zhitu.vgraph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public abstract class Node {
+public class Node {
+	
+
 	
 	//UUID for Node
 	public String id;
 	public String text;
+	public String type;
 	
 	public Node parent;
 	public ArrayList<Node> children = new ArrayList<>();
@@ -24,14 +29,19 @@ public abstract class Node {
 	}
 
 	
-	public Node(String text) {
+	public Node(String text, String type) {
 		this.id = generateId();
 		this.text = text;
+		this.type = type;
+		Graphs.idNodeMap.put(id, this);
 	}
 	
 	
-	public Node(Node parent, String text) {
-		this(text);
+	
+	
+	
+	public Node(Node parent, String text, String type) {
+		this(text, type);
 		this.setParent(parent);
 	}
 
@@ -45,7 +55,7 @@ public abstract class Node {
 		return menu;
 	}
 	
-	public abstract String getType();
+//	public abstract String getType();
 	
 	public void traverse(NodeVisitor visitor){
 		visitor.visit(this);
@@ -93,12 +103,33 @@ public abstract class Node {
 		JsonObject jo = new JsonObject();
 		jo.addProperty("id", id);
 		jo.addProperty("text", text);
+		jo.addProperty("type", type);
+		jo.addProperty("msg", new JsonObject().toString());
 		return jo;
 	}
 	
 
 	public NodeInfo toNodeInfo(){
 		return new NodeInfo(this);
+	}
+	
+	
+	public JsonObject convertTreeToJsonObject(){
+		JsonObject jo = new JsonObject();
+		
+		JsonArray nodesJa = new JsonArray();
+		JsonArray edgesJa = new JsonArray();
+		
+		jo.add("nodes", nodesJa);
+		jo.add("edges", edgesJa);
+		
+		for(Node node: getNodesOfTree()){
+			NodeInfo nodeInfo = node.toNodeInfo();
+			nodesJa.add(nodeInfo.nodeJo);
+			edgesJa.addAll(nodeInfo.edgesJa);
+		}
+		
+		return jo;
 	}
 	
 }

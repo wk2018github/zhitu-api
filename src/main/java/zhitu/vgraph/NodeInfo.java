@@ -1,7 +1,12 @@
 package zhitu.vgraph;
 
+import java.util.List;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import io.swagger.util.Json;
+import net.sf.ehcache.statistics.sampled.SampledCacheStatistics;
 
 public class NodeInfo {
 	
@@ -30,6 +35,12 @@ public class NodeInfo {
 		return sb.toString();
 	}
 	
+//	public static JsonObject convertListToJsonObject(List<Node> nodeList){
+//		List<NodeInfoList>
+//		
+//	}
+	
+
 	
 	
 

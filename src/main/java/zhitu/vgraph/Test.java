@@ -1,37 +1,62 @@
 package zhitu.vgraph;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-import org.apache.tomcat.jni.Proc;
+import com.google.gson.JsonArray;
+
 
 public class Test {
+	
 
 
 	public static void main(String[] args){
-		ProcessNode node0 = new ProcessNode("科处室指标");
-		ProcessNode node1 = new ProcessNode(node0, "单位指标");
-		ProcessNode node2 = new ProcessNode(node1, "用款计划");
+
+		Node node1 = new Node("科处室指标", NodeTypes.PROCESS);
+		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
+		Node node3 = new Node(node2, "用款计划", NodeTypes.PROCESS);
+		Node node4 = new Node(node3, "用款计划", NodeTypes.PROCESS);
 		
-//		node0.traverse(new NodeVisitor() {
-//			@Override
-//			public void visit(Node node) {
-//				
-//			}
+		String id = node1.id;
+		
+		Node root = Graphs.findNodeById(id);
+		System.out.println(node1.convertTreeToJsonObject());
+		
+		
+//		System.out.println(node1.convertTreeToJsonObject());
+		
+//		JsonArray 
+		
+		
+//		List<Node> result = node1.getNodesOfTree().stream().map(node->{
+//			Node newNode = new Node(node.text+"--hehe", node.type);
+//			return newNode;
+//		}).collect(Collectors.toList());
+		
+//		ArrayList<Integer> list = new ArrayList<>();
+//		list.add(0);
+//		list.add(1);
+//		list.add(2);
+//		
+//		
+//		List<String> newList = list.parallelStream().map(value->{
+//			return value + " this is a string";
+//		}).collect(Collectors.toList());
+//		
+//		System.out.println(list);
+//		System.out.println(newList);
+		
+		
+//		.stream().forEach(node->{
+//			System.out.println(node.toNodeInfo());
 //		});
 		
-		System.out.println(node0.getNodesOfTree());
 		
-
-//		Node[] nodes = {
-//				node0, node1, node2
-//		};
-//
-//		for(Node node: nodes){
+//		ArrayList<Node> nodes = node1.getNodesOfTree();
+//		for(Node node:nodes){
 //			System.out.println(node.toNodeInfo());
 //		}
-		
-		
-		
-		
 	}
 }

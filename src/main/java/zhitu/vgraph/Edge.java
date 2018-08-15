@@ -4,21 +4,28 @@ import com.google.gson.JsonObject;
 
 public class Edge {
 	
-	Node from;
-	Node to;
+	Node source;
+	Node target;
 	
+	String label;
 	
-	
-	public Edge(Node from, Node to) {
+	public Edge(Node source, Node target) {
 		super();
-		this.from = from;
-		this.to = to;
+		this.source = source;
+		this.target = target;
+	}
+	
+	public Edge(Node source, Node target, String label) {
+		super();
+		this.source = source;
+		this.target = target;
+		this.label = label;
 	}
 
 	public JsonObject toJsonObject(){
 		JsonObject jo = new JsonObject();
-		jo.addProperty("from", from.id);
-		jo.addProperty("to", to.id);
+		jo.addProperty("source", source.id);
+		jo.addProperty("target", target.id);	
 		return jo;
 	}
 	
@@ -28,7 +35,13 @@ public class Edge {
 		return toJsonObject().toString();
 	}
 	
+	public String getLabel() {
+		return label;
+	}
 	
+	public void setLabel(String label) {
+		this.label = label;
+	}
 	
 
 }
