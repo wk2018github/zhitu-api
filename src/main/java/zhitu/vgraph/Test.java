@@ -12,6 +12,13 @@ public class Test {
 		ProcessNode node1 = new ProcessNode(node0, "单位指标");
 		ProcessNode node2 = new ProcessNode(node1, "用款计划");
 		
+//		node0.traverse(new NodeVisitor() {
+//			@Override
+//			public void visit(Node node) {
+//				
+//			}
+//		});
+		
 		System.out.println(node0.getNodesOfTree());
 		
 
