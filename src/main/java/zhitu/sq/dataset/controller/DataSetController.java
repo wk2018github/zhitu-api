@@ -153,11 +153,12 @@ public class DataSetController extends BaseController{
 ////        		return error("请重新登录!");
 //				user.setId("USER_1353923423");
 //        	}
-			int i = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file, request);
-			if (i > 0) {
+			String fileName = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file, request);
+			if (null == fileName) {
 				return success();
+			} else {
+				return error(fileName+"上传失败");
 			}
-			return error("上传失败");
 		} catch (Exception e) {
 			LOG.error("handleFileUpload", e);
 			return error("上传失败");

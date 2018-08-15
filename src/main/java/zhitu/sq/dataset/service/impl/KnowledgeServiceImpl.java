@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhuanzhi.structuring.App;
-import com.zhuanzhi.structuring.model.Underlying;
 
 import zhitu.sq.dataset.controller.vo.ActivityVo;
 import zhitu.sq.dataset.controller.vo.AdviceVo;
@@ -31,6 +30,7 @@ import zhitu.sq.dataset.controller.vo.UnderlyingVo;
 import zhitu.sq.dataset.mapper.DataSetMapper;
 import zhitu.sq.dataset.mapper.DataTableMapper;
 import zhitu.sq.dataset.mapper.FtpFileMapper;
+import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.mapper.KnowledgeMapper;
 import zhitu.sq.dataset.mapper.RdbMapper;
 import zhitu.sq.dataset.mapper.TaskInfoMapper;
@@ -38,7 +38,6 @@ import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.model.FtpFile;
 import zhitu.sq.dataset.model.Knowledge;
 import zhitu.sq.dataset.model.Rdb;
-import zhitu.sq.dataset.model.TaskInfo;
 import zhitu.sq.dataset.service.KnowledgeService;
 import zhitu.util.DataSourceUtil;
 import zhitu.util.JdbcDbUtils;
@@ -57,6 +56,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 	private DataSetMapper dataSetMapper;
 	@Autowired
 	private RdbMapper rdbMapper;
+	@Autowired
+	private GraphMapper graphMapper;
 	@Autowired
 	private DataTableMapper dataTableMapper;
 	@Autowired
@@ -337,9 +338,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 	}
 
 	@Override
-	public Map<String, Object> addToMap(Map<String, Object> map) throws Exception {
-		Map<String, Object> result = new HashMap<String, Object>();
-		
+	public boolean addToMap(Map<String, Object> map) throws Exception {
+		Configuration config = new PropertiesConfiguration("application.properties");
 		map.put("knowledgeId", map.get("sourceId"));
 		DataSet source = knowledgeMapper.queryDataSetByKnId(map);
 		map.put("knowledgeId", map.get("targetId"));
@@ -347,20 +347,20 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		String sourceDataSetType = source.getTypeId();// 源数据集的类型
 		String targetDataSetType = target.getTypeId();// 目标数据集的类型
-		String sourceTable = "";
-		String targetTable = "";
-		// 文件上传
-		// if("local_file".equals(sourceDataSetType)){
-		//
-		// }
+		String sourceTable = ""; //源表名称   数据集的表
+		String targetTable = ""; //目标表 名称      关联的数据集的表
+		String url = config.getString("spring.datasource.url");
+		String userName = config.getString("spring.datasource.username");
+		String password = config.getString("spring.datasource.password");
+		//	源数据集 是 文件上传
+		if("local_file".equals(sourceDataSetType)){
+			
+			
+		}
 		// 源数据集本地数据库导入
 		if ("local_rdb".equals(sourceDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
-			Configuration config = new PropertiesConfiguration("application.properties");
-			String url = config.getString("spring.datasource.url");
-			String userName = config.getString("spring.datasource.username");
-			String password = config.getString("spring.datasource.password");
-			sourceTable = source.getDataTable();
+			sourceTable = source.getDataTable(); //获取 关系配置 页面源数据集中数据 插入neo4j
 			String columnNames = knowledgeMapper.queryColumnByRdbId(source.getRdbId());
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(url, userName, password, sourceTable,
 					columnNames);
@@ -371,12 +371,12 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		if ("remote_rdb".equals(sourceDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
 			Rdb rdb = knowledgeMapper.queryRdbById(source.getRdbId());
-			String url = rdb.getHost();
+			url = rdb.getHost();
 			Integer port = rdb.getPort();
-			String userName = rdb.getUser();
-			String password = rdb.getPassword();
+			userName = rdb.getUser();
+			password = rdb.getPassword();
 			String databaseName = rdb.getDbName();
-			sourceTable = rdb.getTableName();
+			sourceTable = rdb.getTableName(); //获取 关系配置 页面源数据集中数据 插入neo4j
 			String columnNames = rdb.getColumnNames();
 			List<String> list = dataSourceUtil.queryTableColumnDataNoLimit(url, port, userName, password, databaseName,
 					sourceTable, columnNames);
@@ -384,18 +384,17 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			Neo4jTest.addToNeo4j(sourceTable, columnNames, list);
 		}
 
-		// 文件上传
-		// if("local_file".equals(sourceDataSetType)){
-		//
-		// }
+		// 目标数据集类型 是  文件上传
+		if("local_file".equals(targetDataSetType)){
+			
+		}
 		// 目标数据集本地数据库导入
 		if ("local_rdb".equals(targetDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
-			Configuration config = new PropertiesConfiguration("application.properties");
-			String url = config.getString("spring.datasource.url");
-			String userName = config.getString("spring.datasource.username");
-			String password = config.getString("spring.datasource.password");
-			targetTable = target.getDataTable();
+			url = config.getString("spring.datasource.url");
+			userName = config.getString("spring.datasource.username");
+			password = config.getString("spring.datasource.password");
+			targetTable = target.getDataTable(); //获取 关系配置 页面   目标数据集中数据 插入neo4j
 			String columnNames = knowledgeMapper.queryColumnByRdbId(target.getRdbId());
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(url, userName, password, targetTable,
 					columnNames);
@@ -406,12 +405,12 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		if ("remote_rdb".equals(targetDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
 			Rdb rdb = knowledgeMapper.queryRdbById(target.getRdbId());
-			String url = rdb.getHost();
+			url = rdb.getHost();
 			Integer port = rdb.getPort();
-			String userName = rdb.getUser();
-			String password = rdb.getPassword();
+			userName = rdb.getUser();
+			password = rdb.getPassword();
 			String databaseName = rdb.getDbName();
-			targetTable = rdb.getTableName();
+			targetTable = rdb.getTableName();  //获取 关系配置 页面   目标数据集中数据 插入neo4j
 			String columnNames = rdb.getColumnNames();
 			List<String> list = dataSourceUtil.queryTableColumnDataNoLimit(url, port, userName, password, databaseName,
 					targetTable, columnNames);
@@ -424,8 +423,12 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		String targetKey = String.valueOf(map.get("targetKey"));
 		String relationship = String.valueOf(map.get("relationship"));
 		Neo4jTest.createRelationship(sourceTable, targetTable, sourceKey, targetKey, relationship);
+		
+		String id = "GRAPH_"+System.currentTimeMillis();//graph  id
+		map.put("id",id);
+		int i = graphMapper.insertGraph(map); //插入graph
 
-		return result;
+		return i > 0;
 	}
 
 	@Override

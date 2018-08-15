@@ -235,9 +235,9 @@ public class KnowledgeController extends BaseController {
 		}
 	}
 	
-	private static final String toMap = "{\"sourceId\":\"KN_1483797784\",\"targetId\":\"KN_1483797784\","
-			+ "\"relationship\":\"工作\","
-			+ "\"sourceKey\":\"KN_1483797784\",\"targetKey\":\"KN_1483797784\"}";
+	private static final String toMap = "{\"name\":\"图谱名称\",\"description\":\"图谱描述\","
+			+ "\"sourceId\":\"KN_1483797784\",\"targetId\":\"KN_1483797784\","
+			+ "\"relationship\":\"工作\",\"sourceKey\":\"KN_1483797784\",\"targetKey\":\"KN_1483797784\"}";
 	//\"sourceTable\":\"KN_1483797784\",\"targetTable\":\"KN_1483797784\",
 	/**
 	 * 
@@ -252,14 +252,17 @@ public class KnowledgeController extends BaseController {
 	public SQApiResponse<Map<String, Object>> addToMap(HttpServletRequest request,
 			@ApiParam(value = toMap) @RequestBody Map<String, Object> map) {
 		try {
-			Map<String, Object> result = new HashMap<String,Object>();
+			boolean flag = false;
 			
-			result = knowledgeService.addToMap(map);
-			
-			return success(result);
+			flag = knowledgeService.addToMap(map);
+			if(flag){
+				return success("添加成功",null);
+			} else {
+				return success("操作成功,但是数据没变",null);
+			}
 		} catch (Exception e) {
 			logger.error("knowledge/addToMap", e);
-			return error("查询异常");
+			return error("添加异常");
 		}
 	}
 	/**
