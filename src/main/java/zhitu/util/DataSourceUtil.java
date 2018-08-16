@@ -692,7 +692,12 @@ public class DataSourceUtil {
 		List<String> list = null;
 		Connection conn = null;
 		Statement stmt = null;
-		String sql = "select " + columnNames + " from " + tableName;
+		String sql = "";
+		if(null == columnNames){
+			sql = "select * from " + tableName;
+		} else {
+			sql = "select " + columnNames + " from " + tableName;
+		}
 
 		ResultSet res = null;
 		JSONArray array = null;
@@ -815,7 +820,7 @@ public class DataSourceUtil {
 	}
 
 	public void main(String[] args) {
-		FTPClient ftpClient = getFTPClient();
+//		FTPClient ftpClient = getFTPClient();
 		// ftpClient.r
 	}
 }

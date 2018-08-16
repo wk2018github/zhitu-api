@@ -20,7 +20,7 @@ public class TikaUtils {
      * @param file aaaa
      * @return dfwdf
      */
-    public static String parseFile(MultipartFile file){
+    public static String parseFile(File file){
         String content = "";
         Parser parser = new AutoDetectParser();
         InputStream input = null;
@@ -28,7 +28,7 @@ public class TikaUtils {
             Metadata metadata = new Metadata();
             metadata.set(Metadata.CONTENT_ENCODING, "utf-8");
             metadata.set(Metadata.RESOURCE_NAME_KEY, file.getName());
-            input = file.getInputStream();
+            input = new FileInputStream(file);
             ContentHandler handler = new BodyContentHandler();//当文件大于100000时，new BodyContentHandler(1024*1024*10);
             ParseContext context = new ParseContext();
             context.set(Parser.class,parser);
