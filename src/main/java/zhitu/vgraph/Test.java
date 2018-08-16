@@ -2,17 +2,20 @@ package zhitu.vgraph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonArray;
+
+import zhitu.util.JacksonUtil;
 
 
 public class Test {
 	
 
 
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 
 		Node node1 = new Node("科处室指标", NodeTypes.PROCESS);
 		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
@@ -22,7 +25,19 @@ public class Test {
 		String id = node1.id;
 		
 		Node root = Graphs.findNodeById(id);
-		System.out.println(node1.convertTreeToJsonObject());
+		
+		
+		String json = root.convertTreeToJsonObject().toString();
+		
+		Map<String,Object> map = JacksonUtil.Builder().json2Map(json);
+		
+		json = map.get("links").toString();
+		
+		
+		
+		List<Edge> edges = JacksonUtil.Builder().json2List(json, Edge.class);
+	
+		System.out.println(edges.size());
 		
 //		ArrayList<Integer> a = new ArrayList<>();
 //		a.add(0);

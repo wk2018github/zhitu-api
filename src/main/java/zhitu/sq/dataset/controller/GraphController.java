@@ -168,6 +168,24 @@ public class GraphController extends BaseController {
 		}
 	}
 	
+	private static final String addNode = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\"}";
+	@ApiOperation(value = "图谱分析-流程分析-查询过滤器中的具体的值", notes = "图谱分析-流程分析-查询过滤器中的具体的值")
+	@ResponseBody
+	@RequestMapping(value = "/addNode", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> addNode(HttpServletRequest request,
+			@ApiParam(value = idAndTable) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			List<Select> list = graphService.queryTableFilter(map);
+			
+			return success("查询成功",list);
+			
+		} catch (Exception e) {
+			logger.error("graph/queryTableFilter",e);
+			return error("查询异常");
+		}
+	}
+	
 	
 
 }
