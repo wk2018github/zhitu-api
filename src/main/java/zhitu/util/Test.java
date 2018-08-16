@@ -2,34 +2,30 @@ package zhitu.util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 public class Test {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ConfigurationException {
 		
-		List<String> list = new ArrayList<>();
+		Configuration con = new PropertiesConfiguration("file.properties");
+		String config = con.getString("GRAPH_FILTER");
+		String[] strs = config.split("，");
+		System.out.println(config);
 		
-		list.add("abc/新文件.txt");
-		list.add("cd/aa/new.txt");
-		list.add("bcd/word.docx");
-		list.add("aasd/asd/asdd.xlsx");
-		for (int j = 0; j < list.size(); j++) {
-			String[] p = list.get(j).split("/");
-			if(p.length>1){
-				
-				int k = 1;
-				System.out.println("上传成功一个文件");
-				if(k>0){
-					list.remove(j);
-					j--;
-				}
-			}
+		List<String> ls = Arrays.asList(strs);
+		
+		for (String s : ls) {
+			System.out.println(s+"\t");
 		}
-		
-		String aa = String.join(",",list);
-		System.out.println(aa);
 		
 	}
 

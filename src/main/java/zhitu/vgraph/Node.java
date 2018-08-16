@@ -1,8 +1,13 @@
 package zhitu.vgraph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -47,12 +52,10 @@ public class Node {
 
 
 	//	public abstract String getTitle();
-	public ArrayList<String> getMenu(){
-		ArrayList<String> menu = new ArrayList<>();
-		menu.add("功能科目");
-		menu.add("预算项目");
-		menu.add("支付方式");
-		return menu;
+	public List<String> getMenu() throws ConfigurationException{
+		Configuration con = new PropertiesConfiguration("file.properties");
+		String config = con.getString("GRAPH_FILTER");
+		return Arrays.asList(config.split("，"));
 	}
 	
 //	public abstract String getType();
@@ -121,7 +124,7 @@ public class Node {
 		JsonArray edgesJa = new JsonArray();
 		
 		jo.add("nodes", nodesJa);
-		jo.add("edges", edgesJa);
+		jo.add("links", edgesJa);
 		
 		for(Node node: getNodesOfTree()){
 			NodeInfo nodeInfo = node.toNodeInfo();
