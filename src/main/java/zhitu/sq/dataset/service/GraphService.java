@@ -1,10 +1,12 @@
 package zhitu.sq.dataset.service;
 
 
+import java.util.List;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 
 public interface GraphService {
@@ -25,7 +27,11 @@ public interface GraphService {
 	 */
 	boolean deleteGraph(Map<String,Object> map) throws Exception;
 	
-	
+	/**
+	 * @Author: qwm
+	 * @Description: 查询过滤器下面具体的值
+	 */
+	List<Select> queryTableFilter(Map<String,Object> map) throws Exception;
 	
 	/**
 	 * @author qwm

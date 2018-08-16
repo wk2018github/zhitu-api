@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 
 
@@ -40,6 +41,12 @@ public interface GraphMapper {
 	 * @Description:删除graph
 	 */
 	int deleteGraph(@Param("ids") String ids);
+	
+	/**
+	 * @Author: qwm
+	 * @Description: 查询过滤器下面具体的值
+	 */
+	List<Select> queryTableFilter(@Param("table") String table, @Param("code") String code, @Param("name") String name);
     
 	
 	

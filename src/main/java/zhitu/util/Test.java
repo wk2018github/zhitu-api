@@ -17,15 +17,15 @@ public class Test {
 	public static void main(String[] args) throws ConfigurationException {
 		
 		Configuration con = new PropertiesConfiguration("file.properties");
-		String config = con.getString("GRAPH_FILTER");
-		String[] strs = config.split("，");
+		String config = con.getString("CODE_TABLE_PAY");
+//		String[] strs = config.split("，");
 		System.out.println(config);
 		
-		List<String> ls = Arrays.asList(strs);
-		
-		for (String s : ls) {
-			System.out.println(s+"\t");
-		}
+//		List<String> ls = Arrays.asList(strs);
+//		
+//		for (String s : ls) {
+//			System.out.println(s+"\t");
+//		}
 		
 	}
 

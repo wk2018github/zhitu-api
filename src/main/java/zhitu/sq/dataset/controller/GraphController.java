@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.graph.tree.NodeTest;
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
 import zhitu.vgraph.Node;
@@ -130,7 +131,7 @@ public class GraphController extends BaseController {
 	}
 	
 
-	@ApiOperation(value = "图谱分析-流程分析-环形菜单", notes = "图谱分析-流程分析-环形菜单")
+	@ApiOperation(value = "图谱分析-流程分析-初始4个节点环形菜单", notes = "图谱分析-流程分析-初始4个节点环形菜单")
 	@ResponseBody
 	@RequestMapping(value = "/initAnnularData", method = RequestMethod.POST)
 	public SQApiResponse<List<String>> initAnnularData(HttpServletRequest request) {
@@ -149,7 +150,23 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	
+	private static final String idAndTable = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\"}";
+	@ApiOperation(value = "图谱分析-流程分析-查询过滤器中的具体的值", notes = "图谱分析-流程分析-查询过滤器中的具体的值")
+	@ResponseBody
+	@RequestMapping(value = "/queryTableFilter", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> queryTableFilter(HttpServletRequest request,
+			@ApiParam(value = idAndTable) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			List<Select> list = graphService.queryTableFilter(map);
+			
+			return success("查询成功",list);
+			
+		} catch (Exception e) {
+			logger.error("graph/queryTableFilter",e);
+			return error("查询异常");
+		}
+	}
 	
 	
 
