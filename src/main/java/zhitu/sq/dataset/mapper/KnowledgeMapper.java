@@ -53,4 +53,10 @@ public interface KnowledgeMapper {
 	 */
 	Rdb queryRdbById(String rdbId);
 
+	/**
+	 * 
+	 * @Author: qwm @Description:查询 文件上传生成表名称 根据知识表id @return: List<Select> @throws
+	 */
+	String queryLocalFileTalbe(String knowledgeId);
+
 }

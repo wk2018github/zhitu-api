@@ -10,20 +10,21 @@
 
 
 
-	<select id="queryAllGraph" parameterType="java.util.Map" resultType="zhitu.sq.dataset.model.Graph">
+	<select id="queryAllGraph" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.model.Graph">
 		SELECT *
 		FROM zt_sys_graph
 		WHERE 1=1
-		<if test = " name != null and name != ''">
+		<if test=" name != null and name != ''">
 			AND name LIKE '%${name}%'
 		</if>
 	</select>
-	
+
 	<insert id="insertGraph" parameterType="java.util.Map">
 		INSERT INTO zt_sys_graph
 		VALUES(#{id},NOW(),#{name},#{description})
 	</insert>
-	
+
 	<!-- 修改圖譜 -->
 	<update id="editGraph" parameterType="zhitu.sq.dataset.model.Graph">
 		UPDATE zt_sys_graph
@@ -38,12 +39,18 @@
 		</set>
 		WHERE id = #{id,jdbcType=VARCHAR}
 	</update>
-	
+
 	<!-- 删除圖譜 -->
 	<update id="deleteGraph" parameterType="java.lang.String">
 		DELETE FROM zt_sys_graph
 		WHERE id IN ( ${ids} )
 	</update>
-	
-	
+
+	<select id="queryTableFilter" parameterType="java.lang.String"
+		resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT ${code} AS `code`, ${name} AS `name` 
+		FROM ${table}
+		WHERE 代码级次 = 1
+	</select>
+
 </mapper>

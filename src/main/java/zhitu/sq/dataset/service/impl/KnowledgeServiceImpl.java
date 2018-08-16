@@ -33,7 +33,6 @@ import zhitu.sq.dataset.mapper.FtpFileMapper;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.mapper.KnowledgeMapper;
 import zhitu.sq.dataset.mapper.RdbMapper;
-import zhitu.sq.dataset.mapper.TaskInfoMapper;
 import zhitu.sq.dataset.model.DataSet;
 import zhitu.sq.dataset.model.FtpFile;
 import zhitu.sq.dataset.model.Knowledge;
@@ -62,8 +61,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 	private DataTableMapper dataTableMapper;
 	@Autowired
 	private FtpFileMapper ftpFileMapper;
-	@Autowired
-	private TaskInfoMapper taskInfoMapper;
+//	@Autowired
+//	private TaskInfoMapper taskInfoMapper;
 	@Autowired
 	private DataSourceUtil dataSourceUtil;
 
@@ -135,6 +134,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		List<FtpFile> fList = ftpFileMapper.selectByDataSetId(datasetId);
 		String key = StringHandler.objectToString(map.get("key"));
+		@SuppressWarnings("unchecked")
 		List<String> adudits = (List<String>) map.get("audit");
 		Map<String, Object> tMap = new HashMap<>();
 		if (key.equals("01")) {
@@ -251,7 +251,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			throw new Exception("获取FTP失败");
 		}
 		// 获取ftp 文件
-		for (FtpFile file : fList) {
+		for (@SuppressWarnings("unused") FtpFile file : fList) {
 			App.processFile("G:\\项目\\海南\\文档\\文档提取整理\\工伤生育市本级审计报告 -未标注.doc", list);
 		}
 		ftp.disconnect();
@@ -349,20 +349,24 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		String targetDataSetType = target.getTypeId();// 目标数据集的类型
 		String sourceTable = ""; //源表名称   数据集的表
 		String targetTable = ""; //目标表 名称      关联的数据集的表
-		String url = config.getString("spring.datasource.url");
-		String userName = config.getString("spring.datasource.username");
-		String password = config.getString("spring.datasource.password");
+		String localUrl = config.getString("spring.datasource.url");
+		String localUserName = config.getString("spring.datasource.username");
+		String localPassword = config.getString("spring.datasource.password");
 		//	源数据集 是 文件上传
 		if("local_file".equals(sourceDataSetType)){
-			
-			
+			//获取知识表 中的 表名
+			sourceTable = knowledgeMapper.queryLocalFileTalbe(map.get("sourceId").toString());
+			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
+					null);
+			// 连接neo4j,数据插入至图数据库
+			Neo4jTest.addToNeo4j(sourceTable, null, list);
 		}
 		// 源数据集本地数据库导入
 		if ("local_rdb".equals(sourceDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
 			sourceTable = source.getDataTable(); //获取 关系配置 页面源数据集中数据 插入neo4j
 			String columnNames = knowledgeMapper.queryColumnByRdbId(source.getRdbId());
-			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(url, userName, password, sourceTable,
+			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
 					columnNames);
 			// 连接neo4j,数据插入至图数据库
 			Neo4jTest.addToNeo4j(sourceTable, columnNames, list);
@@ -371,10 +375,10 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		if ("remote_rdb".equals(sourceDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
 			Rdb rdb = knowledgeMapper.queryRdbById(source.getRdbId());
-			url = rdb.getHost();
+			String url = rdb.getHost();
 			Integer port = rdb.getPort();
-			userName = rdb.getUser();
-			password = rdb.getPassword();
+			String userName = rdb.getUser();
+			String password = rdb.getPassword();
 			String databaseName = rdb.getDbName();
 			sourceTable = rdb.getTableName(); //获取 关系配置 页面源数据集中数据 插入neo4j
 			String columnNames = rdb.getColumnNames();
@@ -386,17 +390,19 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		// 目标数据集类型 是  文件上传
 		if("local_file".equals(targetDataSetType)){
-			
+			//获取知识表 中的 表名
+			sourceTable = knowledgeMapper.queryLocalFileTalbe(map.get("targetId").toString());
+			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
+					null);
+			// 连接neo4j,数据插入至图数据库
+			Neo4jTest.addToNeo4j(sourceTable, null, list);
 		}
 		// 目标数据集本地数据库导入
 		if ("local_rdb".equals(targetDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
-			url = config.getString("spring.datasource.url");
-			userName = config.getString("spring.datasource.username");
-			password = config.getString("spring.datasource.password");
 			targetTable = target.getDataTable(); //获取 关系配置 页面   目标数据集中数据 插入neo4j
 			String columnNames = knowledgeMapper.queryColumnByRdbId(target.getRdbId());
-			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(url, userName, password, targetTable,
+			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, targetTable,
 					columnNames);
 			// 连接neo4j,数据插入至图数据库
 			Neo4jTest.addToNeo4j(targetTable, columnNames, list);
@@ -405,10 +411,10 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		if ("remote_rdb".equals(targetDataSetType)) {
 			// 获取数据库连接 查询数据集中 表 字段 对应的数据
 			Rdb rdb = knowledgeMapper.queryRdbById(target.getRdbId());
-			url = rdb.getHost();
+			String url = rdb.getHost();
 			Integer port = rdb.getPort();
-			userName = rdb.getUser();
-			password = rdb.getPassword();
+			String userName = rdb.getUser();
+			String password = rdb.getPassword();
 			String databaseName = rdb.getDbName();
 			targetTable = rdb.getTableName();  //获取 关系配置 页面   目标数据集中数据 插入neo4j
 			String columnNames = rdb.getColumnNames();

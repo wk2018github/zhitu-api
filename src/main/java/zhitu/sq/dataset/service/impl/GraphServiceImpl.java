@@ -3,6 +3,8 @@ package zhitu.sq.dataset.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
@@ -36,12 +39,12 @@ public class GraphServiceImpl implements GraphService{
 		return new PageInfo<Graph>(list);
 	}
 	
-
 	@Override
 	public boolean editGraph(Graph graph) throws Exception {
 		int i = graphMapper.editGraph(graph);
 		return i > 0;
 	}
+	
 	@Override
 	public boolean deleteGraph(Map<String,Object> map) throws Exception {
 		String ids = splitIds(map.get("ids").toString());
@@ -49,7 +52,17 @@ public class GraphServiceImpl implements GraphService{
 		return i > 0;
 	}
 	
-	
+	@Override
+	public List<Select> queryTableFilter(Map<String,Object> map) throws Exception {
+		
+		String filter = map.get("table").toString();
+		Configuration config = new PropertiesConfiguration("file.properties");
+		String table = config.getString("CODE_TABLE_PAY")+map.get("table").toString();
+		String code = filter + "代码";
+		String name = filter + "名称";
+		
+		return graphMapper.queryTableFilter(table, code, name);
+	}
 
 	@Override
 	public Map<String,Object> orderMap(Map<String,Object> map) throws Exception {

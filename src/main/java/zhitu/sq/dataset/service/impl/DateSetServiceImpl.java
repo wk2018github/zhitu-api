@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,7 +77,7 @@ public class DateSetServiceImpl implements DataSetService{
 	}
 
 	public String saveLocalDataSet(String userId, String name, String describe, String projectId,
-			MultipartFile file, HttpServletRequest request) throws Exception {
+			MultipartFile files, HttpServletRequest request) throws Exception {
 		String dataSetId = "DATASET_" + System.currentTimeMillis();
 		
 //		FTPClient ftp = dataSourceUtil.getFTPClient();
@@ -84,15 +85,6 @@ public class DateSetServiceImpl implements DataSetService{
 //			throw new Exception("获取FTP失败");
 //		}
 		
-		FtpFile f = new FtpFile();
-		f.setId("PDF_"+System.currentTimeMillis());
-		// 文件名称带扩展名
-		String fileName = file.getOriginalFilename();
-		f.setFileName(fileName);
-		//调用中科院的接口获取 文件摘要内容一般取前5000字
-//		String su = fileName.substring(fileName.lastIndexOf("."));
-		String fileAbstract = TikaUtils.parseFile(file);
-		f.setFileAbstract(fileAbstract);
 		// 文件上传到ftp
 //		String directory = "zhituFile"+System.currentTimeMillis();
 //		String ftpName = String.valueOf(System.currentTimeMillis())+su;
@@ -103,30 +95,44 @@ public class DateSetServiceImpl implements DataSetService{
 //		System.out.println("upload success");
 //		ftp.disconnect();
 		
-//		Configuration config = new PropertiesConfiguration("file.properties");
-//		String ftpurl = "ftp://"+config.getString("ftp.ip")+"/"+directory+"/"+ftpName;
-		
 		//文件上传本地
 		List<String> paths = FileUpload.upload(request);
 		
-		// 假设文件上传成功，上传ftp地址为System.getProperty("user.dir")
 		DataSet dataSet = new DataSet(dataSetId, new Date(), name, describe, "ftp_file", userId, projectId, null, null);
-//		dataSet.setDataTable("zt_data_" + dataSetId);
+
 		// 文件上传成功后保存数据集
 		int i = dataSetMapper.insert(dataSet);
-		f.setDatasetId(dataSetId);
-		if(i>0){
-			for (int j = 0; j < paths.size(); j++) {
-				String[] p = paths.get(j).split(File.separator);
-				if(p.length>2){
-					f.setFtpurl(paths.get(j));
-					int k = dataSetMapper.insertFtpFile(f);
-					if(k>0){
-						paths.remove(j);
-						j--;
-					}
+		
+		Properties p = System.getProperties();
+		String sys = p.getProperty("os.name").toLowerCase();
+		String split = "";
+		if (sys.contains("windows")) {
+			split = "\\\\";
+		} else {
+			split = "/";
+		}
+		if(i<1){
+			return null;
+		}
+		for (int j = 0; j < paths.size(); j++) {
+			String[] ps = paths.get(j).split(split);
+			if(ps.length>1){
+				FtpFile f = new FtpFile();
+				f.setId("PDF_"+System.currentTimeMillis()); //ftp id
+				String fileName = ps[ps.length-1]; //ftpFile name
+				f.setFileName(fileName);
+				File file = new File(paths.get(j));
+				String fileAbstract = TikaUtils.parseFile(file);
+				f.setFileAbstract(fileAbstract);
+				f.setFtpurl(paths.get(j)); //ftpFile url
+				f.setDatasetId(dataSetId);
+				int k = dataSetMapper.insertFtpFile(f);
+				if(k>0){
+					paths.remove(j);
+					j--;
 				}
 			}
+			Thread.sleep(1);
 		}
 		
 		return String.join(",", paths);

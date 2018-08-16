@@ -64,7 +64,7 @@ public class FileUpload {
 				// 一次遍历所有文件
 				MultipartFile file = multiRequest.getFile(iter.next());
 				if (file != null) {
-					String path = direPath + file.getOriginalFilename();
+					String path = direPath + File.separator + file.getOriginalFilename();
 					size = file.getSize();
 					// 上传
 					try {

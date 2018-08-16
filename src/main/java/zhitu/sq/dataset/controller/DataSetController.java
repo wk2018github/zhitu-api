@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -154,7 +155,7 @@ public class DataSetController extends BaseController{
 //				user.setId("USER_1353923423");
 //        	}
 			String fileName = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file, request);
-			if (null == fileName) {
+			if (StringUtils.isEmpty(fileName)) {
 				return success();
 			} else {
 				return error(fileName+"上传失败");

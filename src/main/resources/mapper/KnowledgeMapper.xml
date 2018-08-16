@@ -16,18 +16,23 @@
 		parameterType="java.lang.String">
 		select *
 		from zt_sys_knowledge
-		where id = #{id,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from zt_sys_knowledge
+		delete from
+		zt_sys_knowledge
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="zhitu.sq.dataset.model.Knowledge">
-		insert into zt_sys_knowledge (id, createTime, name,
+		insert into zt_sys_knowledge
+		(id, createTime, name,
 		description, datasetId, tableName)
-		values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		values
+		(#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{name,jdbcType=VARCHAR},
-		#{description,jdbcType=VARCHAR}, #{datasetId,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR})
+		#{description,jdbcType=VARCHAR},
+		#{datasetId,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="zhitu.sq.dataset.model.Knowledge">
 		insert into zt_sys_knowledge
@@ -94,12 +99,16 @@
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.Knowledge">
-		update zt_sys_knowledge
+		update
+		zt_sys_knowledge
 		set createTime = #{createTime,jdbcType=TIMESTAMP},
 		name = #{name,jdbcType=VARCHAR},
-		description = #{description,jdbcType=VARCHAR},
-		datasetId = #{datasetId,jdbcType=VARCHAR},
-		tableName = #{tableName,jdbcType=VARCHAR}
+		description =
+		#{description,jdbcType=VARCHAR},
+		datasetId =
+		#{datasetId,jdbcType=VARCHAR},
+		tableName =
+		#{tableName,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	<select id="findByName" resultType="java.util.Map"
@@ -107,11 +116,14 @@
 		SELECT
 		k.*, d.typeId,
 		if(d.typeId='ftp_file',0,1) as type,
-		t.description as typeName
+		t.description
+		as typeName
 		FROM
 		zt_sys_knowledge k
-		LEFT JOIN zt_sys_dataset d ON k.datasetId = d.id
-		LEFT JOIN zt_sys_dataset_type t ON t.typeId = d.typeId
+		LEFT JOIN zt_sys_dataset d ON
+		k.datasetId = d.id
+		LEFT JOIN zt_sys_dataset_type t ON t.typeId =
+		d.typeId
 		where 1=1
 		<if test="name !=null and name!='' ">
 			and k.name like concat(concat('%',#{name}),'%')
@@ -164,6 +176,14 @@
 		FROM
 		zt_sys_dataset_rdb
 		WHERE id = #{rdbId}
+	</select>
+
+	<select id="queryLocalFileTalbe" parameterType="java.lang.String" >
+		SELECT
+			tableName
+		FROM
+			zt_sys_knowledge
+		WHERE id = #{knowledgeId}
 	</select>
 
 </mapper>
