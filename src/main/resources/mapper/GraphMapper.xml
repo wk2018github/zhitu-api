@@ -48,9 +48,16 @@
 
 	<select id="queryTableFilter" parameterType="java.lang.String"
 		resultType="zhitu.sq.dataset.controller.vo.Select">
-		SELECT ${code} AS `code`, ${name} AS `name` 
+		SELECT ${code} AS `code`, ${name} AS `name`
 		FROM ${table}
 		WHERE 代码级次 = 1
+	</select>
+
+	<select id="queryLowerLevelTableFilter" parameterType="java.lang.String"
+		resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT ${code} AS `code`, ${name} AS `name`
+		FROM ${table}
+		WHERE 上级代码 = #{codeValue}
 	</select>
 
 </mapper>

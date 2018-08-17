@@ -1,15 +1,11 @@
 package zhitu.sq.dataset.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,18 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
-import com.google.gson.JsonObject;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
-import zhitu.graph.tree.NodeTest;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
-import zhitu.vgraph.Node;
-import zhitu.vgraph.NodeTypes;
 
 @RequestMapping("graph")
 @RestController
@@ -109,21 +101,13 @@ public class GraphController extends BaseController {
 	
 	
 	
-	@ApiOperation(value = "图谱分析-流程分析-加载四个初始节点", notes = "首页图谱分析-刪除圖譜-加载四个初始节点")
+	@ApiOperation(value = "图谱分析-流程分析-加载四个初始节点表节点", notes = "首页图谱分析-刪除圖譜-加载四个初始节点表节点")
 	@ResponseBody
 	@RequestMapping(value = "/initProcessAnalysis", method = RequestMethod.POST)
 	public SQApiResponse<String> initProcessAnalysis(HttpServletRequest request) {
 		try {
-//			Map<String,Object> result = new HashMap<String,Object>();
-			Node node1 = new Node("科处室指标", NodeTypes.PROCESS);
-			Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
-			Node node3 = new Node(node2, "计划", NodeTypes.PROCESS);
-			@SuppressWarnings("unused")
-			Node node4 = new Node(node3, "支付", NodeTypes.PROCESS);
 			
-//			result.put("initData", node1.convertTreeToJsonObject().toString());
-			
-			return success("操作成功",node1.convertTreeToJsonObject().toString());
+			return success("操作成功", graphService.initProcessAnalysis());
 		} catch (Exception e) {
 			logger.error("graph/initProcessAnalysis",e);
 			return error("初始化数据异常");
@@ -136,14 +120,8 @@ public class GraphController extends BaseController {
 	@RequestMapping(value = "/initAnnularData", method = RequestMethod.POST)
 	public SQApiResponse<List<String>> initAnnularData(HttpServletRequest request) {
 		try {
-			List<String> annular = new ArrayList<>();
 			
-			Configuration con = new PropertiesConfiguration("file.properties");
-			String config = con.getString("GRAPH_FILTER");
-			
-			annular = Arrays.asList(config.split("，")); 
-			return success("操作成功",annular);
-			
+			return success("操作成功",graphService.initAnnularData());
 		} catch (Exception e) {
 			logger.error("graph/initAnnularData",e);
 			return error("菜单初始化异常");
@@ -158,9 +136,7 @@ public class GraphController extends BaseController {
 			@ApiParam(value = idAndTable) @RequestBody Map<String,Object> map ) {
 		try {
 			
-			List<Select> list = graphService.queryTableFilter(map);
-			
-			return success("查询成功",list);
+			return success("查询成功",graphService.queryTableFilter(map));
 			
 		} catch (Exception e) {
 			logger.error("graph/queryTableFilter",e);
@@ -168,20 +144,34 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String addNode = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\"}";
-	@ApiOperation(value = "图谱分析-流程分析-查询过滤器中的具体的值", notes = "图谱分析-流程分析-查询过滤器中的具体的值")
+	private static final String addFilterNode = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\",\"code\":\"201\",\"name\":\"人事教育\"}";
+	@ApiOperation(value = "图谱分析-流程分析-添加过滤器节点", notes = "图谱分析-流程分析-添加过滤器节点")
 	@ResponseBody
-	@RequestMapping(value = "/addNode", method = RequestMethod.POST)
-	public SQApiResponse<List<Select>> addNode(HttpServletRequest request,
-			@ApiParam(value = idAndTable) @RequestBody Map<String,Object> map ) {
+	@RequestMapping(value = "/addFilterNode", method = RequestMethod.POST)
+	public SQApiResponse<Map<String,Object>> addFilterNode(HttpServletRequest request,
+			@ApiParam(value = addFilterNode) @RequestBody Map<String,Object> map ) {
 		try {
 			
-			List<Select> list = graphService.queryTableFilter(map);
-			
-			return success("查询成功",list);
+			return success("添加成功",graphService.addFilterNode(map));
 			
 		} catch (Exception e) {
-			logger.error("graph/queryTableFilter",e);
+			logger.error("graph/addFilterNode",e);
+			return error("添加异常");
+		}
+	}
+	
+	private static final String queryFilterNodeLowerLevelMenu = "{\"table\":\"功能科目\",\"code\":\"201\"}";
+	@ApiOperation(value = "图谱分析-流程分析-查询过滤器节点下级菜单的值", notes = "图谱分析-流程分析-查询过滤器节点下级菜单的值")
+	@ResponseBody
+	@RequestMapping(value = "/queryFilterNodeLowerLevelMenu", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> queryFilterNodeLowerLevelMenu(HttpServletRequest request,
+			@ApiParam(value = queryFilterNodeLowerLevelMenu) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success("查询成功",graphService.queryFilterNodeLowerLevelMenu(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/queryFilterNodeLowerLevelMenu",e);
 			return error("查询异常");
 		}
 	}

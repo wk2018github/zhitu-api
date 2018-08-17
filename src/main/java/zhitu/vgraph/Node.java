@@ -2,7 +2,6 @@ package zhitu.vgraph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
@@ -20,6 +19,8 @@ public class Node {
 	public String id;
 	public String text;
 	public String type;
+	public String code; //过滤器节点特有 码值
+	public String table; //过滤器节点特有 表名
 	
 	public Node parent;
 	public ArrayList<Node> children = new ArrayList<>();
@@ -32,7 +33,6 @@ public class Node {
 		}
 		return String.format("N_%s", System.currentTimeMillis());
 	}
-
 	
 	public Node(String text, String type) {
 		this.id = generateId();
@@ -41,12 +41,22 @@ public class Node {
 		Graphs.idNodeMap.put(id, this);
 	}
 	
-	
-	
-	
+	public Node(String text, String type, String code, String table) {
+		this.id = generateId();
+		this.text = text;
+		this.type = type;
+		this.code = code;
+		this.table = table;
+		Graphs.idNodeMap.put(id, this);
+	}
 	
 	public Node(Node parent, String text, String type) {
 		this(text, type);
+		this.setParent(parent);
+	}
+	
+	public Node(Node parent, String text, String type, String code, String table) {
+		this(text, type, code, table);
 		this.setParent(parent);
 	}
 
@@ -107,6 +117,8 @@ public class Node {
 		jo.addProperty("id", id);
 		jo.addProperty("text", text);
 		jo.addProperty("type", type);
+		jo.addProperty("code", code);
+		jo.addProperty("table", table);
 		jo.addProperty("msg", new JsonObject().toString());
 		return jo;
 	}

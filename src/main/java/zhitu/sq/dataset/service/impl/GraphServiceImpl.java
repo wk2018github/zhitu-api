@@ -1,5 +1,8 @@
 package zhitu.sq.dataset.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,9 @@ import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
 import zhitu.util.NumberDealHandler;
+import zhitu.vgraph.Graphs;
+import zhitu.vgraph.Node;
+import zhitu.vgraph.NodeTypes;
 
 @Service
 @Transactional
@@ -56,13 +62,67 @@ public class GraphServiceImpl implements GraphService{
 	public List<Select> queryTableFilter(Map<String,Object> map) throws Exception {
 		
 		String filter = map.get("table").toString();
-		Configuration config = new PropertiesConfiguration("file.properties");
-		String table = config.getString("CODE_TABLE_PAY")+map.get("table").toString();
-		String code = filter + "代码";
-		String name = filter + "名称";
+		String table = getPayTable()+filter;
+		String code = getPayTableCodeField(filter);
+		String name = getPayTableNameField(filter);
 		
 		return graphMapper.queryTableFilter(table, code, name);
 	}
+	
+	@Override
+	public String initProcessAnalysis() throws Exception{
+		Node node1 = new Node("科处室指标", NodeTypes.PROCESS); //表节点
+		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
+		Node node3 = new Node(node2, "计划", NodeTypes.PROCESS);
+		@SuppressWarnings("unused")
+		Node node4 = new Node(node3, "支付", NodeTypes.PROCESS);
+		return node1.convertTreeToJsonObject().toString();
+	}
+	
+	@Override
+	public List<String> initAnnularData() throws Exception {
+		
+		return getAnnularData();
+	}
+	
+	@Override
+	public Map<String,Object> addFilterNode(Map<String,Object> map) throws Exception {
+		Map<String,Object> result = new HashMap<String,Object>();
+		String id = map.get("id").toString(); //起始节点id
+		String table = getPayTable()+map.get("table").toString(); //表名 选中环境数据
+		String code = map.get("code").toString(); // 2级菜单id new node 的 code
+		String name = map.get("name").toString(); // 2级菜单名称  new node 的 name
+		
+		Node node = new Node(name,NodeTypes.PROCESS,code,table); //过滤器节点
+		
+		Node parant = Graphs.findNodeById(id);
+		for (Node no : parant.children) {
+			no.setParent(node);
+		}
+		parant.addChild(node);
+		
+		result.put("node", parant.convertTreeToJsonObject().toString());
+		
+		List<String> annularData = getAnnularData(); //返回的环形11个基本菜单
+		boolean flag = existLowerLevel(table, getPayTableCodeField(table), getPayTableNameField(table), code); // 2级菜单 是否有3级菜单 
+		if(flag){
+			annularData.add("下级");
+		}
+		result.put("annularData", annularData);
+		return result;
+		
+	}
+	
+	@Override
+	public List<Select> queryFilterNodeLowerLevelMenu(Map<String,Object> map) throws Exception {
+		String table = getPayTable()+map.get("table").toString(); //表名 选中环境数据
+		String code = map.get("code").toString(); // 2级菜单id new node 的 code
+		
+		return graphMapper.queryLowerLevelTableFilter(table, getPayTableCodeField(table), getPayTableNameField(table), code);
+		
+	}
+	
+	
 
 	@Override
 	public Map<String,Object> orderMap(Map<String,Object> map) throws Exception {
@@ -100,10 +160,53 @@ public class GraphServiceImpl implements GraphService{
 		sb.deleteCharAt(sb.length()-1);
 		return sb.toString();
 	}
-
-
-
-
+	/**
+	 * @Author: qwm
+	 * @Description: 获取11个环形数据
+	 */
+	public List<String> getAnnularData() throws Exception {
+		List<String> annular = new ArrayList<>();
+		
+		Configuration con = new PropertiesConfiguration("file.properties");
+		String config = con.getString("GRAPH_FILTER");
+		
+		annular = Arrays.asList(config.split("，")); 
+		return annular;
+	}
+	/**
+	 * @Author: qwm
+	 * @Description: 获取代码表 支付管理表前缀
+	 */
+	public String getPayTable() throws Exception {
+		Configuration config = new PropertiesConfiguration("file.properties");
+		return config.getString("CODE_TABLE_PAY");
+	}
+	/**
+	 * @Author: qwm
+	 * @Description: 获取代码表 支付管理表  代码字段 名称
+	 */
+	public String getPayTableCodeField(String table) {
+		return table + "代码";
+	}
+	/**
+	 * @Author: qwm
+	 * @Description: 获取代码表 支付管理表  代码名称  名称
+	 */
+	public String getPayTableNameField(String table) {
+		return table + "名称";
+	}
+	/**
+	 * @Author: qwm
+	 * @Description: 查询是否存在下级菜单
+	 */
+	public boolean existLowerLevel(String table,String code,String name,String codeValue){
+		
+		List<Select> list = graphMapper.queryLowerLevelTableFilter(table, code, name, codeValue);
+		if(list.size()>0){
+			return true;
+		}
+		return false;
+	}
 
 
 	

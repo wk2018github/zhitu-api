@@ -16,17 +16,18 @@ public class Test {
 	
 	public static void main(String[] args) throws ConfigurationException {
 		
-		Configuration con = new PropertiesConfiguration("file.properties");
-		String config = con.getString("CODE_TABLE_PAY");
-//		String[] strs = config.split("，");
-		System.out.println(config);
+		String a = "[abcde";
+		int i = a.indexOf('[');
+		String b = a.replace('[', '{');
+		System.out.println(b);
 		
-//		List<String> ls = Arrays.asList(strs);
-//		
-//		for (String s : ls) {
-//			System.out.println(s+"\t");
-//		}
-		
+		StringBuffer sb = new StringBuffer(a);
+		int j = sb.indexOf("[");
+		if(j>-1){
+			StringBuffer end = sb.deleteCharAt(j);
+			System.out.println(end);
+		}
+		System.out.println(sb);
 	}
 
 }
