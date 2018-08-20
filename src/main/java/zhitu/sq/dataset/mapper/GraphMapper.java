@@ -47,6 +47,12 @@ public interface GraphMapper {
 	 * @Description: 查询过滤器下面具体的值
 	 */
 	List<Select> queryTableFilter(@Param("table") String table, @Param("code") String code, @Param("name") String name);
+	/**
+	 * @Author: qwm
+	 * @Description: 查询下一级过滤器下面具体的值
+	 */
+	List<Select> queryLowerLevelTableFilter(@Param("table") String table, @Param("code") String code
+			, @Param("name") String name, @Param("codeValue") String codeValue);
     
 	
 	

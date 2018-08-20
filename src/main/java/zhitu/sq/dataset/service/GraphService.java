@@ -43,5 +43,27 @@ public interface GraphService {
 	 * @Description 多个id,分割
 	 */
 	String splitIds(String ids) throws Exception;
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-加载四个初始节点
+	 */
+	String initProcessAnalysis() throws Exception;
+	/**
+	 * @Author: qwm
+	 * @Description: 图谱分析-流程分析-初始4个节点环形菜单
+	 */
+	List<String> initAnnularData() throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-添加过滤器节点
+	 */
+	Map<String,Object> addFilterNode(Map<String,Object> map) throws Exception;
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-查询过滤器节点下级菜单的值
+	 */
+	List<Select> queryFilterNodeLowerLevelMenu(Map<String,Object> map) throws Exception;
+	
 	
 }

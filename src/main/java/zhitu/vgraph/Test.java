@@ -3,10 +3,8 @@ package zhitu.vgraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import com.google.gson.JsonArray;
+import org.apache.commons.lang3.StringUtils;
 
 import zhitu.util.JacksonUtil;
 
@@ -17,27 +15,49 @@ public class Test {
 
 	public static void main(String[] args) throws Exception{
 
-		Node node1 = new Node("科处室指标", NodeTypes.PROCESS);
+		Node node1 = new Node(null, "科处室指标", NodeTypes.PROCESS);
 		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
-		Node node3 = new Node(node2, "计划", NodeTypes.PROCESS);
-		Node node4 = new Node(node3, "支付", NodeTypes.PROCESS);
+		Node node3 = new Node(node2,  "计划", NodeTypes.PROCESS);
+		Node node4 = new Node(node3,  "支付", NodeTypes.PROCESS);
 		
-		String id = node1.id;
+		Node node15 = new Node(node1, "计划父级",NodeTypes.PROCESS);
+		node3.setParent(node15);
 		
-		Node root = Graphs.findNodeById(id);
+		System.out.println(node1.convertTreeToJsonObject().toString());
 		
+		ArrayList<Node> children = node1.children;
+		for (Node node : children) {
+			System.out.println(node.id);
+			System.out.println(node.text);
+		}
 		
-		String json = root.convertTreeToJsonObject().toString();
+		NodeInfo no = new NodeInfo(node1);
 		
-		Map<String,Object> map = JacksonUtil.Builder().json2Map(json);
+		System.out.println(no.toString());
 		
-		json = map.get("links").toString();
-		
-		
-		
-		List<Edge> edges = JacksonUtil.Builder().json2List(json, Edge.class);
-	
-		System.out.println(edges.size());
+//		Node node5 = new Node("功能科目",NodeTypes.PROCESS);
+//		node1.addChild(node5);
+//		node1.removeChild(node2);
+//		node2.setParent(node5);
+//		
+//		
+//		String json = node1.convertTreeToJsonObject().toString();
+//		Map<String, Object> json2Map = JacksonUtil.Builder().json2Map(json);
+//		String string = json2Map.get("links").toString();
+//		
+//		String[] split = string.split("},");
+//		List<String> ls = new ArrayList<>();
+//		
+//		for (String s : split) {
+//			String a = s.toString();
+//			a = a.replace('[', '{');
+// 			a = a.replace(']', '{');
+// 			a = a.replace('}', '{');
+//			
+// 			ls.add(reAll(a).trim());
+//		}
+//		
+//		System.out.println(ls.get(0)+"\n"+ls.get(1));
 		
 //		ArrayList<Integer> a = new ArrayList<>();
 //		a.add(0);
@@ -77,5 +97,19 @@ public class Test {
 //		for(String cString:c){
 //			System.out.println(cString);
 //		}
+	}
+	
+	public static String reAll(String str){
+		if(StringUtils.isEmpty(str)){
+			return str;
+		}
+		StringBuffer s = new StringBuffer(str);
+		int index = s.indexOf("{");
+		if(index>-1){
+			s.deleteCharAt(index);
+			str = reAll(s.toString());
+		}
+		
+		return str; 
 	}
 }
