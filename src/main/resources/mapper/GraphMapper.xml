@@ -51,6 +51,9 @@
 		SELECT ${code} AS `code`, ${name} AS `name`
 		FROM ${table}
 		WHERE 代码级次 = 1
+		<if test="name!=null and name!=''">
+			AND ${name} != #{code}
+		</if>
 	</select>
 
 	<select id="queryLowerLevelTableFilter" parameterType="java.lang.String"

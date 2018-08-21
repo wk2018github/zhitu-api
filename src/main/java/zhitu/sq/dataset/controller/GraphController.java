@@ -129,7 +129,7 @@ public class GraphController extends BaseController {
 	}
 	
 	private static final String idAndTable = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\"}";
-	@ApiOperation(value = "图谱分析-流程分析-查询过滤器中的具体的值", notes = "图谱分析-流程分析-查询过滤器中的具体的值")
+	@ApiOperation(value = "图谱分析-流程分析-查询表节点的过滤器中的具体的值", notes = "图谱分析-流程分析-查询表节点的过滤器中的具体的值")
 	@ResponseBody
 	@RequestMapping(value = "/queryTableFilter", method = RequestMethod.POST)
 	public SQApiResponse<List<Select>> queryTableFilter(HttpServletRequest request,
@@ -172,6 +172,22 @@ public class GraphController extends BaseController {
 			
 		} catch (Exception e) {
 			logger.error("graph/queryFilterNodeLowerLevelMenu",e);
+			return error("查询异常");
+		}
+	}
+	
+	private static final String idAndTableAndFilterName = "{\"id\":\"N_1534399392833\",\"table\":\"结算方式\",\"code\":\"2\"}";
+	@ApiOperation(value = "图谱分析-流程分析-查询过滤器节点的过滤器中的具体的值", notes = "图谱分析-流程分析-查询过滤器节点的过滤器中的具体的值")
+	@ResponseBody
+	@RequestMapping(value = "/queryNodesFilterAnnularData", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> queryNodesFilterAnnularData(HttpServletRequest request,
+			@ApiParam(value = idAndTableAndFilterName) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success("查询成功",graphService.queryTableFilter(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/queryTableFilter",e);
 			return error("查询异常");
 		}
 	}
