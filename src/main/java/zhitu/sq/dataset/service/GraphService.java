@@ -75,5 +75,11 @@ public interface GraphService {
 	 * @Description:图谱分析-流程分析-查询过滤器节点下级菜单的值
 	 */
 	List<Select> queryFilterNodeLowerLevelMenu(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-添加其他表节点线
+	 */
+	Map<String, Object> addOtherNodesLine(Map<String, Object> map) throws Exception;
 
 }

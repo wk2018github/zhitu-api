@@ -208,6 +208,20 @@ public class GraphController extends BaseController {
 		}
 	}
 	
+	@ApiOperation(value = "图谱分析-流程分析-添加其他表节点线", notes = "图谱分析-流程分析-添加其他表节点线")
+	@ResponseBody
+	@RequestMapping(value = "/addOtherNodesLine", method = RequestMethod.POST)
+	public SQApiResponse<Map<String,Object>> addOtherNodesLine(HttpServletRequest request,
+			@ApiParam(value = addFilterNode) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success("添加成功",graphService.addOtherNodesLine(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/addOtherNodesLine",e);
+			return error("添加异常");
+		}
+	}
 	
 
 }

@@ -24,6 +24,7 @@ import zhitu.util.NumberDealHandler;
 import zhitu.vgraph.Graphs;
 import zhitu.vgraph.Node;
 import zhitu.vgraph.NodeTypes;
+import zhitu.vgraph.TableNodeName;
 
 @Service
 @Transactional
@@ -71,11 +72,11 @@ public class GraphServiceImpl implements GraphService{
 	
 	@Override
 	public String initProcessAnalysis() throws Exception{
-		Node node1 = new Node("科处室指标", NodeTypes.PROCESS); //表节点
-		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
-		Node node3 = new Node(node2, "计划", NodeTypes.PROCESS);
+		Node node1 = new Node(TableNodeName.ONE, NodeTypes.PROCESS); //表节点
+		Node node2 = new Node(node1, TableNodeName.TWO, NodeTypes.PROCESS);
+		Node node3 = new Node(node2, TableNodeName.THREE, NodeTypes.PROCESS);
 		@SuppressWarnings("unused")
-		Node node4 = new Node(node3, "支付", NodeTypes.PROCESS);
+		Node node4 = new Node(node3, TableNodeName.FOUR, NodeTypes.PROCESS);
 		return node1.convertTreeToJsonObject().toString();
 	}
 	
@@ -94,7 +95,6 @@ public class GraphServiceImpl implements GraphService{
 		String code = map.get("code").toString(); // 2级菜单id new node 的 code
 		String name = map.get("name").toString(); // 2级菜单名称  new node 的 name
 		
-		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
 		Node node = new Node(name,NodeTypes.FILTER,code,tableSuffix); //将要添加的过滤器节点
 		
 		Node parant = Graphs.findNodeById(parent_id); //将要添加的过滤器节点的父节点
@@ -104,6 +104,7 @@ public class GraphServiceImpl implements GraphService{
 		}
 		parant.addChild(node);
 		
+		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
 		result.put("node", nodeSource.convertTreeToJsonObject().toString());
 		
 		return result;
@@ -134,6 +135,45 @@ public class GraphServiceImpl implements GraphService{
 		return graphMapper.queryLowerLevelTableFilter(table, getPayTableCodeField(tableSuffix), getPayTableNameField(tableSuffix), code);
 		
 	}
+	
+	@Override
+	public Map<String,Object> addOtherNodesLine(Map<String,Object> map) throws Exception {
+		Map<String,Object> result = new HashMap<String,Object>();
+		String id = map.get("id").toString(); //初始节点id
+		String parent_id = map.get("parent_id").toString(); //父节点id
+		String tableSuffix = map.get("table").toString(); //表名后缀 选中环境数据
+		String code = map.get("code").toString(); // 2级菜单id new node 的 code
+		String name = map.get("name").toString(); // 2级菜单名称  new node 的 name
+		
+		Node node = new Node(name,NodeTypes.FILTER,code,tableSuffix); //将要添加的过滤器节点
+		
+		Node parant = Graphs.findNodeById(parent_id); //将要添加的过滤器节点的父节点
+		parant.addChild(node);
+		
+		if(TableNodeName.ONE.equals(parant.text)){
+			Node node1 = new Node(node, TableNodeName.TWO, NodeTypes.PROCESS);
+			Node node2 = new Node(node1, TableNodeName.THREE, NodeTypes.PROCESS);
+			@SuppressWarnings("unused")
+			Node node3 = new Node(node2, TableNodeName.FOUR, NodeTypes.PROCESS);
+		}
+		if(TableNodeName.TWO.equals(parant.text)){
+			Node node1 = new Node(node, TableNodeName.THREE, NodeTypes.PROCESS);
+			@SuppressWarnings("unused")
+			Node node2 = new Node(node1, TableNodeName.FOUR, NodeTypes.PROCESS);
+		}
+		if(TableNodeName.THREE.equals(parant.text)){
+			@SuppressWarnings("unused")
+			Node node1 = new Node(node, TableNodeName.FOUR, NodeTypes.PROCESS);
+		}
+		
+		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
+		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		
+		return result;
+		
+	}
+	
+	
 	
 	
 
