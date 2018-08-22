@@ -139,7 +139,7 @@
 		</foreach>
 	</delete>
 
-	<select id="queryKnowledge" resultType="zhitu.sq.dataset.controller.vo.KnowledgeVo">
+	<select id="queryKnowledge" resultType="zhitu.sq.dataset.controller.vo.Select">
 		SELECT
 		k.id, k.name
 		FROM

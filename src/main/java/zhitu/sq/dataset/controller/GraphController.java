@@ -144,7 +144,7 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String addFilterNode = "{\"id\":\"N_1534399392833\",\"table\":\"功能科目\",\"code\":\"201\",\"name\":\"人事教育\"}";
+	private static final String addFilterNode = "{\"id\":\"N_1534399392833\",\"parent_id\":\"N_1534399392833\",\"table\":\"功能科目\",\"code\":\"201\",\"name\":\"人事教育\"}";
 	@ApiOperation(value = "图谱分析-流程分析-添加过滤器节点", notes = "图谱分析-流程分析-添加过滤器节点")
 	@ResponseBody
 	@RequestMapping(value = "/addFilterNode", method = RequestMethod.POST)
@@ -157,6 +157,22 @@ public class GraphController extends BaseController {
 		} catch (Exception e) {
 			logger.error("graph/addFilterNode",e);
 			return error("添加异常");
+		}
+	}
+	
+	private static final String queryFilterNodeAnnular = "{\"table\":\"功能科目\",\"code\":\"201\"}";
+	@ApiOperation(value = "图谱分析-流程分析-过滤器节点的环形菜单的数据", notes = "图谱分析-流程分析-过滤器节点的环形菜单的数据")
+	@ResponseBody
+	@RequestMapping(value = "/queryFilterNodeAnnularData", method = RequestMethod.POST)
+	public SQApiResponse<List<String>> queryFilterNodeAnnularData(HttpServletRequest request,
+			@ApiParam(value = queryFilterNodeAnnular) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success("查询成功",graphService.queryFilterNodeAnnularData(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/queryFilterNodeAnnularData",e);
+			return error("查询异常");
 		}
 	}
 	

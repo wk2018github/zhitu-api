@@ -190,7 +190,7 @@ public class KnowledgeController extends BaseController {
 	
 	
 	
-	
+	private static final String name = "{\"sourceName\":\"知识表名称\",\"targetName\":\"知识表名称\"}";
 	/**
 	 * 
 	 * @Author: qwm
@@ -201,7 +201,8 @@ public class KnowledgeController extends BaseController {
 	@ApiOperation(value = "知识库-关系配置页面-所有知识表下拉选项", notes = "知识库-关系配置页面-所有知识表下拉选项")
 	@ResponseBody
 	@RequestMapping(value = "/queryKnowledgeSelect", method = RequestMethod.POST)
-	public SQApiResponse<List<Select>> queryKnowledgeSelect(HttpServletRequest request) {
+	public SQApiResponse<List<Select>> queryKnowledgeSelect(HttpServletRequest request,
+			@ApiParam(value = name) @RequestBody Map<String,Object> map) {
 		try {
 			List<Select> result = new ArrayList<Select>();
 			result = knowledgeService.queryKnowledge();

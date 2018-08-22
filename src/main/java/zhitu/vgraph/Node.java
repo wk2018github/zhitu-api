@@ -20,7 +20,7 @@ public class Node {
 	public String text;
 	public String type;
 	public String code; //过滤器节点特有 码值
-	public String table; //过滤器节点特有 表名
+	public String table; //过滤器节点特有 表名后缀
 	
 	public Node parent;
 	public ArrayList<Node> children = new ArrayList<>();

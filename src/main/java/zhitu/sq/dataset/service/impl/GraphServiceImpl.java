@@ -88,37 +88,50 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public Map<String,Object> addFilterNode(Map<String,Object> map) throws Exception {
 		Map<String,Object> result = new HashMap<String,Object>();
-		String id = map.get("id").toString(); //起始节点id
-		String table = getPayTable()+map.get("table").toString(); //表名 选中环境数据
+		String id = map.get("id").toString(); //初始节点id
+		String parent_id = map.get("parent_id").toString(); //父节点id
+		String tableSuffix = map.get("table").toString(); //表名后缀 选中环境数据
 		String code = map.get("code").toString(); // 2级菜单id new node 的 code
 		String name = map.get("name").toString(); // 2级菜单名称  new node 的 name
 		
-		Node node = new Node(name,NodeTypes.PROCESS,code,table); //过滤器节点
+		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
+		Node node = new Node(name,NodeTypes.FILTER,code,tableSuffix); //将要添加的过滤器节点
 		
-		Node parant = Graphs.findNodeById(id);
+		Node parant = Graphs.findNodeById(parent_id); //将要添加的过滤器节点的父节点
 		for (Node no : parant.children) {
 			no.setParent(node);
+			break;
 		}
 		parant.addChild(node);
 		
-		result.put("node", parant.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject().toString());
 		
-		List<String> annularData = getAnnularData(); //返回的环形11个基本菜单
-		boolean flag = existLowerLevel(table, getPayTableCodeField(table), getPayTableNameField(table), code); // 2级菜单 是否有3级菜单 
-		if(flag){
-			annularData.add("下级");
-		}
-		result.put("annularData", annularData);
 		return result;
 		
 	}
 	
 	@Override
+	public List<String> queryFilterNodeAnnularData(Map<String,Object> map) throws Exception{
+		String tableSuffix = map.get("table").toString(); //表名 当前过滤器节点的名称
+		String table = getPayTable()+tableSuffix; //完整表名称
+		String code = map.get("code").toString(); // 码值 当前过滤器节点的码值
+		
+		List<String> annularData = getAnnularData(); //返回的环形11个基本菜单
+		boolean flag = existLowerLevel(table, getPayTableCodeField(tableSuffix), getPayTableNameField(tableSuffix), code); // 2级菜单 是否有3级菜单 
+		if(flag){
+			annularData.add("下级");
+		}
+		
+		return annularData;
+	}
+	
+	@Override
 	public List<Select> queryFilterNodeLowerLevelMenu(Map<String,Object> map) throws Exception {
-		String table = getPayTable()+map.get("table").toString(); //表名 选中环境数据
+		String tableSuffix = map.get("table").toString(); //表名 当前过滤器节点的名称
+		String table = getPayTable()+tableSuffix; //表名 选中环境数据
 		String code = map.get("code").toString(); // 2级菜单id new node 的 code
 		
-		return graphMapper.queryLowerLevelTableFilter(table, getPayTableCodeField(table), getPayTableNameField(table), code);
+		return graphMapper.queryLowerLevelTableFilter(table, getPayTableCodeField(tableSuffix), getPayTableNameField(tableSuffix), code);
 		
 	}
 	
@@ -171,7 +184,7 @@ public class GraphServiceImpl implements GraphService{
 		String config = con.getString("GRAPH_FILTER");
 		
 		annular = Arrays.asList(config.split("，")); 
-		return annular;
+		return new ArrayList<String>(annular);
 	}
 	/**
 	 * @Author: qwm
