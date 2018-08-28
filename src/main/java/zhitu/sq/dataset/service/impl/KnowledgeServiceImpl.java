@@ -11,7 +11,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,6 +125,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public String extractKnowledge(Map<String, Object> map, String userId) throws Exception {
 		String datasetId = StringHandler.objectToString(map.get("datasetId"));
@@ -134,7 +134,6 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		List<FtpFile> fList = ftpFileMapper.selectByDataSetId(datasetId);
 		String key = StringHandler.objectToString(map.get("key"));
-		@SuppressWarnings("unchecked")
 		List<String> adudits = (List<String>) map.get("audit");
 		Map<String, Object> tMap = new HashMap<>();
 		if (key.equals("01")) {
@@ -231,6 +230,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 					// 槽位表名
 					tMap.put("advice", tableName);
 				}
+				Thread.sleep(1);
 			}
 		}
 		HashMap<String, ArrayList<HashMap<String, String>>> list = new HashMap<String, ArrayList<HashMap<String, String>>>();
@@ -246,15 +246,15 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		// taskInfo.setProjectId("暂时没有project");
 		// taskInfoMapper.insert(taskInfo);
 
-		FTPClient ftp = dataSourceUtil.getFTPClient();
-		if (null == ftp) {
-			throw new Exception("获取FTP失败");
-		}
+//		FTPClient ftp = dataSourceUtil.getFTPClient();
+//		if (null == ftp) {
+//			throw new Exception("获取FTP失败");
+//		}
 		// 获取ftp 文件
-		for (@SuppressWarnings("unused") FtpFile file : fList) {
-			App.processFile("G:\\项目\\海南\\文档\\文档提取整理\\工伤生育市本级审计报告 -未标注.doc", list);
+		for (FtpFile file : fList) {
+			App.processFile(file.getFtpurl(), list);
 		}
-		ftp.disconnect();
+//		ftp.disconnect();
 
 		if (tMap.containsKey("activity")) {
 			List<HashMap<String, String>> activityList = list.get("activity");

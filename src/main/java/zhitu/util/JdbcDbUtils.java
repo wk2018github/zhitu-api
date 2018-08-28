@@ -221,7 +221,7 @@ public class JdbcDbUtils {
 				
 			}else if (rdb.getDatabaseType().equals("sqlserver")) {
 				
-				url = "jdbc:microsoft:sqlserver://"+rdb.getHost()+":"+rdb.getPort()+";;DatabaseName="+rdb.getDbName();
+				url = "jdbc:microsoft:sqlserver://"+rdb.getHost()+":"+rdb.getPort()+";DatabaseName="+rdb.getDbName();
 				Class.forName("com.microsoft.JDBC.sqlserver.SQLServerDriver");
 				
 			}
