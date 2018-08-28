@@ -46,7 +46,7 @@ public class FileUpload {
 		// 目录不存在 则创建
 		File f = new File(direPath);
 		if (!(f.exists() && f.isDirectory())) {
-			logger.info("目录或文件夹不存在！");
+			logger.info("目录或文件夹不存在,正在创建...");
 			f.mkdir();
 		}
 
@@ -81,7 +81,7 @@ public class FileUpload {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("上传时间：" + String.valueOf(endTime - startTime) + "ms");
+		logger.info("上传时间：" + String.valueOf(endTime - startTime) + "ms");
 
 		return paths;
 

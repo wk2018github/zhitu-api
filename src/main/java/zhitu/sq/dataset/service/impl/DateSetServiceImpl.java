@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hankcs.hanlp.dependency.nnparser.util.math;
 
 import zhitu.sq.dataset.controller.vo.DataSetRdbVo;
 import zhitu.sq.dataset.controller.vo.RdbVo;
@@ -94,15 +93,6 @@ public class DateSetServiceImpl implements DataSetService{
 //		}
 //		System.out.println("upload success");
 //		ftp.disconnect();
-		
-		//文件上传本地
-		List<String> paths = FileUpload.upload(request);
-		
-		DataSet dataSet = new DataSet(dataSetId, new Date(), name, describe, "ftp_file", userId, projectId, null, null);
-
-		// 文件上传成功后保存数据集
-		int i = dataSetMapper.insert(dataSet);
-		
 		Properties p = System.getProperties();
 		String sys = p.getProperty("os.name").toLowerCase();
 		String split = "";
@@ -111,30 +101,51 @@ public class DateSetServiceImpl implements DataSetService{
 		} else {
 			split = "/";
 		}
+		
+		List<String> paths = FileUpload.upload(request);// 上传返回path,成功和失败的都有
+		List<String> success = new ArrayList<String>();// 上传成功的path集合
+		boolean flag = false; // 是否有任何一个文件上传成功
+		for (int i = 0; i < paths.size(); i++) {
+			String path = paths.get(i);
+			String[] ps = path.split(split);
+			if(ps.length>1){
+				paths.remove(path);
+				success.add(path);
+				flag = true;
+			}
+		}
+		if(!flag){
+			return null;
+		}
+		
+		DataSet dataSet = new DataSet(dataSetId, new Date(), name, describe, "ftp_file", userId, projectId, null, null);
+
+		// 文件上传成功后保存数据集
+		int i = dataSetMapper.insert(dataSet);
 		if(i<1){
 			return null;
 		}
-		for (int j = 0; j < paths.size(); j++) {
-			String[] ps = paths.get(j).split(split);
-			if(ps.length>1){
-				FtpFile f = new FtpFile();
-				f.setId("PDF_"+System.currentTimeMillis()); //ftp id
-				String fileName = ps[ps.length-1]; //ftpFile name
-				f.setFileName(fileName);
-				File file = new File(paths.get(j));
-				String fileAbstract = TikaUtils.parseFile(file);
-				f.setFileAbstract(fileAbstract);
-				f.setFtpurl(paths.get(j)); //ftpFile url
-				f.setDatasetId(dataSetId);
-				int k = dataSetMapper.insertFtpFile(f);
-				if(k>0){
-					paths.remove(j);
-					j--;
-				}
+		
+		for (int j = 0; j < success.size(); j++) {
+			String path = success.get(j);
+			String[] ps = path.split(split);
+			FtpFile f = new FtpFile();
+			f.setId("PDF_"+System.currentTimeMillis()); //ftp id
+			String fileName = ps[ps.length-1]; //ftpFile name
+			f.setFileName(fileName);
+			File file = new File(path);
+			String fileAbstract = TikaUtils.parseFile(file);
+			f.setFileAbstract(fileAbstract);
+			f.setFtpurl(path); //ftpFile url
+			f.setDatasetId(dataSetId);
+			int k = dataSetMapper.insertFtpFile(f);
+			if(k>0){
+				success.remove(j);
+				j--;
 			}
 			Thread.sleep(1);
 		}
-		
+		paths.addAll(success);
 		return String.join(",", paths);
 	}
 
