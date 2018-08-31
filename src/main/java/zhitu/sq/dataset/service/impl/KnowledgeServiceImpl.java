@@ -353,7 +353,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		String localUserName = config.getString("spring.datasource.username");
 		String localPassword = config.getString("spring.datasource.password");
 		//	源数据集 是 文件上传
-		if("local_file".equals(sourceDataSetType)){
+		if("ftp_file".equals(sourceDataSetType)){
 			//获取知识表 中的 表名
 			sourceTable = knowledgeMapper.queryLocalFileTalbe(map.get("sourceId").toString());
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
@@ -389,13 +389,13 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		}
 
 		// 目标数据集类型 是  文件上传
-		if("local_file".equals(targetDataSetType)){
+		if("ftp_file".equals(targetDataSetType)){
 			//获取知识表 中的 表名
-			sourceTable = knowledgeMapper.queryLocalFileTalbe(map.get("targetId").toString());
+			targetTable = knowledgeMapper.queryLocalFileTalbe(map.get("targetId").toString());
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
 					null);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(sourceTable, null, list);
+			Neo4jTest.addToNeo4j(targetTable, null, list);
 		}
 		// 目标数据集本地数据库导入
 		if ("local_rdb".equals(targetDataSetType)) {

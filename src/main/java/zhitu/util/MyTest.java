@@ -166,10 +166,10 @@ public class MyTest {
         RuleNode node1 = new RuleNode();
         node1.id = p1.id;
         node1.addLabel(p1.text);
+        System.err.println(filterNode1.text);
         node1.filterMap.put(p1.text, filterNode1.text);
         
         node0.addParent(node1, "");
-        
         
         for(String cypher: node0.createCypherList(1)){
             System.out.println(cypher);

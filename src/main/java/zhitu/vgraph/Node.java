@@ -19,6 +19,7 @@ public class Node {
 	public String id;
 	public String text;
 	public String type;
+	public Integer childrenType;
 	public String code; //过滤器节点特有 码值
 	public String table; //过滤器节点特有 表名后缀
 	
@@ -31,6 +32,7 @@ public class Node {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+//		return String.valueOf(System.currentTimeMillis());
 		return String.format("N_%s", System.currentTimeMillis());
 	}
 	
@@ -38,6 +40,7 @@ public class Node {
 		this.id = generateId();
 		this.text = text;
 		this.type = type;
+		this.childrenType = 1;
 		Graphs.idNodeMap.put(id, this);
 	}
 	
@@ -45,6 +48,7 @@ public class Node {
 		this.id = generateId();
 		this.text = text;
 		this.type = type;
+		this.childrenType = 1;
 		this.code = code;
 		this.table = table;
 		Graphs.idNodeMap.put(id, this);
@@ -52,12 +56,25 @@ public class Node {
 	
 	public Node(Node parent, String text, String type) {
 		this(text, type);
+		parent = setParentChildrenType(parent,type);
 		this.setParent(parent);
 	}
 	
 	public Node(Node parent, String text, String type, String code, String table) {
 		this(text, type, code, table);
+		parent = setParentChildrenType(parent,type);
 		this.setParent(parent);
+	}
+	
+	public Node setParentChildrenType(Node parent, String type){
+		if(null != parent){
+			if(type.equals(NodeTypes.FILTER)){
+				parent.childrenType = 2;
+			} else {
+				parent.childrenType = 1;
+			}
+		}
+		return parent;
 	}
 
 
@@ -91,6 +108,11 @@ public class Node {
 	public void addChild(Node child){
 		child.removeParent();
 		child.parent = this;
+		if(child.type.equals(NodeTypes.FILTER)){
+			this.childrenType = 2;
+		} else {
+			this.childrenType = 1;
+		}
 		this.children.add(child);
 	}
 	
@@ -105,6 +127,7 @@ public class Node {
 	}
 	
 	public void setParent(Node parent){
+		parent = setParentChildrenType(parent,this.type);
 		parent.addChild(this);
 	}
 	
@@ -117,6 +140,7 @@ public class Node {
 		jo.addProperty("id", id);
 		jo.addProperty("text", text);
 		jo.addProperty("type", type);
+		jo.addProperty("childrenType", childrenType);
 		jo.addProperty("code", code);
 		jo.addProperty("table", table);
 		jo.addProperty("msg", new JsonObject().toString());

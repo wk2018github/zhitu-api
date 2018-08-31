@@ -178,11 +178,12 @@
 		WHERE id = #{rdbId}
 	</select>
 
-	<select id="queryLocalFileTalbe" parameterType="java.lang.String" >
+	<select id="queryLocalFileTalbe" parameterType="java.lang.String"
+		resultType="java.lang.String">
 		SELECT
-			tableName
+		tableName
 		FROM
-			zt_sys_knowledge
+		zt_sys_knowledge
 		WHERE id = #{knowledgeId}
 	</select>
 
