@@ -40,7 +40,7 @@ public interface GraphMapper {
 	 * @Author: qwm
 	 * @Description:删除graph
 	 */
-	int deleteGraph(@Param("ids") String ids);
+	int deleteGraph(@Param("ids") List<String> ids);
 	
 	/**
 	 * @Author: qwm

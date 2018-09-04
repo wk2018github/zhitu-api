@@ -80,4 +80,11 @@ public interface KnowledgeService {
 	 */
 	List<String> queryForeignKey(Map<String, Object> map) throws Exception;
 
+	/**
+	 * 根据知识表id 查询
+	 * @param id
+	 * @return
+	 */
+	Knowledge selectById(String id);
+
 }

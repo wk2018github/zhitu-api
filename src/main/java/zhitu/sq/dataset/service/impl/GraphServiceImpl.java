@@ -52,9 +52,11 @@ public class GraphServiceImpl implements GraphService{
 		return i > 0;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean deleteGraph(Map<String,Object> map) throws Exception {
-		String ids = splitIds(map.get("ids").toString());
+//		String ids = splitIds(map.get("ids").toString());
+		List<String> ids = (List<String>) map.get("ids");
 		int i = graphMapper.deleteGraph(ids);
 		return i > 0;
 	}

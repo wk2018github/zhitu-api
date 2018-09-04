@@ -40,12 +40,19 @@
 		WHERE id = #{id,jdbcType=VARCHAR}
 	</update>
 
-	<!-- 删除圖譜 -->
+	<!-- 删除圖譜 
 	<update id="deleteGraph" parameterType="java.lang.String">
 		DELETE FROM zt_sys_graph
 		WHERE id IN ( ${ids} )
-	</update>
-
+	</update>-->
+	<delete id="deleteGraph" parameterType="java.util.List">
+		delete from zt_sys_graph where id in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
 	<select id="queryTableFilter" parameterType="java.lang.String"
 		resultType="zhitu.sq.dataset.controller.vo.Select">
 		SELECT ${code} AS `code`, ${name} AS `name`

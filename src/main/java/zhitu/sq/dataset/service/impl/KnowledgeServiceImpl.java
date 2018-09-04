@@ -81,6 +81,12 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 	@Override
 	public int deleteKnowledge(List<String> ids) {
+		for(String id :ids){
+			Knowledge knowledge = knowledgeMapper.selectByPrimaryKey(id);
+			//根据dataTable及数据库表删除改表
+			if(!knowledge.getTableName().isEmpty())
+				dataTableMapper.deleteByDataSetId(knowledge.getTableName());
+		}
 		return knowledgeMapper.deleteKnowledge(ids);
 	}
 
@@ -196,7 +202,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 					knowledge.setName(name);
 					knowledge.setDatasetId(datasetId);
 					knowledge.setDescription(description);
-					knowledgeMapper.insert(knowledge);
+					int i = knowledgeMapper.insert(knowledge);
+					System.out.println(i);
 					// 槽位表名
 					tMap.put("opinion", tableName);
 				} else if (audit.equals("04")) {
@@ -234,31 +241,14 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			}
 		}
 		HashMap<String, ArrayList<HashMap<String, String>>> list = new HashMap<String, ArrayList<HashMap<String, String>>>();
-		// //任务表插入一条数据,创建任务
-		// TaskInfo taskInfo = new TaskInfo();
-		// Date date = new Date();
-		// taskInfo.setId("TASK_"+System.currentTimeMillis());
-		// taskInfo.setName("暂时还未确定规则");
-		// taskInfo.setDescription("描述信息");
-		// taskInfo.setStatus("1");
-		// taskInfo.setCreateTime(date);
-		// taskInfo.setUserId(userId);
-		// taskInfo.setProjectId("暂时没有project");
-		// taskInfoMapper.insert(taskInfo);
-
-//		FTPClient ftp = dataSourceUtil.getFTPClient();
-//		if (null == ftp) {
-//			throw new Exception("获取FTP失败");
-//		}
-		// 获取ftp 文件
 		for (FtpFile file : fList) {
 			App.processFile(file.getFtpurl(), list);
 		}
-//		ftp.disconnect();
 
 		if (tMap.containsKey("activity")) {
-			List<HashMap<String, String>> activityList = list.get("activity");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("activity");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("activity"));
 				for (HashMap<String, String> act : activityList) {
 					ActivityVo activityVo = new ActivityVo();
@@ -269,8 +259,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		}
 		if (tMap.containsKey("advice")) {
-			List<HashMap<String, String>> activityList = list.get("advice");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("advice");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("advice"));
 				for (HashMap<String, String> act : activityList) {
 					// activity 插入数据
@@ -281,8 +272,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			}
 		}
 		if (tMap.containsKey("opinion")) {
-			List<HashMap<String, String>> activityList = list.get("opinion");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("opinion");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("opinion"));
 				for (HashMap<String, String> act : activityList) {
 					// activity 插入数据
@@ -294,8 +286,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			}
 		}
 		if (tMap.containsKey("underlying")) {
-			List<HashMap<String, String>> activityList = list.get("underlying");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("underlying");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("underlying"));
 				for (HashMap<String, String> act : activityList) {
 					// activity 插入数据
@@ -307,8 +300,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			}
 		}
 		if (tMap.containsKey("problem")) {
-			List<HashMap<String, String>> activityList = list.get("problem");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("problem");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("problem"));
 				for (HashMap<String, String> act : activityList) {
 					// activity 插入数据
@@ -321,8 +315,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		}
 
 		if (tMap.containsKey("enforcement")) {
-			List<HashMap<String, String>> activityList = list.get("enforcement");
-			if (activityList.size() > 0) {
+			List<HashMap<String, String>> activityList = new ArrayList<>();
+			activityList = list.get("enforcement");
+			if (activityList!=null) {
 				String tableName = StringHandler.objectToString(tMap.get("enforcement"));
 				for (HashMap<String, String> act : activityList) {
 					// activity 插入数据
@@ -473,6 +468,11 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		list = Arrays.asList(split);
 
 		return list;
+	}
+
+	@Override
+	public Knowledge selectById(String id) {
+		return knowledgeMapper.selectByPrimaryKey(id);
 	}
 
 }

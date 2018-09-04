@@ -86,6 +86,9 @@ public class KnowledgeController extends BaseController {
 			@ApiParam(value = user) @RequestBody Map<String, Object> map) {
 		try {
 			List<String> ids = (List<String>) map.get("ids");
+			if(ids.isEmpty()){
+				return error("请选择需要删除的知识库!");
+			}
 			int i  = knowledgeService.deleteKnowledge(ids);
 			if(i>0){
 				return success();
@@ -141,29 +144,33 @@ public class KnowledgeController extends BaseController {
 	
 	@ApiOperation(value = "根据知识库的数据集id查询详情", notes = "根据知识库的数据集id查询详情")
 	@ResponseBody
-	@RequestMapping(value = "/selectByDatasetId", method = RequestMethod.POST)
-	public SQApiResponse<Map<String, Object>> selectByDatasetId(HttpServletRequest request,
+	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> selectById(HttpServletRequest request,
 			@ApiParam(value = user) @RequestBody Map<String, Object> map) {
 		try {
 			Map<String, Object> result = new HashMap<String, Object>();
-			String datasetId = StringHandler.objectToString(map.get("datasetId"));
-			DataSet dataSet = dataSetService.selectById(datasetId);
-			if(dataSet.getTypeId().equals("ftp_file")){
-				map.put("id", dataSet.getId());
-				PageInfo<Map<String, Object>> data = dataSetService.findByIdFtpFile(map);
-            	result = mergeJqGridData(data);
-			}else if (dataSet.getTypeId().equals("local_rdb")) {
-				map.put("dataTable",dataSet.getDataTable());
+			String id = StringHandler.objectToString(map.get("id"));
+			Knowledge knowledge = knowledgeService.selectById(id);
+			if(knowledge.getTableName()==null){
+				DataSet dataSet = dataSetService.selectById(knowledge.getDatasetId());
+				if (dataSet.getTypeId().equals("local_rdb")) {
+					map.put("dataTable",dataSet.getDataTable());
+					PageInfo<Map<String, Object>> data = dataSetService.findByIdLcoal(map);
+	            	result = mergeJqGridData(data);
+				}else {
+					map.put("rdbId",dataSet.getRdbId());
+					Map<String, Object> data = dataSetService.findById(map);
+	            	result = data;
+				}
+			}else{
+				map.put("dataTable",knowledge.getTableName());
 				PageInfo<Map<String, Object>> data = dataSetService.findByIdLcoal(map);
             	result = mergeJqGridData(data);
-			}else {
-				map.put("rdbId",dataSet.getRdbId());
-				Map<String, Object> data = dataSetService.findById(map);
-            	result = data;
 			}
+			
 			return success(result);
 		} catch (Exception e) {
-			logger.error("knowledge/selectByDatasetId",e);
+			logger.error("knowledge/selectById",e);
 			return error("保存异常");
 		}
 	}

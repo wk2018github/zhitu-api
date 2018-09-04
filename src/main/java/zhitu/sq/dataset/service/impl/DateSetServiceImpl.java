@@ -12,11 +12,10 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
@@ -44,6 +43,7 @@ import zhitu.util.FileUpload;
 import zhitu.util.JdbcDbUtils;
 
 @Service
+@Transactional
 public class DateSetServiceImpl implements DataSetService{
 
 	@Autowired
@@ -75,6 +75,7 @@ public class DateSetServiceImpl implements DataSetService{
 		return new PageInfo<>(list);
 	}
 
+	@Override
 	public String saveLocalDataSet(String userId, String name, String describe, String projectId,
 			MultipartFile files, HttpServletRequest request) throws Exception {
 		String dataSetId = "DATASET_" + System.currentTimeMillis();
@@ -469,14 +470,15 @@ public class DateSetServiceImpl implements DataSetService{
 		res.put("dataSetName", ds.getName());
 		return res;
 	}
-
+	
+	@Override
 	public Map<String, Object> queryLocalTableColumnData(Map<String, Object> map,String userId) throws Exception {
-		Configuration config = new PropertiesConfiguration("application.properties");
-		String url = config.getString("spring.datasource.url");
-		String userName = config.getString("spring.datasource.username");
-		String password = config.getString("spring.datasource.password");
-		String columnNames = String.valueOf(map.get("columnNames"));
-		
+//		Configuration config = new PropertiesConfiguration("application.properties");
+//		String url = config.getString("spring.datasource.url");
+//		String userName = config.getString("spring.datasource.username");
+//		String password = config.getString("spring.datasource.password");
+//		String columnNames = String.valueOf(map.get("columnNames"));
+//		
 		Map<String, Object> res = new HashMap<String,Object>();
 		
 		//RDB表插入一条数据
@@ -512,16 +514,6 @@ public class DateSetServiceImpl implements DataSetService{
 		//数据迁移
 		SparkSql.migration(rdb, dataTable,taskInfo.getId());
 		
-//		//分页参数
-//		Integer page = Integer.parseInt(String.valueOf(map.get("page")));
-//		Integer rows = Integer.parseInt(String.valueOf(map.get("rows")));
-//		Integer start = getIntStart(page,rows);
-//		Integer end = getIntEnd(page,rows);
-//		
-//		res = dataSourceUtil.queryLocalTableColumnData(url, userName, password, dataTable, columnNames, start, end);//表数据
-//		res.put("taskStatus", 1);//任务状态
-//		DataSet ds = dataSetMapper.selectByPrimaryKey(String.valueOf(map.get("dataSetId")));//数据集相关信息
-//		res.put("dataSet", ds);
 		res.put("id", dataSet.getId());
 		res.put("taskId",taskInfo.getId());
 		return res;
@@ -559,6 +551,7 @@ public class DateSetServiceImpl implements DataSetService{
 	public Integer getIntEnd(int page,int rows){
 		return page*rows;
 	}
+	
 	public boolean upload(FTPClient ftp, MultipartFile file, String directory, String fileName) throws Exception {
 		boolean flag = false;
 		String ftpPath = new String(directory.getBytes("GBK"),"iso-8859-1");
