@@ -85,7 +85,7 @@ public class MyTest {
                 if(whereClauseSb.length() > 0){
                     whereClauseSb.append("AND\n");
                 }
-                whereClauseSb.append(getNodeVariableName()).append(".").append(entry).append("=\"").append(entry.getValue()).append("\"\n");
+                whereClauseSb.append(getNodeVariableName()).append(".").append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"\n");
             }
 
 //            if(childNodeVariableName != null){
@@ -156,24 +156,40 @@ public class MyTest {
 		Node proNode3 = new Node(proNode2,  "计划", NodeTypes.PROCESS);
 		Node filterNode2 = new Node(proNode3, "转账支票", NodeTypes.FILTER);
 		Node proNode4 = new Node(filterNode2,  "支付", NodeTypes.PROCESS);
-    	
-		Node p1 = filterNode1.parent;
+		
+		Node p1 = filterNode2.parent;
     	
     	RuleNode node0 = new RuleNode(); //做一个构造函数，直接把流程节点传进去
-        node0.id = filterNode1.id;
-        node0.addLabel(filterNode1.text);
+        node0.id = filterNode2.id;
+        node0.addLabel(filterNode2.text);
         
         RuleNode node1 = new RuleNode();
         node1.id = p1.id;
         node1.addLabel(p1.text);
-        System.err.println(filterNode1.text);
-        node1.filterMap.put(p1.text, filterNode1.text);
+        node1.filterMap.put(p1.text, filterNode2.text);
         
         node0.addParent(node1, "");
         
         for(String cypher: node0.createCypherList(1)){
             System.out.println(cypher);
         }
+        
+//		Node p1 = filterNode1.parent;
+//    	
+//    	RuleNode node0 = new RuleNode(); //做一个构造函数，直接把流程节点传进去
+//        node0.id = filterNode1.id;
+//        node0.addLabel(filterNode1.text);
+//        
+//        RuleNode node1 = new RuleNode();
+//        node1.id = p1.id;
+//        node1.addLabel(p1.text);
+//        node1.filterMap.put(p1.text, filterNode1.text);
+//        
+//        node0.addParent(node1, "");
+//        
+//        for(String cypher: node0.createCypherList(1)){
+//            System.out.println(cypher);
+//        }
     	
 //        RuleNode node1 = new RuleNode();
 //        node1.id = "b";
