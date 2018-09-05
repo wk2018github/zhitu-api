@@ -24,23 +24,31 @@ public class Project implements Serializable{
      * 项目名称
      */
     private String name;
+    
+    /**
+     * 项目描述
+     */
+    private String description;
 
     /**
      * 用户ID，外键：引用zt_sys_user.id
      */
     private String userId;
     
+    private String graphId;
+    
 	public Project() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Project(String id, Date createTime, String name, String userId) {
+	public Project(String id, Date createTime, String name, String userId, String description,String graphId) {
 		super();
 		this.id = id;
 		this.createTime = createTime;
 		this.name = name;
 		this.userId = userId;
+		this.description = description;
+		this.graphId = graphId;
 	}
 
 	public String getId() {
@@ -73,6 +81,22 @@ public class Project implements Serializable{
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getGraphId() {
+		return graphId;
+	}
+
+	public void setGraphId(String graphId) {
+		this.graphId = graphId;
 	}
 
     

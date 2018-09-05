@@ -1,13 +1,120 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="zhitu.sq.dataset.mapper.ProjectMapper">
-	<resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.Project">
-		<id column="id" property="id" jdbcType="VARCHAR" />
-		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="userId" property="userId" jdbcType="VARCHAR" />
-	</resultMap>
-
-	
-	
+<mapper namespace="zhitu.sq.dataset.mapper.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="zhitu.sq.dataset.model.Project" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="VARCHAR" />
+    <result column="graphId" property="graphId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, createTime, name, description, userId ,graphId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from zt_sys_project
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from zt_sys_project
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="zhitu.sq.dataset.model.Project" >
+    insert into zt_sys_project (id, createTime, name, 
+      description, userId,graphId)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},#{graphId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="zhitu.sq.dataset.model.Project" >
+    insert into zt_sys_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+       <if test="graphId != null" >
+        graphId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="graphId != null" >
+        #{graphId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="zhitu.sq.dataset.model.Project" >
+    update zt_sys_project
+    <set >
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="graphId != null" >
+        userId = #{graphId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="zhitu.sq.dataset.model.Project" >
+    update zt_sys_project
+    set createTime = #{createTime,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=VARCHAR},
+      graphId = #{graphId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="queryProject" resultType="java.util.Map">
+   	SELECT * FROM zt_sys_project d
+	where d.userId = #{userId}
+	<if test="name!=null and name!=''">
+		and d.`name` like concat(concat('%',#{name}),'%')
+	</if>
+	ORDER BY d.createTime DESC
+  </select>
+  <delete id="deleteProject" parameterType="java.util.List">
+		delete from zt_sys_project
+		where id in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=",">
+			#{id}
+		</foreach>
+	</delete>
 </mapper>
