@@ -69,5 +69,13 @@
 		FROM ${table}
 		WHERE 上级代码 = #{codeValue}
 	</select>
+	
+	<select id="queryNodeDetails" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.controller.vo.NodeDetail">
+		SELECT 指标金额,已申请金额,在途调减金额,在途调增金额,指标增加金额,指标追减金额,
+			指标调剂金额,指标调剂调入金额,指标调剂调出金额,可用指标金额,指标核销金额,指标剩余金额,指标冻结金额
+		FROM 基础表_预算管理数据_分析单位指标明细表
+		WHERE 指标剩余金额 > 0
+	</select>
 
 </mapper>

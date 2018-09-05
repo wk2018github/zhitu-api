@@ -180,7 +180,9 @@ public class GraphServiceImpl implements GraphService{
 	}
 	
 	@Override
-	public List<NodeDetail> queryNodeDetails(Map<String,Object> map) throws Exception {
+	public PageInfo<NodeDetail> queryNodeDetails(Map<String,Object> map) throws Exception {
+		map = orderMap(map);
+		
 		List<NodeDetail> nodeDetail = new ArrayList<NodeDetail>();
 		String id = StringHandler.objectToString(map.get("id"));
 		String cypher = "";
@@ -194,10 +196,14 @@ public class GraphServiceImpl implements GraphService{
 			cypher = s;
 			System.out.println(s);
 		}
+//		nodeDetail = Neo4jTest.queryNodeDetails(cypher);
+		PageHelper.startPage(NumberDealHandler.objectToInt(map.get("page")),
+				NumberDealHandler.objectToInt(map.get("rows")));
+		List<NodeDetail> list = graphMapper.queryNodeDetails(map);
 		
-		nodeDetail = Neo4jTest.queryNodeDetails(cypher);
+		return new PageInfo<NodeDetail>(list);
 		
-		return nodeDetail;
+//		return nodeDetail;
 		
 	}
 	

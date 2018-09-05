@@ -224,15 +224,19 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String nodeId = "{\"id\":\"GRAPH_12341441\"}";
+	private static final String nodeId = "{\"id\":\"GRAPH_12341441\",\"page\":\"1\",\"rows\":\"10\",\"sidx\":\"createTime\",\"sord\":\"desc\"}";
 	@ApiOperation(value = "图谱分析-流程分析-点击节点上的查看详情", notes = "图谱分析-流程分析-点击节点上的查看详情")
 	@ResponseBody
 	@RequestMapping(value = "/queryNodeDetails", method = RequestMethod.POST)
-	public SQApiResponse<List<NodeDetail>> queryNodeDetails(HttpServletRequest request,
+	public SQApiResponse<Map<String, Object>> queryNodeDetails(HttpServletRequest request,
 			@ApiParam(value = nodeId) @RequestBody Map<String,Object> map ) {
 		try {
 			
-			return success("查询成功",graphService.queryNodeDetails(map));
+			Map<String, Object> result = new HashMap<String, Object>();
+			
+			PageInfo<NodeDetail> list = graphService.queryNodeDetails(map);
+			result = mergeJqGridData(list);
+			return success(result);
 			
 		} catch (Exception e) {
 			logger.error("graph/queryNodeDetails",e);

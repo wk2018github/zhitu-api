@@ -73,7 +73,7 @@ public class MyTest {
             String labelsCondition = String.join(":", labels);
             StringBuilder matchClauseSb = new StringBuilder();
             if(childMatchClause != null){
-                matchClauseSb.append(childMatchClause).append("-[:").append(relationType).append("]->");
+                matchClauseSb.append(childMatchClause).append("-[ ").append(relationType).append("]->");
             }
             matchClauseSb.append("(").append(getNodeVariableName()).append(":").append(labelsCondition).append(")");
 
@@ -151,10 +151,10 @@ public class MyTest {
     public static void main(String[] args) {
     	
     	Node proNode1 = new Node("科处室指标", NodeTypes.PROCESS);
-    	Node filterNode1 = new Node(proNode1, "现金支票", NodeTypes.FILTER);
+    	Node filterNode1 = new Node(proNode1, "一般公共服务支出", NodeTypes.FILTER);
     	Node proNode2 = new Node(filterNode1, "单位指标", NodeTypes.PROCESS);
 		Node proNode3 = new Node(proNode2,  "计划", NodeTypes.PROCESS);
-		Node filterNode2 = new Node(proNode3, "转账支票", NodeTypes.FILTER);
+		Node filterNode2 = new Node(proNode3, "外交支出", NodeTypes.FILTER);
 		Node proNode4 = new Node(filterNode2,  "支付", NodeTypes.PROCESS);
 		
 		Node p1 = filterNode2.parent;

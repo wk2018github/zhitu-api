@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 
@@ -55,5 +56,14 @@ public interface GraphMapper {
 			, @Param("name") String name, @Param("codeValue") String codeValue);
     
 	
+	
+	
+	/**
+	 * @author qwm
+	 * 查询graph表所有数据  或者按照名称
+	 * @param email
+	 * @return
+	 */
+	List<NodeDetail> queryNodeDetails(Map<String,Object> map);
 	
 }

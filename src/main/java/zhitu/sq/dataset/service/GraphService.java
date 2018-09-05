@@ -87,6 +87,6 @@ public interface GraphService {
 	 * @Author: qwm
 	 * @Description:图谱分析-流程分析-点击节点上的查看详情
 	 */
-	List<NodeDetail> queryNodeDetails(Map<String, Object> map) throws Exception;
+	PageInfo<NodeDetail> queryNodeDetails(Map<String, Object> map) throws Exception;
 
 }
