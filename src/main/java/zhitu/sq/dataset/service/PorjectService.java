@@ -12,9 +12,10 @@ public interface PorjectService {
 	 * @param id
 	 * @param name
 	 * @param description
+	 * @param graphId 
 	 * @return
 	 */
-	int saveProject(String id, String name, String description) throws Exception;
+	int saveProject(String id, String name, String description, String graphId) throws Exception;
 
 	/**
 	 * 查询项目

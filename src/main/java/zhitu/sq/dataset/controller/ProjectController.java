@@ -44,8 +44,15 @@ public class ProjectController extends BaseController{
 //			User user = (User)request.getSession().getAttribute("user");
 			String name = StringHandler.objectToString(map.get("name"));
 			String description = StringHandler.objectToString(map.get("description"));
+			String graphId = StringHandler.objectToString(map.get("graphId"));
+			if(name.isEmpty()){
+				return error("项目名称不能为空！");
+			}
+			if(graphId.isEmpty()){
+				return error("图谱id不能为空！");
+			}
 //			Map<String, Object> result = new HashMap<String, Object>();
-			int i = porjectService.saveProject("USER_1353923423",name,description);
+			int i = porjectService.saveProject("USER_1353923423",name,description,graphId);
 			if(i>0){
 				return success("保存成功",null);
 			}

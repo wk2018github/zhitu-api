@@ -20,13 +20,14 @@ public class PorjectServiceImpl implements PorjectService{
 	private ProjectMapper projectMapper;
 
 	@Override
-	public int saveProject(String userId, String name,String description) throws Exception{
+	public int saveProject(String userId, String name,String description,String graphId) throws Exception{
 		Project project = new Project();
 		project.setCreateTime(new Date());
 		project.setId("PROJECT_"+System.currentTimeMillis());
 		project.setName(name);
 		project.setDescription(description);
 		project.setUserId(userId);
+		project.setGraphId(graphId);
 		return projectMapper.insert(project);
 	}
 
