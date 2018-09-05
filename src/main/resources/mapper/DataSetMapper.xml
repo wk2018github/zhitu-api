@@ -67,7 +67,7 @@
   </update>
   
   <select id="findByName" resultType="java.util.Map">
-   	SELECT d.*, f.description AS typeDesc
+   	SELECT d.*, if(d.typeId='ftp_file',0,1) as type,f.description AS typeDesc
 	FROM zt_sys_dataset d
 	LEFT JOIN zt_sys_dataset_type f ON f.typeId = d.typeId
 	where d.userId = #{userId}
