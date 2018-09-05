@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 
 public interface SinglePointService {
@@ -26,5 +27,36 @@ public interface SinglePointService {
 	 * @Description: 1.3单点分析-查询表节点的过滤器中的具体的值
 	 */
 	List<Select> queryTableFilter(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-单点分析-添加过滤器节点
+	 */
+	Map<String, Object> addFilterNode(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description: 图谱分析-单点分析-过滤器节点环形菜单
+	 */
+	List<String> queryFilterNodeAnnularData(Map<String,Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-单点分析-查询过滤器节点下级菜单的值
+	 */
+	List<Select> queryFilterNodeLowerLevelMenu(Map<String,Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-单点分析-点击节点上的查看详情
+	 */
+	PageInfo<NodeDetail> queryNodeDetails(Map<String,Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-单点分析-添加流程节点
+	 */
+	Map<String, Object> addProcessNode(Map<String, Object> map) throws Exception;
+	
 
 }

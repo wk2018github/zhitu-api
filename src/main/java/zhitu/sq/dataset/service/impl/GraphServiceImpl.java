@@ -97,7 +97,7 @@ public class GraphServiceImpl implements GraphService{
 		Map<String,Object> result = new HashMap<String,Object>();
 		String id = map.get("id").toString(); //初始节点id
 		String parent_id = map.get("parent_id").toString(); //父节点id
-		String tableSuffix = map.get("table").toString(); //表名后缀 选中环境数据
+		String tableSuffix = map.get("table").toString(); //表名后缀 选中环形数据
 		String code = map.get("code").toString(); // 2级菜单id new node 的 code
 		String name = map.get("name").toString(); // 2级菜单名称  new node 的 name
 		
