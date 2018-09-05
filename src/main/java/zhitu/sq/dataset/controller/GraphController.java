@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
@@ -220,6 +221,22 @@ public class GraphController extends BaseController {
 		} catch (Exception e) {
 			logger.error("graph/addOtherNodesLine",e);
 			return error("添加异常");
+		}
+	}
+	
+	private static final String nodeId = "{\"id\":\"GRAPH_12341441\"}";
+	@ApiOperation(value = "图谱分析-流程分析-点击节点上的查看详情", notes = "图谱分析-流程分析-点击节点上的查看详情")
+	@ResponseBody
+	@RequestMapping(value = "/queryNodeDetails", method = RequestMethod.POST)
+	public SQApiResponse<List<NodeDetail>> queryNodeDetails(HttpServletRequest request,
+			@ApiParam(value = nodeId) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success("查询成功",graphService.queryNodeDetails(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/queryNodeDetails",e);
+			return error("查询异常");
 		}
 	}
 	

@@ -16,11 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
+import zhitu.util.MyTest.RuleNode;
+import zhitu.util.Neo4jTest;
 import zhitu.util.NumberDealHandler;
+import zhitu.util.StringHandler;
 import zhitu.vgraph.Graphs;
 import zhitu.vgraph.Node;
 import zhitu.vgraph.NodeTypes;
@@ -175,6 +179,27 @@ public class GraphServiceImpl implements GraphService{
 		
 	}
 	
+	@Override
+	public List<NodeDetail> queryNodeDetails(Map<String,Object> map) throws Exception {
+		List<NodeDetail> nodeDetail = new ArrayList<NodeDetail>();
+		String id = StringHandler.objectToString(map.get("id"));
+		String cypher = "";
+		Node node = Graphs.findNodeById(id);
+		RuleNode ruleNode = new RuleNode(); // 做一个构造函数，直接把流程节点传进去
+		ruleNode.id = node.id;
+		ruleNode.addLabel(node.text);
+		ruleNode = getFirstRuleNode(ruleNode, node);
+		
+		for (String s : ruleNode.createCypherList(1)) {
+			cypher = s;
+			System.out.println(s);
+		}
+		
+		nodeDetail = Neo4jTest.queryNodeDetails(cypher);
+		
+		return nodeDetail;
+		
+	}
 	
 	
 	
@@ -262,7 +287,24 @@ public class GraphServiceImpl implements GraphService{
 		}
 		return false;
 	}
-
+	/**
+	 * @Author: qwm
+	 * @Description: 递归取得根节点node
+	 */
+	public RuleNode getFirstRuleNode(RuleNode ruleNode, Node node){
+		if(null != node.parent){
+			
+			Node p = node.parent;
+			RuleNode pNode = new RuleNode(); // 做一个构造函数，直接把流程节点传进去
+			pNode.id = p.id;
+			pNode.addLabel(p.text);
+			pNode.filterMap.put(p.text, node.text);
+			ruleNode.addParent(pNode, "");
+			
+			getFirstRuleNode(pNode, p);
+		}
+    	return ruleNode;
+    }
 
 	
 	

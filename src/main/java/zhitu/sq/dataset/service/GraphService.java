@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
 
@@ -81,5 +82,11 @@ public interface GraphService {
 	 * @Description:图谱分析-流程分析-添加其他表节点线
 	 */
 	Map<String, Object> addOtherNodesLine(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-点击节点上的查看详情
+	 */
+	List<NodeDetail> queryNodeDetails(Map<String, Object> map) throws Exception;
 
 }

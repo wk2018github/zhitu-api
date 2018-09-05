@@ -35,7 +35,7 @@ public class MyTest {
         public ArrayList<String> parentRelationTypes = new ArrayList<>();
 
 
-        HashMap<String, String> filterMap = new HashMap<>();
+        public HashMap<String, String> filterMap = new HashMap<>();
 //        public HashMap<String, String> getFilterMapWithParents(){
 //
 //            RuleNode currentRuleNode = this;

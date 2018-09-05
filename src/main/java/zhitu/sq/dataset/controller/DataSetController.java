@@ -337,7 +337,7 @@ public class DataSetController extends BaseController{
 
 			return success(res);
 		} catch (Exception e) {
-			LOG.error("查询失败", e);
+			LOG.error("dataSet/queryDBType", e);
 			return error("查询失败");
 		}
 	}
@@ -359,7 +359,7 @@ public class DataSetController extends BaseController{
 
 			return success(res);
 		} catch (Exception e) {
-			LOG.error("查询失败", e);
+			LOG.error("dataSet/queryDBTables", e);
 			return error("查询失败");
 		}
 	}
@@ -385,7 +385,7 @@ public class DataSetController extends BaseController{
 
 			return success(result);
 		} catch (Exception e) {
-			LOG.error("queryDBTables", e);
+			LOG.error("dataSet/queryTableData", e);
 			return error("查询失败");
 		}
 	}
@@ -408,7 +408,7 @@ public class DataSetController extends BaseController{
 
 			return success(res);
 		} catch (Exception e) {
-			LOG.error("queryDBTables", e);
+			LOG.error("dataSet/queryTableColumn", e);
 			return error("查询失败");
 		}
 	}
@@ -434,7 +434,7 @@ public class DataSetController extends BaseController{
 
 			return success(result);
 		} catch (Exception e) {
-			LOG.error("queryDBTables", e);
+			LOG.error("dataSet/queryTableColumnData", e);
 			return error("查询失败");
 		}
 	}
@@ -464,7 +464,7 @@ public class DataSetController extends BaseController{
 
 			return success(result);
 		} catch (Exception e) {
-			LOG.error("queryDBTables", e);
+			LOG.error("dataSet/queryLocalTableColumnData", e);
 			return error("查询失败");
 		}
 	}

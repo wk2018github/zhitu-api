@@ -12,6 +12,7 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
 
+import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.util.JacksonUtil;
 
 public class Neo4jTest {
@@ -107,7 +108,7 @@ public class Neo4jTest {
 
 	/**
 	 * 
-	 * @throws Exception 
+	 * @throws Exception
 	 * @Author: qwm @Description:插入数据至neo4j @return: boolean @throws
 	 */
 	public static boolean addToNeo4j(String tableName, String columns, List<String> list) throws Exception {
@@ -120,7 +121,8 @@ public class Neo4jTest {
 				str = changeJson(str);
 
 				String cypher = "create (n:" + tableName + " " + str + ")";
-//				String cypher = "create (n:" + tableName + ":"+图谱id+" " + str + ")";
+				// String cypher = "create (n:" + tableName + ":"+图谱id+" " + str
+				// + ")";
 				session.run(cypher);
 
 			}
@@ -148,14 +150,34 @@ public class Neo4jTest {
 
 		return true;
 	}
+
 	/**
 	 * 
-	 * @Author: qwm
-	 * @Description:{"name":"数据集cc","description":"c数据集的描述"} to {name:"数据集cc",description:"c数据集的描述"}
-	 * @return: String      
-	 * @throws
+	 * @Author: qwm @Description:get所有关系类型 @return: List<String> @throws
 	 */
-	public static String changeJson(String json) throws Exception{
+	public static List<NodeDetail> queryNodeDetails(String cypher) {
+		List<NodeDetail> list = new ArrayList<NodeDetail>();
+
+		try (Session session = driver.session()) {
+
+			StatementResult results = session.run(cypher);
+
+			while (results.hasNext()) {
+				
+				
+			}
+
+		}
+
+		return list;
+	}
+
+	/**
+	 * 
+	 * @Author: qwm @Description:{"name":"数据集cc","description":"c数据集的描述"} to
+	 * {name:"数据集cc",description:"c数据集的描述"} @return: String @throws
+	 */
+	public static String changeJson(String json) throws Exception {
 		Map<String, Object> map = JacksonUtil.Builder().json2Map(json);
 
 		StringBuffer str = new StringBuffer("{");
@@ -164,7 +186,7 @@ public class Neo4jTest {
 		}
 		str.deleteCharAt(str.lastIndexOf(","));
 		str.append("}");
-		
+
 		return str.toString();
 	}
 
