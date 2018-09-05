@@ -5,8 +5,16 @@
 
 	<select id="queryRootSinglePoint" resultType="java.lang.String">
 		SELECT `value`
-		FROM zt_sys_dict
+		FROM
+		zt_sys_dict
 		WHERE code = 'rootSinglePoint'
+	</select>
+
+	<select id="queryProcessNodeText" resultType="zhitu.sq.dataset.controller.vo.SuspendDetail">
+		SELECT `value` AS `name`
+		FROM
+		zt_sys_dict
+		WHERE code = 'processNode' AND parentValue = '00'
 	</select>
 
 

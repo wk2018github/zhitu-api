@@ -24,6 +24,7 @@ import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
 
@@ -224,12 +225,12 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String nodeId = "{\"id\":\"GRAPH_12341441\",\"page\":\"1\",\"rows\":\"10\",\"sidx\":\"createTime\",\"sord\":\"desc\"}";
+	private static final String nodeIdPage = "{\"id\":\"GRAPH_12341441\",\"page\":\"1\",\"rows\":\"10\",\"sidx\":\"createTime\",\"sord\":\"desc\"}";
 	@ApiOperation(value = "图谱分析-流程分析-点击节点上的查看详情", notes = "图谱分析-流程分析-点击节点上的查看详情")
 	@ResponseBody
 	@RequestMapping(value = "/queryNodeDetails", method = RequestMethod.POST)
 	public SQApiResponse<Map<String, Object>> queryNodeDetails(HttpServletRequest request,
-			@ApiParam(value = nodeId) @RequestBody Map<String,Object> map ) {
+			@ApiParam(value = nodeIdPage) @RequestBody Map<String,Object> map ) {
 		try {
 			
 			Map<String, Object> result = new HashMap<String, Object>();
@@ -240,6 +241,22 @@ public class GraphController extends BaseController {
 			
 		} catch (Exception e) {
 			logger.error("graph/queryNodeDetails",e);
+			return error("查询异常");
+		}
+	}
+	
+	private static final String nodeId = "{\"id\":\"GRAPH_12341441\"}";
+	@ApiOperation(value = "图谱分析-流程分析-鼠标悬浮节点显示信息", notes = "图谱分析-流程分析-鼠标悬浮节点显示信息")
+	@ResponseBody
+	@RequestMapping(value = "/querySuspendDetails", method = RequestMethod.POST)
+	public SQApiResponse<List<SuspendDetail>> querySuspendDetails(HttpServletRequest request,
+			@ApiParam(value = nodeId) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success(graphService.querySuspendDetails(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/querySuspendDetails",e);
 			return error("查询异常");
 		}
 	}

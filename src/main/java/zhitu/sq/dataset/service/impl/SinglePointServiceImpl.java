@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.mapper.SinglePointMapper;
 import zhitu.sq.dataset.service.GraphService;
@@ -182,6 +183,16 @@ public class SinglePointServiceImpl implements SinglePointService {
 
 		return result;
 
+	}
+	
+	@Override
+	public List<SuspendDetail> querySuspendDetails(Map<String,Object> map) throws Exception {
+//		List<SuspendDetail> list = new ArrayList<>();
+		
+//		String id = StringHandler.objectToString(map.get("id"));
+//		Node node = Graphs.findNodeById(id);
+
+		return singlePointMapper.queryProcessNodeText();
 	}
 	
 	

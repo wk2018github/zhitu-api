@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.model.Graph;
 import zhitu.sq.dataset.service.GraphService;
@@ -207,6 +208,26 @@ public class GraphServiceImpl implements GraphService{
 		
 	}
 	
+	@Override
+	public List<SuspendDetail> querySuspendDetails(Map<String,Object> map) throws Exception {
+		List<SuspendDetail> list = new ArrayList<>();
+		
+		String id = StringHandler.objectToString(map.get("id"));
+		Node node = Graphs.findNodeById(id);
+		
+		SuspendDetail sd = new SuspendDetail(getPreviousProcessNode(node).text, "");
+		list.add(sd);
+
+		return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
@@ -310,6 +331,20 @@ public class GraphServiceImpl implements GraphService{
 			getFirstRuleNode(pNode, p);
 		}
     	return ruleNode;
+    }
+	/**
+	 * @Author: qwm
+	 * @Description: 递归取得上一个流程节点
+	 */
+	public Node getPreviousProcessNode(Node node){
+		if(null != node.parent){
+			Node p = node.parent;
+			if(NodeTypes.PROCESS.equals(p.type)){
+				return p;
+			}
+			node = getPreviousProcessNode(p);
+		}
+    	return node;
     }
 
 	

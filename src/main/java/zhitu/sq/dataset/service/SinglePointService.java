@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.SuspendDetail;
 
 public interface SinglePointService {
 	
@@ -57,6 +58,12 @@ public interface SinglePointService {
 	 * @Description:图谱分析-单点分析-添加流程节点
 	 */
 	Map<String, Object> addProcessNode(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-单点分析-鼠标悬浮节点显示信息
+	 */
+	List<SuspendDetail> querySuspendDetails(Map<String, Object> map) throws Exception;
 	
 
 }

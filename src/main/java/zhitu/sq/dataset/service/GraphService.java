@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.model.Graph;
 
 public interface GraphService {
@@ -88,5 +89,11 @@ public interface GraphService {
 	 * @Description:图谱分析-流程分析-点击节点上的查看详情
 	 */
 	PageInfo<NodeDetail> queryNodeDetails(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-鼠标悬浮节点显示信息
+	 */
+	List<SuspendDetail> querySuspendDetails(Map<String, Object> map) throws Exception;
 
 }
