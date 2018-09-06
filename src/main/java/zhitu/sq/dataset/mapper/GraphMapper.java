@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
+import zhitu.sq.dataset.model.ProcessGraph;
 
 
 
@@ -55,8 +56,23 @@ public interface GraphMapper {
 	List<Select> queryLowerLevelTableFilter(@Param("table") String table, @Param("code") String code
 			, @Param("name") String name, @Param("codeValue") String codeValue);
     
+	/**
+	 * @Author: qwm
+	 * @Description: 保存流程图
+	 */
+	int saveProcessGraph(Map<String,Object> map);
 	
+	/**
+	 * @Author: qwm
+	 * @Description:2.1图谱分析-流程分析-查询流程图列表
+	 */
+	List<ProcessGraph> queryProcessGraph(Map<String, Object> map);
 	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-删除流程图列表
+	 */
+	Integer deleteProcessGraph(Map<String, Object> map);
 	
 	/**
 	 * @author qwm

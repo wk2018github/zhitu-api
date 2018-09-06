@@ -9,6 +9,7 @@ import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.model.Graph;
+import zhitu.sq.dataset.model.ProcessGraph;
 
 public interface GraphService {
 
@@ -101,5 +102,23 @@ public interface GraphService {
 	 * @Description:图谱分析-流程分析-删除当前节点
 	 */
 	Map<String, Object> deleteThisNode(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:2.1图谱分析-流程分析-保存当前流程图
+	 */
+	Map<String, Object> saveProcessGraph(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:2.1图谱分析-流程分析-查询流程图列表
+	 */
+	List<ProcessGraph> queryProcessGraph(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description: 图谱分析-流程分析-删除流程图列表
+	 */
+	Map<String, Object> deleteProcessGraph(Map<String, Object> map) throws Exception;
 
 }

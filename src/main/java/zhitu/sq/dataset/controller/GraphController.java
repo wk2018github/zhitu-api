@@ -26,6 +26,7 @@ import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.model.Graph;
+import zhitu.sq.dataset.model.ProcessGraph;
 import zhitu.sq.dataset.service.GraphService;
 
 @RequestMapping("graph")
@@ -225,7 +226,7 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String nodeIdPage = "{\"id\":\"GRAPH_12341441\",\"page\":\"1\",\"rows\":\"10\",\"sidx\":\"createTime\",\"sord\":\"desc\"}";
+	private static final String nodeIdPage = "{\"id\":\"GRAPH_12341441\",\"year\":\"2017\",\"page\":\"1\",\"rows\":\"10\"}";
 	@ApiOperation(value = "图谱分析-流程分析-点击节点上的查看详情", notes = "图谱分析-流程分析-点击节点上的查看详情")
 	@ResponseBody
 	@RequestMapping(value = "/queryNodeDetails", method = RequestMethod.POST)
@@ -273,6 +274,58 @@ public class GraphController extends BaseController {
 			
 		} catch (Exception e) {
 			logger.error("graph/deleteThisNode",e);
+			return error("删除异常");
+		}
+	}
+	
+	private static final String saveGraph = "{\"year\":\"2017\",\"name\":\"测试流程图\",\"json\":\"json\",\"graphId\":\"json\"}";
+	@ApiOperation(value = "9.1图谱分析-流程分析-保存当前流程图", notes = "9.1图谱分析-流程分析-保存当前流程图")
+	@ResponseBody
+	@RequestMapping(value = "/saveProcessGraph", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> saveProcessGraph(HttpServletRequest request,
+			@ApiParam(value = saveGraph) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success(graphService.saveProcessGraph(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/saveProcessGraph",e);
+			return error("保存异常");
+		}
+	}
+	
+	private static final String queryProcessGraph = "{\"page\":\"1\",\"rows\":\"10\"}";
+	@ApiOperation(value = "9.2图谱分析-流程分析-流程图列表", notes = "9.2图谱分析-流程分析-流程图列表")
+	@ResponseBody
+	@RequestMapping(value = "/queryProcessGraph", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> queryProcessGraph(HttpServletRequest request,
+			@ApiParam(value = queryProcessGraph) @RequestBody Map<String,Object> map) {
+		try {
+			
+			Map<String, Object> result = new HashMap<String, Object>();
+			
+			List<ProcessGraph> list = graphService.queryProcessGraph(map);
+			result.put("list", list);
+			return success(result);
+			
+		} catch (Exception e) {
+			logger.error("graph/queryProcessGraph",e);
+			return error("查询异常");
+		}
+	}
+	
+	private static final String deleteProcessGraph = "{\"id\":\"1\"}";
+	@ApiOperation(value = "9.3图谱分析-流程分析-删除流程图列表", notes = "9.3图谱分析-流程分析-删除流程图列表")
+	@ResponseBody
+	@RequestMapping(value = "/deleteProcessGraph", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> deleteProcessGraph(HttpServletRequest request,
+			@ApiParam(value = deleteProcessGraph) @RequestBody Map<String,Object> map) {
+		try {
+			
+			return success(graphService.deleteProcessGraph(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/deleteProcessGraph",e);
 			return error("删除异常");
 		}
 	}

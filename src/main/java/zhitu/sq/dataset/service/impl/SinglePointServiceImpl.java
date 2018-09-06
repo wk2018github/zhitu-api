@@ -138,6 +138,7 @@ public class SinglePointServiceImpl implements SinglePointService {
 		
 		List<NodeDetail> nodeDetail = new ArrayList<NodeDetail>();
 		String id = StringHandler.objectToString(map.get("id"));
+//		String year = StringHandler.objectToString(map.get("year"));//////////////////////////////
 		String cypher = "";
 		Node node = Graphs.findNodeById(id);
 		RuleNode ruleNode = new RuleNode(); // 做一个构造函数，直接把流程节点传进去

@@ -21,6 +21,7 @@ import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.controller.vo.SuspendDetail;
 import zhitu.sq.dataset.mapper.GraphMapper;
 import zhitu.sq.dataset.model.Graph;
+import zhitu.sq.dataset.model.ProcessGraph;
 import zhitu.sq.dataset.service.GraphService;
 import zhitu.util.MyTest.RuleNode;
 import zhitu.util.Neo4jTest;
@@ -186,6 +187,7 @@ public class GraphServiceImpl implements GraphService{
 		
 		List<NodeDetail> nodeDetail = new ArrayList<NodeDetail>();
 		String id = StringHandler.objectToString(map.get("id"));
+//		String year = StringHandler.objectToString(map.get("year"));/////////////////////////////////////
 		String cypher = "";
 		Node node = Graphs.findNodeById(id);
 		RuleNode ruleNode = new RuleNode(); // 做一个构造函数，直接把流程节点传进去
@@ -232,6 +234,41 @@ public class GraphServiceImpl implements GraphService{
 		Node nodeSource = Graphs.findNodeById(initId); //初始的表节点
 		result.put("node", nodeSource.convertTreeToJsonObject().toString());
 		
+		return result;
+	}
+	
+	@Override
+	public Map<String,Object> saveProcessGraph(Map<String,Object> map) throws Exception {
+		Map<String,Object> result = new HashMap<>();
+		
+		String id = "PRO_"+System.currentTimeMillis();
+		map.put("id", id);
+		int i = graphMapper.saveProcessGraph(map);
+		if(i>0){
+			result.put("保存成功", null);
+		} else {
+			result.put("保存异常", null);
+		}
+		return result;
+	}
+	
+	@Override
+	public List<ProcessGraph> queryProcessGraph(Map<String, Object> map) throws Exception {
+//		map = orderMap(map);
+		
+		return graphMapper.queryProcessGraph(map);
+		
+	}
+	
+	@Override
+	public Map<String, Object> deleteProcessGraph(Map<String, Object> map) throws Exception{
+		Map<String, Object> result = new HashMap<>();
+		int i = graphMapper.deleteProcessGraph(map);
+		if(i>0){
+			result.put("删除成功", null);
+		} else {
+			result.put("删除异常", null);
+		}
 		return result;
 	}
 	

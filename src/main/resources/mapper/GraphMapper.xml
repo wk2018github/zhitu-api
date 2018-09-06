@@ -40,19 +40,16 @@
 		WHERE id = #{id,jdbcType=VARCHAR}
 	</update>
 
-	<!-- 删除圖譜 
-	<update id="deleteGraph" parameterType="java.lang.String">
-		DELETE FROM zt_sys_graph
-		WHERE id IN ( ${ids} )
-	</update>-->
+	<!-- 删除圖譜 <update id="deleteGraph" parameterType="java.lang.String"> DELETE 
+		FROM zt_sys_graph WHERE id IN ( ${ids} ) </update> -->
 	<delete id="deleteGraph" parameterType="java.util.List">
-		delete from zt_sys_graph where id in
+		DELETE FROM zt_sys_graph WHERE id IN
 		<foreach collection="ids" item="id" open="(" close=")"
 			separator=",">
 			#{id}
 		</foreach>
 	</delete>
-	
+
 	<select id="queryTableFilter" parameterType="java.lang.String"
 		resultType="zhitu.sq.dataset.controller.vo.Select">
 		SELECT ${code} AS `code`, ${name} AS `name`
@@ -69,12 +66,32 @@
 		FROM ${table}
 		WHERE 上级代码 = #{codeValue}
 	</select>
-	
+
+	<insert id="saveProcessGraph" parameterType="java.util.Map">
+		INSERT INTO
+		zt_sys_process_graph
+		VALUES(#{id},NOW(),#{name},#{year},#{json})
+	</insert>
+
+	<select id="queryProcessGraph" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.model.ProcessGraph">
+		SELECT *
+		FROM
+		zt_sys_process_graph
+	</select>
+
+	<delete id="deleteProcessGraph" parameterType="java.util.Map">
+		DELETE FROM zt_sys_process_graph 
+		WHERE id = #{id}
+	</delete>
+
+
 	<select id="queryNodeDetails" parameterType="java.util.Map"
 		resultType="zhitu.sq.dataset.controller.vo.NodeDetail">
 		SELECT 指标金额,已申请金额,在途调减金额,在途调增金额,指标增加金额,指标追减金额,
-			指标调剂金额,指标调剂调入金额,指标调剂调出金额,可用指标金额,指标核销金额,指标剩余金额,指标冻结金额
-		FROM 基础表_预算管理数据_分析单位指标明细表
+		指标调剂金额,指标调剂调入金额,指标调剂调出金额,可用指标金额,指标核销金额,指标剩余金额,指标冻结金额
+		FROM
+		基础表_预算管理数据_分析单位指标明细表
 		WHERE 指标剩余金额 > 0
 	</select>
 
