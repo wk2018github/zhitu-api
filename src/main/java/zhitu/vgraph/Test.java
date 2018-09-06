@@ -14,7 +14,7 @@ public class Test {
 
 
 	public static void main(String[] args) throws Exception{
-
+		
 		Node node1 = new Node(null, "科处室指标", NodeTypes.PROCESS);
 		Node node2 = new Node(node1, "单位指标", NodeTypes.PROCESS);
 		Node node3 = new Node(node2,  "计划", NodeTypes.PROCESS);
@@ -97,6 +97,7 @@ public class Test {
 //		for(String cString:c){
 //			System.out.println(cString);
 //		}
+//		String.join(",", paths)
 	}
 	
 	public static String reAll(String str){

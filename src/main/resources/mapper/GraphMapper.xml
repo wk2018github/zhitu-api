@@ -82,7 +82,7 @@
 
 	<delete id="deleteProcessGraph" parameterType="java.util.Map">
 		DELETE FROM zt_sys_process_graph 
-		WHERE id = #{id}
+		WHERE id IN ( ${id} )
 	</delete>
 
 

@@ -314,7 +314,7 @@ public class GraphController extends BaseController {
 		}
 	}
 	
-	private static final String deleteProcessGraph = "{\"id\":\"1\"}";
+	private static final String deleteProcessGraph = "{\"id\":\"1,2\"}";
 	@ApiOperation(value = "9.3图谱分析-流程分析-删除流程图列表", notes = "9.3图谱分析-流程分析-删除流程图列表")
 	@ResponseBody
 	@RequestMapping(value = "/deleteProcessGraph", method = RequestMethod.POST)

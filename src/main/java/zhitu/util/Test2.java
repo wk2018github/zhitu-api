@@ -4,14 +4,14 @@ package zhitu.util;
 public class Test2 {
 	
 	public static void main(String[] args) {
-		String path = "e:\\aa\\ddd\\ea.txt";
+		String id = "1,2,3,4";
 		
-		System.out.println(path);
-		
-		path.replaceAll("\\", "\\\\");
-		
-		String p2 = "e:\\\\aa\\\\ddd\\\\ea.txt";
-		System.out.println(p2);
+		StringBuffer sb = new StringBuffer();
+		for (String s : id.split(",")) {
+			sb.append("'").append(s).append("',");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		System.out.println(sb.toString());
 		
 	}
 	

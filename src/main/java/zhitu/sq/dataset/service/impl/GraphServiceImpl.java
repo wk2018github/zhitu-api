@@ -263,6 +263,13 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public Map<String, Object> deleteProcessGraph(Map<String, Object> map) throws Exception{
 		Map<String, Object> result = new HashMap<>();
+		String id = StringHandler.objectToString(map.get("id"));
+		StringBuffer sb = new StringBuffer();
+		for (String s : id.split(",")) {
+			sb.append("'").append(s).append("',");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		map.put("id", sb.toString());
 		int i = graphMapper.deleteProcessGraph(map);
 		if(i>0){
 			result.put("删除成功", null);
