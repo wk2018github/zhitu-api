@@ -221,6 +221,23 @@ public class GraphServiceImpl implements GraphService{
 		return list;
 	}
 	
+	@Override
+	public Map<String,Object> deleteThisNode(Map<String,Object> map) throws Exception {
+		Map<String,Object> result = new HashMap<String,Object>();
+		String initId = map.get("initId").toString(); //初始节点id
+		String id = map.get("id").toString(); //当前节点id  
+		Node node = Graphs.findNodeById(id);
+		node.parent.removeChild(node);
+		
+		Node nodeSource = Graphs.findNodeById(initId); //初始的表节点
+		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		
+		return result;
+	}
+	
+	
+	
+	
 	
 	
 	

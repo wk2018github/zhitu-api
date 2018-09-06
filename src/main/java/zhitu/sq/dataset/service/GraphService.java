@@ -95,5 +95,11 @@ public interface GraphService {
 	 * @Description:图谱分析-流程分析-鼠标悬浮节点显示信息
 	 */
 	List<SuspendDetail> querySuspendDetails(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:图谱分析-流程分析-删除当前节点
+	 */
+	Map<String, Object> deleteThisNode(Map<String, Object> map) throws Exception;
 
 }

@@ -261,5 +261,21 @@ public class GraphController extends BaseController {
 		}
 	}
 	
+	private static final String nodeIdAndSourceId = "{\"initId\":\"GRAPH_12341441\",\"id\":\"GRAPH_12341441\"}";
+	@ApiOperation(value = "图谱分析-删除当前节点", notes = "图谱分析-流程分析-删除当前节点")
+	@ResponseBody
+	@RequestMapping(value = "/deleteThisNode", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> deleteThisNode(HttpServletRequest request,
+			@ApiParam(value = nodeIdAndSourceId) @RequestBody Map<String,Object> map ) {
+		try {
+			
+			return success(graphService.deleteThisNode(map));
+			
+		} catch (Exception e) {
+			logger.error("graph/deleteThisNode",e);
+			return error("删除异常");
+		}
+	}
+	
 
 }
