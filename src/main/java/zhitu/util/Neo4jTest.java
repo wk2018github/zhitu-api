@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
@@ -20,8 +23,13 @@ public class Neo4jTest {
 	public static Driver driver;
 
 	static {
-		String uri = "bolt://192.168.100.103:7687";
-		driver = GraphDatabase.driver(uri);
+		try {
+			Configuration config = new PropertiesConfiguration("config.properties");
+			String neo4jUrl = config.getString("neo4j.datasource.url");
+			driver = GraphDatabase.driver(neo4jUrl);
+		} catch (ConfigurationException e) {
+			e.printStackTrace();
+		}
 		// driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password
 		// ) );
 	}
