@@ -243,6 +243,34 @@ public class KnowledgeController extends BaseController {
 		}
 	}
 	
+	private static final String toMap2 = "{\"name\":\"图谱名称\",\"description\":\"图谱描述\"}";
+	/**
+	 * @Author: qwm
+	 * @Description:
+	 * @return: SQApiResponseMap<String, Object>
+	 * @throws
+	 */
+	@ApiOperation(value = "1.2知识库-关系配置页面-添加关系至图谱2", notes = "1.2知识库-关系配置页面-添加关系至图谱2")
+	@ResponseBody
+	@RequestMapping(value = "/addToMap2", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> addToMap2(HttpServletRequest request,
+			@ApiParam(value = toMap2) @RequestBody Map<String, Object> map) {
+		try {
+			Map<String, Object> result = new HashMap<String, Object>();
+			
+			String id = knowledgeService.addToMap2(map);
+			if(StringHandler.isNotEmptyOrNull(id)){
+				result.put("id",id);
+				return success("添加成功",result);
+			} else {
+				return error("添加失败");
+			}
+		} catch (Exception e) {
+			logger.error("knowledge/addToMap", e);
+			return error("添加异常");
+		}
+	}
+	
 	private static final String toMap = "{\"name\":\"图谱名称\",\"description\":\"图谱描述\","
 			+ "\"sourceId\":\"KN_1483797784\",\"targetId\":\"KN_1483797784\","
 			+ "\"relationship\":\"工作\",\"sourceKey\":\"KN_1483797784\",\"targetKey\":\"KN_1483797784\"}";
@@ -251,10 +279,10 @@ public class KnowledgeController extends BaseController {
 	 * 
 	 * @Author: qwm
 	 * @Description:
-	 * @return: SQApiResponse<List<Select>>      
+	 * @return: SQApiResponseMap<String, Object>
 	 * @throws
 	 */
-	@ApiOperation(value = "知识库-关系配置页面-添加关系至图谱", notes = "知识库-关系配置页面-添加关系至图谱")
+	@ApiOperation(value = "1.1知识库-关系配置页面-添加关系至图谱", notes = "1.1知识库-关系配置页面-添加关系至图谱")
 	@ResponseBody
 	@RequestMapping(value = "/addToMap", method = RequestMethod.POST)
 	public SQApiResponse<Map<String, Object>> addToMap(HttpServletRequest request,
@@ -266,7 +294,7 @@ public class KnowledgeController extends BaseController {
 			if(flag){
 				return success("添加成功",null);
 			} else {
-				return success("操作成功,但是数据没变",null);
+				return error("操作失败");
 			}
 		} catch (Exception e) {
 			logger.error("knowledge/addToMap", e);
@@ -332,7 +360,7 @@ public class KnowledgeController extends BaseController {
 			String node = StringHandler.objectToString(map.get("node"));
 
 			if (!Neo4jTest.delLabels(node)) {
-				result.put("data", "删除失败");
+				return error("删除失败");
 			}
 			result.put("data", "删除成功");
 			return success(result);
@@ -360,7 +388,7 @@ public class KnowledgeController extends BaseController {
 			String type = StringHandler.objectToString(map.get("type"));
 			
 			if (!Neo4jTest.delTypes(type)) {
-				result.put("data", "删除失败");
+				return error("删除异常");
 			}
 			result.put("data", "删除成功");
 			return success(result);

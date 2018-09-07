@@ -43,7 +43,7 @@ public class Neo4jTest {
 
 		try (Session session = driver.session()) {
 
-			StatementResult nodes = session.run("match(n) return n");
+			StatementResult nodes = session.run("Match (n) return distinct labels(n)");
 
 			while (nodes.hasNext()) {
 				Node asNode = nodes.next().get("n").asNode();

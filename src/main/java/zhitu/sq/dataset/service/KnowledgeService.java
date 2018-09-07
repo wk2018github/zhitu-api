@@ -67,6 +67,12 @@ public interface KnowledgeService {
 	 * @Author: qwm @Description:添加关系至图谱 @return: int @throws
 	 */
 	boolean addToMap(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * 
+	 * @Author: qwm @Description:添加关系至图谱 @return: int @throws
+	 */
+	String addToMap2(Map<String, Object> map) throws Exception;
 
 	/**
 	 * 

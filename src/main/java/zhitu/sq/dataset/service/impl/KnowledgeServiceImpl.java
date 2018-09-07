@@ -331,6 +331,16 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		return null;
 	}
+	
+	@Override
+	public String addToMap2(Map<String, Object> map) throws Exception {
+		String id = "GRAPH_"+System.currentTimeMillis();//graph  id
+		map.put("id",id);
+		if(graphMapper.insertGraph(map)>0){
+			return id;
+		}
+		return "";
+	}
 
 	@Override
 	public boolean addToMap(Map<String, Object> map) throws Exception {
@@ -423,13 +433,8 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 		String sourceKey = String.valueOf(map.get("sourceKey"));
 		String targetKey = String.valueOf(map.get("targetKey"));
 		String relationship = String.valueOf(map.get("relationship"));
-		Neo4jTest.createRelationship(sourceTable, targetTable, sourceKey, targetKey, relationship);
-		
-		String id = "GRAPH_"+System.currentTimeMillis();//graph  id
-		map.put("id",id);
-		int i = graphMapper.insertGraph(map); //插入graph
 
-		return i > 0;
+		return Neo4jTest.createRelationship(sourceTable, targetTable, sourceKey, targetKey, relationship);
 	}
 
 	@Override
