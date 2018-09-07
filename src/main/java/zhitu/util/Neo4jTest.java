@@ -10,8 +10,10 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
+import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
 
@@ -43,15 +45,20 @@ public class Neo4jTest {
 
 		try (Session session = driver.session()) {
 
-			StatementResult nodes = session.run("Match (n) return distinct labels(n)");
+			StatementResult result = session.run("Match (n) return distinct labels(n)");
 
-			while (nodes.hasNext()) {
-				Node asNode = nodes.next().get("n").asNode();
-
-				Iterable<String> labels = asNode.labels();
-				for (String s : labels) {
-					list.add(s);
+			while (result.hasNext()) {
+				
+				List<Record> list2 = result.list();
+				for (Record r : list2) {
+					Map<String, Object> asMap = r.asMap();
+					Object object = asMap.get("labels(n)");
+					StringBuffer sb = new StringBuffer(object.toString());
+					sb.deleteCharAt(sb.length()-1);
+					sb.deleteCharAt(0);
+					list.add(sb.toString());
 				}
+				
 			}
 
 		}
@@ -68,13 +75,18 @@ public class Neo4jTest {
 
 		try (Session session = driver.session()) {
 
-			StatementResult results = session.run("match ()-[r]-() return r");
+			StatementResult results = session.run("match ()-[r]-() return distinct(type(r))");
 
 			while (results.hasNext()) {
-				Relationship relation = results.next().get("r").asRelationship();
-
-				String type = relation.type();
-				list.add(type);
+				
+				List<Record> list2 = results.list();
+				for (Record r : list2) {
+					List<Value> values = r.values();
+					for (Value v : values) {
+						list.add(v.toString());
+					}
+				}
+				
 			}
 
 		}

@@ -234,9 +234,9 @@ public class KnowledgeController extends BaseController {
 	public SQApiResponse<List<String>> queryForeignKey(HttpServletRequest request,
 			@ApiParam(value = knId) @RequestBody Map<String, Object> map) {
 		try {
-			List<String> result = new ArrayList<String>();
-			result = knowledgeService.queryForeignKey(map);
-			return success(result);
+			
+			return success(knowledgeService.queryForeignKey(map));
+			
 		} catch (Exception e) {
 			logger.error("knowledge/queryForeignKey", e);
 			return error("查询异常");
