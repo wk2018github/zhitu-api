@@ -58,6 +58,11 @@ public class GraphServiceImpl implements GraphService{
 		return i > 0;
 	}
 	
+	public Graph updateGraph(Map<String, Object> map) throws Exception {
+		
+		return graphMapper.queryGraph(map);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean deleteGraph(Map<String,Object> map) throws Exception {

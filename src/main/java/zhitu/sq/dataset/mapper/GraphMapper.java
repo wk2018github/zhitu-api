@@ -40,6 +40,12 @@ public interface GraphMapper {
 	
 	/**
 	 * @Author: qwm
+	 * @Description: 查询graph
+	 */
+	Graph queryGraph(Map<String,Object> map);
+	
+	/**
+	 * @Author: qwm
 	 * @Description:删除graph
 	 */
 	int deleteGraph(@Param("ids") List<String> ids);

@@ -24,6 +24,12 @@ public interface GraphService {
 	 * @Description:行内编辑 图谱名称和描述
 	 */
 	boolean editGraph(Graph graph) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:更新图谱
+	 */
+	Graph updateGraph(Map<String, Object> map) throws Exception;
 
 	/**
 	 * @Author: qwm

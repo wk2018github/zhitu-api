@@ -82,6 +82,24 @@ public class GraphController extends BaseController {
 		}
 	}
 	
+	private static final String id = "{\"id\":\"GRAPH_12341441\"}";
+	@ApiOperation(value = "首页图谱分析-更新图谱按钮", notes = "首页图谱分析-更新图谱按钮")
+	@ResponseBody
+	@RequestMapping(value = "/updateGraph", method = RequestMethod.POST)
+	public SQApiResponse<Map<String, Object>> updateGraph(HttpServletRequest request,
+			@ApiParam(value = id) @RequestBody Map<String,Object> map) {
+		try {
+			
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("graph", graphService.updateGraph(map));
+			return success("查询成功",result);
+			
+		} catch (Exception e) {
+			logger.error("graph/updateGraph",e);
+			return error("更新异常");
+		}
+	}
+	
 	private static final String ids = "{\"ids\":\"GRAPH_12341441,GRAPH_12549942\"}";
 	@ApiOperation(value = "首页图谱分析-刪除圖譜", notes = "首页图谱分析-刪除圖譜")
 	@ResponseBody

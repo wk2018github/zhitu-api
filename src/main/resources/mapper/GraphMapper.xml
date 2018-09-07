@@ -40,6 +40,13 @@
 		WHERE id = #{id,jdbcType=VARCHAR}
 	</update>
 
+	<select id="queryGraph" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.model.Graph">
+		SELECT *
+		FROM zt_sys_graph
+		WHERE `id` = #{id}
+	</select>
+
 	<!-- 删除圖譜 <update id="deleteGraph" parameterType="java.lang.String"> DELETE 
 		FROM zt_sys_graph WHERE id IN ( ${ids} ) </update> -->
 	<delete id="deleteGraph" parameterType="java.util.List">
@@ -81,7 +88,8 @@
 	</select>
 
 	<delete id="deleteProcessGraph" parameterType="java.util.Map">
-		DELETE FROM zt_sys_process_graph 
+		DELETE FROM
+		zt_sys_process_graph
 		WHERE id IN ( ${id} )
 	</delete>
 
