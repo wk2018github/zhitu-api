@@ -113,6 +113,7 @@ public class DateSetServiceImpl implements DataSetService{
 				paths.remove(path);
 				success.add(path);
 				flag = true;
+				i--;
 			}
 		}
 		if(!flag){

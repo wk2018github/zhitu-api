@@ -145,7 +145,8 @@ public class DataSetController extends BaseController{
 	@ResponseBody
 	public SQApiResponse<Map<String, Object>> handleFileUpload(HttpServletRequest request,
 			@RequestParam("name") String name, @RequestParam("describe") String describe,
-			@RequestParam("projectId") String projectId ,@ApiParam(value = "上传文件", required = true)MultipartFile file ) {
+			@RequestParam("projectId") String projectId ) {
+//		,@ApiParam(value = "上传文件", required = true)MultipartFile file 
 		try {
 			
 			// 获取登录用户Id
@@ -154,7 +155,7 @@ public class DataSetController extends BaseController{
 ////        		return error("请重新登录!");
 //				user.setId("USER_1353923423");
 //        	}
-			String fileName = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, file, request);
+			String fileName = dataSetService.saveLocalDataSet("USER_1353923423", name, describe, projectId, null, request); //file, 
 			if (StringUtils.isEmpty(fileName)) {
 				return success();
 			} else {

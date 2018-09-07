@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -51,18 +53,16 @@ public class FileUpload {
 		}
 
 		// 将当前上下文初始化给 CommonsMutipartResolver （多部分解析器）
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-				request.getSession().getServletContext());
-		// 检查form中是否有enctype="multipart/form-data"
-		if (multipartResolver.isMultipart(request)) {
+//		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+//				request.getSession().getServletContext());
+//		// 检查form中是否有enctype="multipart/form-data"
+//		if (multipartResolver.isMultipart(request)) {
 			// 将request变成多部分request
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			// 获取multiRequest 中所有的文件名
-			Iterator<String> iter = multiRequest.getFileNames();
-
-			while (iter.hasNext()) {
-				// 一次遍历所有文件
-				MultipartFile file = multiRequest.getFile(iter.next());
+			List<MultipartFile> fileList = multiRequest.getFiles("file");
+//	        Map<String, MultipartFile> fileMap = multiRequest.getFileMap();
+//	        MultiValueMap<String, MultipartFile> map = multiRequest.getMultiFileMap();
+			for (MultipartFile file : fileList) {
 				if (file != null) {
 					String path = direPath + File.separator + file.getOriginalFilename();
 					size = file.getSize();
@@ -79,7 +79,7 @@ public class FileUpload {
 					}
 				}
 			}
-		}
+//		}
 		long endTime = System.currentTimeMillis();
 		logger.info("上传时间：" + String.valueOf(endTime - startTime) + "ms");
 

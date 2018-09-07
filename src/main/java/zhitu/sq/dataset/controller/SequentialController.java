@@ -39,7 +39,7 @@ public class SequentialController extends BaseController {
 	@Autowired
 	private SequentialService sequentialService;
 
-	@ApiOperation(value = "1.1时序分析-获取数据年度范围", notes = "1.1时序分析-获取数据年度范围")
+	@ApiOperation(value = "1.1时序分析-全图分析下拉选项", notes = "1.1时序分析-全图分析下拉选项")
 	@ResponseBody
 	@RequestMapping(value = "/queryYearScope", method = RequestMethod.POST)
 	public SQApiResponse<List<String>> queryYearScope(HttpServletRequest request) {
