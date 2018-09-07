@@ -73,7 +73,7 @@ public class MyTest {
             String labelsCondition = String.join(":", labels);
             StringBuilder matchClauseSb = new StringBuilder();
             if(childMatchClause != null){
-                matchClauseSb.append(childMatchClause).append("-[ ").append(relationType).append("]->");
+                matchClauseSb.append(childMatchClause).append("-[ ").append(relationType).append("]-");
             }
             matchClauseSb.append("(").append(getNodeVariableName()).append(":").append(labelsCondition).append(")");
 

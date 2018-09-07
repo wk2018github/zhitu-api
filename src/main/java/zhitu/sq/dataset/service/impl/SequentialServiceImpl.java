@@ -36,6 +36,24 @@ public class SequentialServiceImpl implements SequentialService {
 
 	@Autowired
 	private SequentialMapper sequentialMapper;
+	
+	@Override
+	public List<Select> queryAnalysisSelect() throws Exception {
+
+		return sequentialMapper.queryAnalysisSelect();
+	}
+	
+	@Override
+	public List<Select> querySelectOne() throws Exception {
+
+		return sequentialMapper.querySelectOne();
+	}
+	
+	@Override
+	public List<Select> querySelectTwo(Map<String,Object> map) throws Exception {
+
+		return sequentialMapper.querySelectTwo(map);
+	}
 
 	@Override
 	public List<String> queryYearScope() throws Exception {

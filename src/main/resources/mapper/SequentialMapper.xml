@@ -3,9 +3,35 @@
 <mapper namespace="zhitu.sq.dataset.mapper.SequentialMapper">
 
 
+
+	<select id="queryAnalysisSelect" resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT `value` AS
+		`name`,`key` AS `code`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'analysisType'
+	</select>
+
+	<select id="querySelectOne" resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT `value` AS
+		`name`,`key` AS `code`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'basicsTable' AND parentValue = '0'
+	</select>
+
+	<select id="querySelectTwo" parameterType="java.util.Map" resultType="zhitu.sq.dataset.controller.vo.Select">
+		SELECT `value` AS
+		`name`,`key` AS `code`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'nodeColumn' AND parentValue = #{key}
+	</select>
+
 	<select id="queryRootSinglePoint" resultType="java.lang.String">
 		SELECT `value`
-		FROM zt_sys_dict
+		FROM
+		zt_sys_dict
 		WHERE code = 'rootSinglePoint'
 	</select>
 

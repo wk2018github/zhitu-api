@@ -41,14 +41,42 @@ public class SequentialController extends BaseController {
 
 	@ApiOperation(value = "1.1时序分析-全图分析下拉选项", notes = "1.1时序分析-全图分析下拉选项")
 	@ResponseBody
-	@RequestMapping(value = "/queryYearScope", method = RequestMethod.POST)
-	public SQApiResponse<List<String>> queryYearScope(HttpServletRequest request) {
+	@RequestMapping(value = "/queryAnalysisSelect", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> queryAnalysisSelect(HttpServletRequest request) {
 		try {
 
-			return success("操作成功", sequentialService.queryYearScope());
+			return success("操作成功", sequentialService.queryAnalysisSelect());
 		} catch (Exception e) {
-			logger.error("sequential/initRootSinglePoint", e);
-			return error("初始化数据异常");
+			logger.error("sequential/queryAnalysisSelect", e);
+			return error("查询异常");
+		}
+	}
+	
+	@ApiOperation(value = "1.2时序分析-观测指标-第一个下拉框", notes = "1.2时序分析-观测指标-第一个下拉框")
+	@ResponseBody
+	@RequestMapping(value = "/querySelectOne", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> querySelectOne(HttpServletRequest request) {
+		try {
+
+			return success("操作成功", sequentialService.querySelectOne());
+		} catch (Exception e) {
+			logger.error("sequential/querySelectOne", e);
+			return error("查询异常");
+		}
+	}
+	
+	private static final String tableKey = "{\"key\":\"01\"}";
+	@ApiOperation(value = "1.3时序分析-观测指标-第二个下拉框", notes = "1.3时序分析-观测指标-第二个下拉框")
+	@ResponseBody
+	@RequestMapping(value = "/querySelectTwo", method = RequestMethod.POST)
+	public SQApiResponse<List<Select>> querySelectTwo(HttpServletRequest request,
+			@ApiParam(value=tableKey) @RequestBody Map<String,Object> map) {
+		try {
+
+			return success("操作成功", sequentialService.querySelectTwo(map));
+		} catch (Exception e) {
+			logger.error("sequential/querySelectTwo", e);
+			return error("查询异常");
 		}
 	}
 

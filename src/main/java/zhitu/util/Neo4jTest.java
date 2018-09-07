@@ -129,8 +129,10 @@ public class Neo4jTest {
 				str = changeJson(str);
 
 				String cypher = "create (n:" + tableName + " " + str + ")";
+//				String cypher2 = String.format("create (n:%s:%s)", tableName, "graphId");
 				// String cypher = "create (n:" + tableName + ":"+图谱id+" " + str
 				// + ")";
+				//merge 
 				session.run(cypher);
 
 			}
