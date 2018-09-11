@@ -42,7 +42,7 @@
 		`name`,`key` AS `code`
 		FROM
 		zt_sys_dict
-		WHERE `code` = 'basicsTable' AND
+		WHERE `code` = 'nodeColumnTable' AND
 		`key` IN ( ${tableCodes} )
 	</select>
 

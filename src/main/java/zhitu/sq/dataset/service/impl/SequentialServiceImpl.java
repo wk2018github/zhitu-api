@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,7 @@ public class SequentialServiceImpl implements SequentialService {
 	public List<TableMoney> queryTableMoney(Map<String,Object> map) throws Exception {
 		String tableCodes = map.get("tableCodes").toString();
 		List<TableMoney> tableMoney = sequentialMapper.queryBasicsTableName(tableCodes);
+//		tableMoney = getTableMoney(tableMoney);
 		for (int i = 0; i < tableMoney.size(); i++) {
 			String tableName = tableMoney.get(i).getName(); //表名称
 			List<Map<String,Object>> ls = new ArrayList<>();
@@ -67,5 +70,13 @@ public class SequentialServiceImpl implements SequentialService {
 		
 		return tableMoney;
 	}
-
+	
+	public List<TableMoney> getTableMoney(List<TableMoney> tableMoney) throws Exception {
+		for (TableMoney t : tableMoney) {
+//			String table = getPayTable()+t.getName(); //完整表名称
+//			t.setName(table);
+		}
+		return tableMoney;
+	}
+	
 }
