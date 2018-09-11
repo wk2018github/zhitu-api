@@ -345,6 +345,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 	@Override
 	public boolean addToMap(Map<String, Object> map) throws Exception {
 		Configuration config = new PropertiesConfiguration("application.properties");
+		String id = map.get("id").toString();
 		map.put("knowledgeId", map.get("sourceId"));
 		DataSet source = knowledgeMapper.queryDataSetByKnId(map);
 		map.put("knowledgeId", map.get("targetId"));
@@ -364,7 +365,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
 					null);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(sourceTable, null, list);
+			Neo4jTest.addToNeo4j(id, sourceTable, null, list);
 		}
 		// 源数据集本地数据库导入
 		if ("local_rdb".equals(sourceDataSetType)) {
@@ -374,7 +375,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
 					columnNames);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(sourceTable, columnNames, list);
+			Neo4jTest.addToNeo4j(id, sourceTable, columnNames, list);
 		}
 		// 源数据集远程数据库直接过去的数据
 		if ("remote_rdb".equals(sourceDataSetType)) {
@@ -390,7 +391,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryTableColumnDataNoLimit(url, port, userName, password, databaseName,
 					sourceTable, columnNames);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(sourceTable, columnNames, list);
+			Neo4jTest.addToNeo4j(id, sourceTable, columnNames, list);
 		}
 
 		// 目标数据集类型 是  文件上传
@@ -400,7 +401,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, sourceTable,
 					null);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(targetTable, null, list);
+			Neo4jTest.addToNeo4j(id, targetTable, null, list);
 		}
 		// 目标数据集本地数据库导入
 		if ("local_rdb".equals(targetDataSetType)) {
@@ -410,7 +411,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryLocalTableColumnDataNoLimit(localUrl, localUserName, localPassword, targetTable,
 					columnNames);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(targetTable, columnNames, list);
+			Neo4jTest.addToNeo4j(id, targetTable, columnNames, list);
 		}
 		// 目标数据集远程数据库直接过去的数据
 		if ("remote_rdb".equals(targetDataSetType)) {
@@ -426,7 +427,7 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 			List<String> list = dataSourceUtil.queryTableColumnDataNoLimit(url, port, userName, password, databaseName,
 					targetTable, columnNames);
 			// 连接neo4j,数据插入至图数据库
-			Neo4jTest.addToNeo4j(targetTable, columnNames, list);
+			Neo4jTest.addToNeo4j(id, targetTable, columnNames, list);
 		}
 
 		// 建立两个数据集在neo4j中的关系

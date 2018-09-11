@@ -151,7 +151,7 @@ public class SinglePointController extends BaseController {
 	}
 
 
-	private static final String nodeIdPage = "{\"id\":\"GRAPH_12341441\",\"year\":\"2017\",\"page\":\"1\",\"rows\":\"10\"}";
+	private static final String nodeIdPage = "{\"id\":\"GRAPH_12341441\",\"name\":\"选择的4条信息中一条查看\",\"year\":\"2017\",\"page\":\"1\",\"rows\":\"10\"}";
 	@ApiOperation(value = "1.8图谱分析-单点分析-点击节点上的查看详情", notes = "1.8图谱分析-单点分析-点击节点上的查看详情")
 	@ResponseBody
 	@RequestMapping(value = "/queryNodeDetails", method = RequestMethod.POST)

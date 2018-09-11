@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.Logger;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Record;
@@ -21,6 +22,8 @@ import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.util.JacksonUtil;
 
 public class Neo4jTest {
+	
+	private static final Logger logger = Logger.getLogger(Neo4jTest.class);
 
 	public static Driver driver;
 
@@ -60,7 +63,9 @@ public class Neo4jTest {
 				}
 				
 			}
-
+			logger.info("getLabels: SUCCESS");
+		} catch (Exception e) {
+			logger.error("getLabels: ERROR");
 		}
 
 		return list;
@@ -88,8 +93,11 @@ public class Neo4jTest {
 				}
 				
 			}
-
+			logger.info("getTypes: SUCCESS");
+		} catch (Exception e) {
+			logger.error("getTypes: ERROR");
 		}
+
 
 		return list;
 	}
@@ -104,7 +112,10 @@ public class Neo4jTest {
 		try (Session session = driver.session()) {
 
 			session.run("match (n:" + node + ") detach delete n");
-
+			
+			logger.info("delLabels: SUCCESS");
+		} catch (Exception e) {
+			logger.error("delLabels: ERROR");
 		}
 
 		return true;
@@ -120,7 +131,10 @@ public class Neo4jTest {
 		try (Session session = driver.session()) {
 
 			session.run("match ()-[r:" + type + "]-() delete r");
-
+			
+			logger.info("delTypes: SUCCESS");
+		} catch (Exception e) {
+			logger.error("delTypes: ERROR");
 		}
 
 		return true;
@@ -131,7 +145,7 @@ public class Neo4jTest {
 	 * @throws Exception
 	 * @Author: qwm @Description:插入数据至neo4j @return: boolean @throws
 	 */
-	public static boolean addToNeo4j(String tableName, String columns, List<String> list) throws Exception {
+	public static boolean addToNeo4j(String id, String tableName, String columns, List<String> list) {
 		boolean flag = false;
 
 		try (Session session = driver.session()) {
@@ -140,7 +154,7 @@ public class Neo4jTest {
 				String str = list.get(i);
 				str = changeJson(str);
 
-				String cypher = "create (n:" + tableName + " " + str + ")";
+				String cypher = "create (n:" + id + ":" + tableName + " " + str + ")";
 //				String cypher2 = String.format("create (n:%s:%s)", tableName, "graphId");
 				// String cypher = "create (n:" + tableName + ":"+图谱id+" " + str
 				// + ")";
@@ -148,7 +162,9 @@ public class Neo4jTest {
 				session.run(cypher);
 
 			}
-
+			logger.info("addToNeo4j: SUCCESS");
+		} catch (Exception e) {
+			logger.error("addToNeo4j: ERROR");
 		}
 
 		return true;
@@ -167,7 +183,10 @@ public class Neo4jTest {
 			String cypher = "match (n:" + sourceTable + "),(m:" + targetTable + ") where n." + sourceKey + " " + "= m."
 					+ targetKey + "  create (n)-[r:" + relationship + "]->(m)";
 			session.run(cypher);
-
+			
+			logger.info("createRelationship: SUCCESS");
+		} catch (Exception e) {
+			logger.error("createRelationship: ERROR");
 		}
 
 		return true;
@@ -175,7 +194,7 @@ public class Neo4jTest {
 
 	/**
 	 * 
-	 * @Author: qwm @Description:get所有关系类型 @return: List<String> @throws
+	 * @Author: qwm @Description:查询节点详情 @return: List<String> @throws
 	 */
 	public static List<NodeDetail> queryNodeDetails(String cypher) {
 		List<NodeDetail> list = new ArrayList<NodeDetail>();

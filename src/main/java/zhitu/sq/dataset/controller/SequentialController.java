@@ -1,5 +1,6 @@
 package zhitu.sq.dataset.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
+import zhitu.sq.dataset.controller.vo.LineChart;
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
 import zhitu.sq.dataset.model.Graph;
@@ -79,6 +81,66 @@ public class SequentialController extends BaseController {
 			return error("查询异常");
 		}
 	}
+	
+	private static final String startAnalysis = "{\"analysisType\":\"01\",\"analysisObj\":\"01\",\"year\":\"2015,2017\",\"node\":\"2015,2017\"}";
+	@ApiOperation(value = "1.4时序分析-开始分析", notes = "1.4时序分析-开始分析")
+	@ResponseBody
+	@RequestMapping(value = "/startAnalysis", method = RequestMethod.POST)
+	public SQApiResponse<Map<String,Object>> startAnalysis(HttpServletRequest request,
+			@ApiParam(value=startAnalysis) @RequestBody Map<String,Object> map) {
+		try {
+			Map<String,Object> result = new HashMap<String,Object>();
+			
+			String analysisType = map.get("analysisType").toString();
+			
+			List<Integer> list = new ArrayList<>();
+			list.add(2015);
+			list.add(2016);
+			list.add(2017);
+			List<String> money = new ArrayList<>();
+			money.add("46767");
+			money.add("36322");
+			money.add("66212");
+			List<String> money2 = new ArrayList<>();
+			money2.add("76777");
+			money2.add("96382");
+			money2.add("69912");
+			List<String> money3 = new ArrayList<>();
+			money3.add("12482");
+			money3.add("32111");
+			money3.add("56215");
+			List<String> money4 = new ArrayList<>();
+			money4.add("83763");
+			money4.add("66327");
+			money4.add("56255");
+			
+			if("01".equals(analysisType)){
+				LineChart l = new LineChart("分析对象",money);
+				result.put("obj", l);
+			}
+			if("02".equals(analysisType)){
+				LineChart l = new LineChart("科处室指标",money);
+				LineChart l2 = new LineChart("单位指标",money2);
+				LineChart l3 = new LineChart("计划",money3);
+				LineChart l4 = new LineChart("支付",money4);
+				List<LineChart> ls = new ArrayList<>();
+				ls.add(l);
+				ls.add(l2);
+				ls.add(l3);
+				ls.add(l4);
+				result.put("obj", ls);
+			}
+			result.put("transverse", list); //横线  年度
+
+			return success(result);
+		} catch (Exception e) {
+			logger.error("sequential/startAnalysis", e);
+			return error("查询异常");
+		}
+	}
+	
+	
+	
 
 
 }
