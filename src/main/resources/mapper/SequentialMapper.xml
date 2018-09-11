@@ -17,10 +17,12 @@
 		`name`,`key` AS `code`
 		FROM
 		zt_sys_dict
-		WHERE `code` = 'basicsTable' AND parentValue = '0'
+		WHERE `code` = 'basicsTable' AND
+		parentValue = '0'
 	</select>
 
-	<select id="querySelectTwo" parameterType="java.util.Map" resultType="zhitu.sq.dataset.controller.vo.Select">
+	<select id="querySelectTwo" parameterType="java.util.Map"
+		resultType="zhitu.sq.dataset.controller.vo.Select">
 		SELECT `value` AS
 		`name`,`key` AS `code`
 		FROM
@@ -35,5 +37,27 @@
 		WHERE code = 'rootSinglePoint'
 	</select>
 
+	<select id="queryBasicsTableName" parameterType="java.lang.String" resultType="zhitu.sq.dataset.controller.vo.TableMoney">
+		SELECT `value` AS
+		`name`,`key` AS `code`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'basicsTable' AND
+		`key` IN ( ${tableCodes} )
+	</select>
+
+	<select id="queryNodeColumnName" resultType="java.lang.String">
+		SELECT `value`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'nodeColumn' AND
+		`parentValue` =
+		#{parentValue}
+	</select>
+
+	<select id="queryMoney" resultType="java.lang.String">
+		SELECT SUM(${column})
+		FROM ${tableName}
+	</select>
 
 </mapper>

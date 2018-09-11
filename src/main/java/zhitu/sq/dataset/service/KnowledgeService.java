@@ -91,6 +91,11 @@ public interface KnowledgeService {
 	 * @param id
 	 * @return
 	 */
-	Knowledge selectById(String id);
+	Knowledge selectById(String id) throws Exception;
+	
+	/**
+	 * @Author: qwm @Description:查询外键 @return: List<Select> @throws
+	 */
+	List<String> previewGraph(Map<String, Object> map) throws Exception;
 
 }

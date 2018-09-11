@@ -399,4 +399,28 @@ public class KnowledgeController extends BaseController {
 	}
 	
 	
+	private static final String msg = "{\"source\":\"原表名\",\"target\":\"目标表名\",\"relationShip\":\"关系名\","
+			+ "\"nodeLabels\":\"节点标签逗号分隔\",\"relationShipTypes\":\"关系类型逗号分隔\"}";
+	/**
+	 * @Author: qwm
+	 * @Description:
+	 * @return: SQApiResponse<List<String>>      
+	 * @throws
+	 */
+	@ApiOperation(value = "知识库-关系配置页面-预览图谱按钮", notes = "知识库-关系配置页面-预览图谱按钮")
+	@ResponseBody
+	@RequestMapping(value = "/previewGraph", method = RequestMethod.POST)
+	public SQApiResponse<List<String>> previewGraph(HttpServletRequest request,
+			@ApiParam(value = msg) @RequestBody Map<String, Object> map) {
+		try {
+			
+			
+			return success(knowledgeService.previewGraph(map));
+		} catch (Exception e) {
+			logger.error("knowledge/previewGraph", e);
+			return error("预览异常");
+		}
+	}
+	
+	
 }

@@ -1,12 +1,8 @@
 package zhitu.vgraph;
 
-import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import io.swagger.util.Json;
-import net.sf.ehcache.statistics.sampled.SampledCacheStatistics;
 
 public class NodeInfo {
 	
@@ -14,14 +10,14 @@ public class NodeInfo {
 	JsonObject nodeJo;
 	JsonArray edgesJa;
 	
-	public NodeInfo(Node node){
+	public NodeInfo(Node node, String label){
 		this.node = node;
 		
 		this.nodeJo = node.toJsonObject();
 		
 		this.edgesJa = new JsonArray();
 		for(Node child: node.children){
-			Edge edge = new Edge(node, child);
+			Edge edge = new Edge(node, child, label);
 			edgesJa.add(edge.toJsonObject());
 		}
 	}

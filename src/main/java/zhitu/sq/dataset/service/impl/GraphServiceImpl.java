@@ -90,7 +90,7 @@ public class GraphServiceImpl implements GraphService{
 		Node node3 = new Node(node2, TableNodeName.THREE, NodeTypes.PROCESS);
 		@SuppressWarnings("unused")
 		Node node4 = new Node(node3, TableNodeName.FOUR, NodeTypes.PROCESS);
-		return node1.convertTreeToJsonObject().toString();
+		return node1.convertTreeToJsonObject(null).toString();
 	}
 	
 	@Override
@@ -118,7 +118,7 @@ public class GraphServiceImpl implements GraphService{
 		parant.addChild(node);
 		
 		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
-		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject(null).toString());
 		
 		return result;
 		
@@ -180,7 +180,7 @@ public class GraphServiceImpl implements GraphService{
 		}
 		
 		Node nodeSource = Graphs.findNodeById(id); //初始的表节点
-		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject(null).toString());
 		
 		return result;
 		
@@ -237,7 +237,7 @@ public class GraphServiceImpl implements GraphService{
 		node.parent.removeChild(node);
 		
 		Node nodeSource = Graphs.findNodeById(initId); //初始的表节点
-		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject(null).toString());
 		
 		return result;
 	}

@@ -18,11 +18,14 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
 
+import com.google.gson.JsonObject;
+
 import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.util.JacksonUtil;
+import zhitu.vgraph.NodeTypes;
 
 public class Neo4jTest {
-	
+
 	private static final Logger logger = Logger.getLogger(Neo4jTest.class);
 
 	public static Driver driver;
@@ -51,17 +54,17 @@ public class Neo4jTest {
 			StatementResult result = session.run("Match (n) return distinct labels(n)");
 
 			while (result.hasNext()) {
-				
+
 				List<Record> list2 = result.list();
 				for (Record r : list2) {
 					Map<String, Object> asMap = r.asMap();
 					Object object = asMap.get("labels(n)");
 					StringBuffer sb = new StringBuffer(object.toString());
-					sb.deleteCharAt(sb.length()-1);
+					sb.deleteCharAt(sb.length() - 1);
 					sb.deleteCharAt(0);
 					list.add(sb.toString());
 				}
-				
+
 			}
 			logger.info("getLabels: SUCCESS");
 		} catch (Exception e) {
@@ -83,7 +86,7 @@ public class Neo4jTest {
 			StatementResult results = session.run("match ()-[r]-() return distinct(type(r))");
 
 			while (results.hasNext()) {
-				
+
 				List<Record> list2 = results.list();
 				for (Record r : list2) {
 					List<Value> values = r.values();
@@ -91,13 +94,12 @@ public class Neo4jTest {
 						list.add(v.toString());
 					}
 				}
-				
+
 			}
 			logger.info("getTypes: SUCCESS");
 		} catch (Exception e) {
 			logger.error("getTypes: ERROR");
 		}
-
 
 		return list;
 	}
@@ -112,7 +114,7 @@ public class Neo4jTest {
 		try (Session session = driver.session()) {
 
 			session.run("match (n:" + node + ") detach delete n");
-			
+
 			logger.info("delLabels: SUCCESS");
 		} catch (Exception e) {
 			logger.error("delLabels: ERROR");
@@ -131,7 +133,7 @@ public class Neo4jTest {
 		try (Session session = driver.session()) {
 
 			session.run("match ()-[r:" + type + "]-() delete r");
-			
+
 			logger.info("delTypes: SUCCESS");
 		} catch (Exception e) {
 			logger.error("delTypes: ERROR");
@@ -155,10 +157,11 @@ public class Neo4jTest {
 				str = changeJson(str);
 
 				String cypher = "create (n:" + id + ":" + tableName + " " + str + ")";
-//				String cypher2 = String.format("create (n:%s:%s)", tableName, "graphId");
+				// String cypher2 = String.format("create (n:%s:%s)", tableName,
+				// "graphId");
 				// String cypher = "create (n:" + tableName + ":"+图谱id+" " + str
 				// + ")";
-				//merge 
+				// merge
 				session.run(cypher);
 
 			}
@@ -183,7 +186,7 @@ public class Neo4jTest {
 			String cypher = "match (n:" + sourceTable + "),(m:" + targetTable + ") where n." + sourceKey + " " + "= m."
 					+ targetKey + "  create (n)-[r:" + relationship + "]->(m)";
 			session.run(cypher);
-			
+
 			logger.info("createRelationship: SUCCESS");
 		} catch (Exception e) {
 			logger.error("createRelationship: ERROR");
@@ -204,8 +207,7 @@ public class Neo4jTest {
 			StatementResult results = session.run(cypher);
 
 			while (results.hasNext()) {
-				
-				
+
 			}
 
 		}
@@ -216,7 +218,7 @@ public class Neo4jTest {
 	/**
 	 * 
 	 * @Author: qwm @Description:{"name":"数据集cc","description":"c数据集的描述"} to
-	 * {name:"数据集cc",description:"c数据集的描述"} @return: String @throws
+	 *          {name:"数据集cc",description:"c数据集的描述"} @return: String @throws
 	 */
 	public static String changeJson(String json) throws Exception {
 		Map<String, Object> map = JacksonUtil.Builder().json2Map(json);
@@ -230,46 +232,125 @@ public class Neo4jTest {
 
 		return str.toString();
 	}
+	
+	/**
+	 * 
+	 * @Author: qwm @Description: 预览图谱
+	 * @return: String 
+	 * @throws
+	 */
+	public static List<String> previewGraph(String cypher) {
+		List<String> ls = new ArrayList<>();
+		
+		try (Session session = driver.session()) {
+			
+			StatementResult results = session.run(cypher);
+			
+			while (results.hasNext()) {
+				List<Record> list2 = results.list();
+				for (Record r : list2) {
+					
+					Node asNode = r.get("a").asNode();
+					zhitu.vgraph.Node n = getNodeGraph(asNode);
+					
+					Node asNode2 = r.get("b").asNode();
+					zhitu.vgraph.Node n2 = getNodeGraph(asNode2);
+					
+					n2.setParent(n);
+					Relationship asRelationship = r.get("r").asRelationship();
+					String type = asRelationship.type();
+					JsonObject json = n.convertTreeToJsonObject(type);
+					logger.info(json.toString());
+					ls.add(json.toString());
+					
+				}
+			}
+			logger.info("previewGraph: SUCCESS");
+			return ls;
+		} catch (Exception e) {
+			logger.error("previewGraph: ERROR");
+			return null;
+		}
+	}
+	
+	public static zhitu.vgraph.Node getNodeGraph(Node node){
+		zhitu.vgraph.Node n = new zhitu.vgraph.Node(null,NodeTypes.POINT);
+		Map<String, Object> asMap = node.asMap();
+		for (Entry<String, Object> e : asMap.entrySet()) {
+			n.text = e.getValue().toString();
+			break;
+		}
+		return n;
+	}
 
 	public static void main(String... args) throws Exception {
-
-		String tableName = "zt_sys_dataset";
-		List<String> list = new ArrayList<String>();
-		list.add("{\"name\":\"数据集cc\",\"id\":\"DATASET_1533179158417\",\"description\":\"c数据集的描述\"}");
-		list.add("{\"name\":\"数据集dd\",\"id\":\"DATASET_1533179364589\",\"description\":\"d数据集的描述\"}");
+		String cypher = "match (a:People)-[r:Study]-(b:School) return a,b,r";
 
 		try (Session session = driver.session()) {
-
-			for (int i = 0; i < list.size(); i++) {
-				String str = list.get(i);
-				Map<String, Object> map = JacksonUtil.Builder().json2Map(str);
-
-				StringBuffer json = new StringBuffer("{");
-				for (Entry<String, Object> e : map.entrySet()) {
-					json.append(e.getKey()).append(":\"").append(e.getValue()).append("\",");
+			List<String> ls = new ArrayList<>();
+			StatementResult results = session.run(cypher);
+			while (results.hasNext()) {
+				
+				List<Record> list2 = results.list();
+				for (Record r : list2) {
+					zhitu.vgraph.Node n1 = new zhitu.vgraph.Node(null,NodeTypes.POINT);
+					Node asNode = r.get("a").asNode();
+					Map<String, Object> asMap = asNode.asMap();
+					for (Entry<String, Object> e : asMap.entrySet()) {
+						n1.text = e.getValue().toString();
+						break;
+					}
+					zhitu.vgraph.Node n2 = new zhitu.vgraph.Node(null,NodeTypes.POINT);
+					Node asNode2 = r.get("b").asNode();
+					Map<String, Object> asMap2 = asNode2.asMap();
+					for (Entry<String, Object> e : asMap2.entrySet()) {
+						n2.text = e.getValue().toString();
+						break;
+					}
+					n2.setParent(n1);
+					Relationship asRelationship = r.get("r").asRelationship();
+					String type = asRelationship.type();
+					JsonObject json = n1.convertTreeToJsonObject(type);
+					logger.info(json.toString());
+					ls.add(json.toString());
 				}
-				json.deleteCharAt(json.lastIndexOf(","));
-				json.append("}");
-				System.out.println(json);
-
-				String cypher = "create (n:" + tableName + " " + json + ")";
-				System.out.println(cypher);
-				session.run(cypher);
 
 			}
-
+			
+			driver.close();
 		}
-
-		driver.close();
 
 	}
 
-	// public static void main(String[] args){
-	// String cypher = "match
-	// (n:"+"zt_sys_dataset"+"),(m:"+"zt_data_ftp_file"+") where n."+"id"+" "
-	// + "= m."+"datasetId"+" create (n)-[r:"+"外键关系"+"]->(m)";
+	// public static void main(String[] args) {
+	// String tableName = "zt_sys_dataset";
+	// List<String> list = new ArrayList<String>();
+	// list.add("{\"name\":\"数据集cc\",\"id\":\"DATASET_1533179158417\",\"description\":\"c数据集的描述\"}");
+	// list.add("{\"name\":\"数据集dd\",\"id\":\"DATASET_1533179364589\",\"description\":\"d数据集的描述\"}");
+	//
+	// try (Session session = driver.session()) {
+	//
+	// for (int i = 0; i < list.size(); i++) {
+	// String str = list.get(i);
+	// Map<String, Object> map = JacksonUtil.Builder().json2Map(str);
+	//
+	// StringBuffer json = new StringBuffer("{");
+	// for (Entry<String, Object> e : map.entrySet()) {
+	// json.append(e.getKey()).append(":\"").append(e.getValue()).append("\",");
+	// }
+	// json.deleteCharAt(json.lastIndexOf(","));
+	// json.append("}");
+	// System.out.println(json);
+	//
+	// String cypher = "create (n:" + tableName + " " + json + ")";
 	// System.out.println(cypher);
 	// session.run(cypher);
+	//
+	// }
+	//
+	// }
+	//
+	// driver.close();
 	//
 	// }
 	//

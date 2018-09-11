@@ -47,7 +47,7 @@ public class SinglePointServiceImpl implements SinglePointService {
 
 		Node node = new Node(rootName, NodeTypes.PROCESS); // 表节点
 
-		return node.convertTreeToJsonObject().toString();
+		return node.convertTreeToJsonObject(null).toString();
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class SinglePointServiceImpl implements SinglePointService {
 		parant.addChild(node);
 
 		Node nodeSource = Graphs.findNodeById(id); // 初始的表节点
-		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject(null).toString());
 
 		return result;
 
@@ -180,7 +180,7 @@ public class SinglePointServiceImpl implements SinglePointService {
 		parant.addChild(node);
 
 		Node nodeSource = Graphs.findNodeById(id); // 初始的表节点
-		result.put("node", nodeSource.convertTreeToJsonObject().toString());
+		result.put("node", nodeSource.convertTreeToJsonObject(null).toString());
 
 		return result;
 

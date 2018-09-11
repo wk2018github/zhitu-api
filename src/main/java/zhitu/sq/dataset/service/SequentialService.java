@@ -3,10 +3,9 @@ package zhitu.sq.dataset.service;
 import java.util.List;
 import java.util.Map;
 
-import com.github.pagehelper.PageInfo;
 
-import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
+import zhitu.sq.dataset.controller.vo.TableMoney;
 
 public interface SequentialService {
 	
@@ -33,6 +32,12 @@ public interface SequentialService {
 	 * @Description: 1单点分析-初始化根节点
 	 */
 	List<String> queryYearScope() throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description: 1.5时序分析-开始分析-右下角四张表数据
+	 */
+	List<TableMoney> queryTableMoney(Map<String,Object> map) throws Exception;
 	
 	
 

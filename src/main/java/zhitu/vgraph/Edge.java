@@ -9,11 +9,11 @@ public class Edge {
 	
 	String label;
 	
-	public Edge(Node source, Node target) {
-		super();
-		this.source = source;
-		this.target = target;
-	}
+//	public Edge(Node source, Node target) {
+//		super();
+//		this.source = source;
+//		this.target = target;
+//	}
 	
 	public Edge(Node source, Node target, String label) {
 		super();
@@ -25,7 +25,8 @@ public class Edge {
 	public JsonObject toJsonObject(){
 		JsonObject jo = new JsonObject();
 		jo.addProperty("source", source.id);
-		jo.addProperty("target", target.id);	
+		jo.addProperty("target", target.id);
+		jo.addProperty("label", label);
 		return jo;
 	}
 	

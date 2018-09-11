@@ -23,7 +23,7 @@ public class Test {
 		Node node15 = new Node(node1, "计划父级",NodeTypes.PROCESS);
 		node3.setParent(node15);
 		
-		System.out.println(node1.convertTreeToJsonObject().toString());
+		System.out.println(node1.convertTreeToJsonObject(null).toString());
 		
 		ArrayList<Node> children = node1.children;
 		for (Node node : children) {
@@ -31,7 +31,7 @@ public class Test {
 			System.out.println(node.text);
 		}
 		
-		NodeInfo no = new NodeInfo(node1);
+		NodeInfo no = new NodeInfo(node1,null);
 		
 		System.out.println(no.toString());
 		

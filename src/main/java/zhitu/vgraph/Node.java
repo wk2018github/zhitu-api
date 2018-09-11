@@ -148,12 +148,12 @@ public class Node {
 	}
 	
 
-	public NodeInfo toNodeInfo(){
-		return new NodeInfo(this);
+	public NodeInfo toNodeInfo(String label){
+		return new NodeInfo(this, label);
 	}
 	
 	
-	public JsonObject convertTreeToJsonObject(){
+	public JsonObject convertTreeToJsonObject(String label){
 		JsonObject jo = new JsonObject();
 		
 		JsonArray nodesJa = new JsonArray();
@@ -163,7 +163,7 @@ public class Node {
 		jo.add("links", edgesJa);
 		
 		for(Node node: getNodesOfTree()){
-			NodeInfo nodeInfo = node.toNodeInfo();
+			NodeInfo nodeInfo = node.toNodeInfo(label);
 			nodesJa.add(nodeInfo.nodeJo);
 			edgesJa.addAll(nodeInfo.edgesJa);
 		}

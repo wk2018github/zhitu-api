@@ -6,30 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import zhitu.cfg.BaseController;
 import zhitu.cfg.SQApiResponse;
 import zhitu.sq.dataset.controller.vo.LineChart;
-import zhitu.sq.dataset.controller.vo.NodeDetail;
 import zhitu.sq.dataset.controller.vo.Select;
-import zhitu.sq.dataset.model.Graph;
-import zhitu.sq.dataset.service.GraphService;
+import zhitu.sq.dataset.controller.vo.TableMoney;
 import zhitu.sq.dataset.service.SequentialService;
-import zhitu.sq.dataset.service.SinglePointService;
 
 @RequestMapping("sequential")
 @RestController
@@ -82,7 +75,8 @@ public class SequentialController extends BaseController {
 		}
 	}
 	
-	private static final String startAnalysis = "{\"analysisType\":\"01\",\"analysisObj\":\"01\",\"year\":\"2015,2017\",\"node\":\"2015,2017\"}";
+	private static final String startAnalysis = "{\"analysisType\":\"01\",\"analysisObj\":\"01\",\"year\":\"2015,2017\","
+			+ "\"nodeId\":\"2015,2017\",\"basicsTable\":\"基础表名\",\"nodeColumn\":\"金额列名\"}";
 	@ApiOperation(value = "1.4时序分析-开始分析", notes = "1.4时序分析-开始分析")
 	@ResponseBody
 	@RequestMapping(value = "/startAnalysis", method = RequestMethod.POST)
@@ -135,6 +129,21 @@ public class SequentialController extends BaseController {
 			return success(result);
 		} catch (Exception e) {
 			logger.error("sequential/startAnalysis", e);
+			return error("查询异常");
+		}
+	}
+	
+	private static final String tableCodes = "{\"tableCodes\":\"01,02,03,04\"}";
+	@ApiOperation(value = "1.5时序分析-开始分析-右下角四张表数据", notes = "1.5时序分析-开始分析-右下角四张表数据")
+	@ResponseBody
+	@RequestMapping(value = "/queryTableMoney", method = RequestMethod.POST)
+	public SQApiResponse<List<TableMoney>> queryTableMoney(HttpServletRequest request,
+			@ApiParam(value=tableCodes) @RequestBody Map<String,Object> map) {
+		try {
+
+			return success(sequentialService.queryTableMoney(map));
+		} catch (Exception e) {
+			logger.error("sequential/queryTableMoney", e);
 			return error("查询异常");
 		}
 	}

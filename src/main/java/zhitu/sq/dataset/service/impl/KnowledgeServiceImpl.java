@@ -462,6 +462,18 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
 		return strToList(column);
 	}
+	
+	@Override
+	public List<String> previewGraph(Map<String, Object> map) throws Exception {
+		String source = map.get("source").toString();
+		String target = map.get("target").toString();
+		String relationShip = map.get("relationShip").toString();
+		
+		String cypher = "match (a:"+source+")-[r:"+relationShip+"]-(b:"+target+") return a,b,r limit 25";
+		
+		return Neo4jTest.previewGraph(cypher);
+	}
+	
 
 	public List<String> strToList(String str) {
 		if (StringUtils.isEmpty(str)) {
