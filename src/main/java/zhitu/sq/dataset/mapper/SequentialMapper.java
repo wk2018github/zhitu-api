@@ -54,7 +54,18 @@ public interface SequentialMapper {
 	 * @author qwm
 	 * 查询基础表 的金额列 的 金额的总和
 	 */
-	String queryMoney(@Param(value="tableName")String tableName, @Param(value="column")String column);
+	String queryMoney(@Param(value="tableName")String tableName, @Param(value="column")String column, @Param(value="year")String year);
 	
+	/**
+	 * @author qwm
+	 * 查询基础表 的金额列名称
+	 */
+	List<String> queryColumnNameByCodeParentCodeFromDict(@Param(value="key")String key, @Param(value="parentValue")String parentValue);
+	
+	/**
+	 * @author qwm
+	 * 查询基础表 的金额列名称
+	 */
+	String queryBasicsTableNameByCode(@Param(value="key")String key);
 	
 }

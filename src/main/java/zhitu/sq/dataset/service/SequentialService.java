@@ -29,9 +29,15 @@ public interface SequentialService {
 	
 	/**
 	 * @Author: qwm
-	 * @Description: 1单点分析-初始化根节点
+	 * @Description: 
 	 */
 	List<String> queryYearScope() throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description: 
+	 */
+	Map<String,Object> startAnalysis(Map<String,Object> map) throws Exception;
 	
 	/**
 	 * @Author: qwm

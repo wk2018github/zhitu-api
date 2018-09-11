@@ -37,7 +37,8 @@
 		WHERE code = 'rootSinglePoint'
 	</select>
 
-	<select id="queryBasicsTableName" parameterType="java.lang.String" resultType="zhitu.sq.dataset.controller.vo.TableMoney">
+	<select id="queryBasicsTableName" parameterType="java.lang.String"
+		resultType="zhitu.sq.dataset.controller.vo.TableMoney">
 		SELECT `value` AS
 		`name`,`key` AS `code`
 		FROM
@@ -57,7 +58,28 @@
 
 	<select id="queryMoney" resultType="java.lang.String">
 		SELECT SUM(${column})
-		FROM ${tableName}
+		FROM
+		${tableName}
+		<if test="year != null and year != ''">
+			WHERE 预算年度 = ${year}
+		</if>
+	</select>
+
+	<select id="queryColumnNameByCodeParentCodeFromDict" resultType="java.lang.String">
+		SELECT `value`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'nodeColumn' AND
+		`key` =
+		#{key} AND `parentValue` = #{parentValue}
+	</select>
+
+	<select id="queryBasicsTableNameByCode" resultType="java.lang.String">
+		SELECT `value`
+		FROM
+		zt_sys_dict
+		WHERE `code` = 'basicsTable' AND
+		`key` = #{key}
 	</select>
 
 </mapper>

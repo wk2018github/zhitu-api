@@ -77,7 +77,7 @@
 	<insert id="saveProcessGraph" parameterType="java.util.Map">
 		INSERT INTO
 		zt_sys_process_graph
-		VALUES(#{id},NOW(),#{name},#{year},#{json})
+		VALUES(#{id},NOW(),#{name},#{year},#{json},#{graphId})
 	</insert>
 
 	<select id="queryProcessGraph" parameterType="java.util.Map"
