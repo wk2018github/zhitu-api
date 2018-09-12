@@ -188,12 +188,16 @@ public class SinglePointServiceImpl implements SinglePointService {
 	
 	@Override
 	public List<SuspendDetail> querySuspendDetails(Map<String,Object> map) throws Exception {
-//		List<SuspendDetail> list = new ArrayList<>();
+		
+		List<SuspendDetail> ls = singlePointMapper.queryProcessNodeText();
 		
 //		String id = StringHandler.objectToString(map.get("id"));
 //		Node node = Graphs.findNodeById(id);
+		for (SuspendDetail sd : ls) {
+			sd = graphService.newSuspendDetail(sd);
+		}
 
-		return singlePointMapper.queryProcessNodeText();
+		return ls;
 	}
 	
 	

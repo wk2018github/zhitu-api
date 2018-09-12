@@ -126,5 +126,11 @@ public interface GraphService {
 	 * @Description: 图谱分析-流程分析-删除流程图列表
 	 */
 	Map<String, Object> deleteProcessGraph(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * @Author: qwm
+	 * @Description:写死 鼠标悬停4个表的后面简介内容
+	 */
+	SuspendDetail newSuspendDetail(SuspendDetail sd) throws Exception;
 
 }

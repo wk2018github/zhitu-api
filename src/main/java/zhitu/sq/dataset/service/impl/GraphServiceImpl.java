@@ -221,8 +221,11 @@ public class GraphServiceImpl implements GraphService{
 		
 		String id = StringHandler.objectToString(map.get("id"));
 		Node node = Graphs.findNodeById(id);
-		
-		SuspendDetail sd = new SuspendDetail(getPreviousProcessNode(node).text, "");
+		if(!(NodeTypes.PROCESS.equals(node.type))){
+			node = getPreviousProcessNode(node);
+		}
+		SuspendDetail sd = new SuspendDetail(node.text, "");
+		sd = newSuspendDetail(sd); //把简介里面的内容写死//////////////////////
 		list.add(sd);
 
 		return list;
@@ -412,6 +415,23 @@ public class GraphServiceImpl implements GraphService{
 		}
     	return node;
     }
+	
+	@Override
+	public SuspendDetail newSuspendDetail(SuspendDetail sd){
+		if("科处室指标".equals(sd.getName())){
+			sd.setSynopsis("科处室规划预算指标");
+		}
+		if("单位指标".equals(sd.getName())){
+			sd.setSynopsis("单位规划预算指标");
+		}
+		if("计划".equals(sd.getName())){
+			sd.setSynopsis("计划支出金额");
+		}
+		if("支付".equals(sd.getName())){
+			sd.setSynopsis("最终支付金额");
+		}
+		return sd;
+	}
 
 	
 	
