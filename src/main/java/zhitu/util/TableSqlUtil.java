@@ -65,8 +65,8 @@ public class TableSqlUtil {
 	public static String tableOpinion(String tableName){
 		String sql = "create table "+tableName
 				+"(`auditTarget` varchar(100) DEFAULT NULL COMMENT '被审计单位',"
-				+"`auditCoverage` varchar(50) DEFAULT NULL COMMENT '审计覆盖面',"
-				+"`auditTotalFunds` varchar(50) DEFAULT NULL COMMENT '审计资金总额' "
+				+"`auditCoverage` varchar(100) DEFAULT NULL COMMENT '审计覆盖面',"
+				+"`auditTotalFunds` varchar(100) DEFAULT NULL COMMENT '审计资金总额' "
 				+")ENGINE=InnoDB DEFAULT CHARSET=utf8";
 		return sql;
 	}

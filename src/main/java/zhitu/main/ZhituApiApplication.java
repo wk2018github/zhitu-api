@@ -1,22 +1,14 @@
 package zhitu.main;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-import javax.servlet.MultipartConfigElement;
 
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -33,24 +25,25 @@ import zhitu.filter.LoginFilter;
 public class ZhituApiApplication {
     public static void main(String[] args) {
     	//1.初始化
-        SpringApplication application=  new SpringApplication(ZhituApiApplication.class);
-    	//2.添加数据源
-        Map<String, Object> map = new HashMap<>();
-        map.put("spring.datasource.url","jdbc:mysql://localhost:3306/dk_kg?useSSL=false");
-        map.put("spring.datasource.username","root");
-        map.put("spring.datasource.password","123456");
+//        SpringApplication application=  new SpringApplication(ZhituApiApplication.class);
+//    	//2.添加数据源
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("spring.datasource.url","jdbc:mysql://localhost:3306/dk_kg?useSSL=false");
+//        map.put("spring.datasource.username","root");
+//        map.put("spring.datasource.password","123456");
+//
+//        //3.开启驼峰映射 (Such as account_id ==> accountId)
+//        map.put("mybatis.configuration.map-underscore-to-camel-case",true);
+//        application.setDefaultProperties(map);
+//        //4.启动应用
+//        application.run(args);
 
-        //3.开启驼峰映射 (Such as account_id ==> accountId)
-        map.put("mybatis.configuration.map-underscore-to-camel-case",true);
-        application.setDefaultProperties(map);
-        //4.启动应用
-        application.run(args);
-
-//        SpringApplication.run(ZhituApiApplication.class, args);
+        SpringApplication.run(ZhituApiApplication.class, args);
     }
 
 
-    @Bean
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Bean
     public FilterRegistrationBean loginFilterRegistration(){
         FilterRegistrationBean registration = new FilterRegistrationBean(new LoginFilter());
         registration.addUrlPatterns("/*");
